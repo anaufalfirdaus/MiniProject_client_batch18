@@ -1,6 +1,6 @@
 import React, { Fragment, useEffect, useState } from 'react'
 import Link from 'next/link';
-import Image from 'next/image';
+// import Image from 'next/image';
 import { useRouter } from 'next/router';
 import { Popover, Dialog, Menu, Transition } from '@headlessui/react';
 import {
@@ -56,8 +56,8 @@ function classNames(...classes) {
 
 export default function LandingPage(props) {
     const { children } = props
-    const router = useRouter()
     const dispatch = useDispatch();
+    const router = useRouter()
     const [user, setUser] = useState({})
     const { UserProfile } = useSelector(state => state.usrStated)
 
@@ -192,7 +192,7 @@ export default function LandingPage(props) {
                                                                         href="#"
                                                                         className={classNames(active ? 'bg-gray-100' : '', 'block px-4 py-2 text-sm text-gray-700 divide-y')}
                                                                     >
-                                                                        <dd className="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">Hi,{UserProfile.username}</dd>
+                                                                        <dd className="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">Hi,{user.username}</dd>
                                                                     </Link>
                                                                 )}
                                                             </Menu.Item>

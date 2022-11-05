@@ -51,11 +51,12 @@ export default function AppLayout(props) {
     const { children } = props
 
     const dispatch = useDispatch();
-    const [user, setUser] = useState({})
     const { UserProfile } = useSelector(state => state.usrStated)
+    const [user, setUser] = useState({})
     useEffect(() => {
         setUser(UserProfile)
-    }, [])
+    },[])
+    console.log(UserProfile);
     console.log(user);
     const onLogout = () => {
         dispatch(doPushSignoutRequest());
@@ -122,7 +123,7 @@ export default function AppLayout(props) {
                             <div className="mt-5 flex-1 h-0 overflow-y-auto">
                                 <nav className="px-2">
                                     <div className="space-y-1">
-                                        {navigation.filter(item => item.roles.includes(user.roles)).map((item) => (
+                                        {navigation.filter(item => item.roles.includes(user.roles || UserProfile.roles)).map((item) => (
                                             <Link
                                                 key={item.name}
                                                 href={item.href}
@@ -184,8 +185,8 @@ export default function AppLayout(props) {
                                                         alt=""
                                                     />
                                                     <span className="flex-1 flex flex-col min-w-0">
-                                                        <span className="text-gray-900 text-sm font-medium truncate">{user.username}</span>
-                                                        <span className="text-gray-500 text-sm truncate">{user.email}</span>
+                                                        <span className="text-gray-900 text-sm font-medium truncate">{user.username || UserProfile.username}</span>
+                                                        <span className="text-gray-500 text-sm truncate">{user.email || UserProfile.email}</span>
                                                     </span>
                                                 </span>
                                                 <SelectorIcon
@@ -303,7 +304,7 @@ export default function AppLayout(props) {
                         {/* Navigation */}
                         <nav className="px-3 mt-6">
                             <div className="space-y-1">
-                                {navigation.filter(item => item.roles.includes(user.roles)).map((item) => (
+                                {navigation.filter(item => item.roles.includes(user.roles || UserProfile.roles)).map((item) => (
                                     <Link
                                         key={item.name}
                                         href={item.href}
