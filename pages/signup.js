@@ -61,28 +61,28 @@ export default function signup() {
   });
   return (
     <div>
-      <div class="text-center mt-24">
-        <div class="flex items-center justify-center">
+      <div className="text-center mt-24">
+        <div className="flex items-center justify-center">
           <img
             className="h-10 w-auto"
             src="../assets/images/codeid.png"
             alt="codeid"
           />
         </div>
-        <h2 class="text-4xl tracking-tight">
+        <h2 className="text-4xl tracking-tight">
           Sign up into your account
         </h2>
-        <span class="text-sm">or{' '}
+        <span className="text-sm">or{' '}
           <Link href="/signin" className="font-medium text-indigo-600 hover:text-indigo-500">
             sign in your account
           </Link>
         </span>
       </div>
-      <div class="flex justify-center my-2 mx-4 md:mx-0">
-        <form class="w-full max-w-xl bg-white rounded-lg shadow-md p-6">
-          <div class="flex flex-wrap -mx-3 mb-6">
-            <div class="w-full md:w-full px-3 mb-6">
-              <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2">First Name</label>
+      <div className="flex justify-center my-2 mx-4 md:mx-0">
+        <form className="w-full max-w-xl bg-white rounded-lg shadow-md p-6">
+          <div className="flex flex-wrap -mx-3 mb-6">
+            <div className="w-full md:w-full px-3 mb-6">
+              <label className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2">First Name</label>
               <input
                 id="FirstName"
                 name="FirstName"
@@ -91,14 +91,14 @@ export default function signup() {
                 onChange={formik.handleChange}
                 onBlur={formik.handleBlur}
                 autoComplete="FirstName"
-                class="appearance-none block w-full bg-white text-gray-900 font-medium border border-gray-400 rounded-lg py-3 px-3 leading-tight focus:outline-none"
+                className="appearance-none block w-full bg-white text-gray-900 font-medium border border-gray-400 rounded-lg py-3 px-3 leading-tight focus:outline-none"
                 placeholder="First Name"
                 required />
               {formik.touched.FirstName && formik.errors.FirstName ?
                 <span className="mt-2 text-sm text-red-600">{formik.errors.FirstName}</span> : null}
             </div>
-            <div class="w-full md:w-full px-3 mb-6">
-              <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2">Last Name</label>
+            <div className="w-full md:w-full px-3 mb-6">
+              <label className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2">Last Name</label>
               <input
                 id="LastName"
                 name="LastName"
@@ -107,14 +107,14 @@ export default function signup() {
                 onChange={formik.handleChange}
                 onBlur={formik.handleBlur}
                 autoComplete="LastName"
-                class="appearance-none block w-full bg-white text-gray-900 font-medium border border-gray-400 rounded-lg py-3 px-3 leading-tight focus:outline-none"
+                className="appearance-none block w-full bg-white text-gray-900 font-medium border border-gray-400 rounded-lg py-3 px-3 leading-tight focus:outline-none"
                 placeholder="Last Name"
                 required />
               {formik.touched.LastName && formik.errors.LastName ?
                 <span className="mt-2 text-sm text-red-600">{formik.errors.LastName}</span> : null}
             </div>
-            <div class="w-full md:w-full px-3 mb-6">
-              <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2">Username</label>
+            <div className="w-full md:w-full px-3 mb-6">
+              <label className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2">Username</label>
               <input
                 id="username"
                 name="username"
@@ -123,14 +123,14 @@ export default function signup() {
                 onChange={formik.handleChange}
                 onBlur={formik.handleBlur}
                 autoComplete="username"
-                class="appearance-none block w-full bg-white text-gray-900 font-medium border border-gray-400 rounded-lg py-3 px-3 leading-tight focus:outline-none"
+                className="appearance-none block w-full bg-white text-gray-900 font-medium border border-gray-400 rounded-lg py-3 px-3 leading-tight focus:outline-none"
                 placeholder="Username"
                 required />
               {formik.touched.username && formik.errors.username ?
                 <span className="mt-2 text-sm text-red-600">{formik.errors.username}</span> : null}
             </div>
-            <div class="w-full md:w-full px-3 mb-6">
-              <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2">Email Address</label>
+            <div className="w-full md:w-full px-3 mb-6">
+              <label className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2">Email Address</label>
               <input
                 id="email"
                 name="email"
@@ -139,14 +139,14 @@ export default function signup() {
                 onChange={formik.handleChange}
                 onBlur={formik.handleBlur}
                 autoComplete="email"
-                class="appearance-none block w-full bg-white text-gray-900 font-medium border border-gray-400 rounded-lg py-3 px-3 leading-tight focus:outline-none"
+                className="appearance-none block w-full bg-white text-gray-900 font-medium border border-gray-400 rounded-lg py-3 px-3 leading-tight focus:outline-none"
                 placeholder="Email Address"
                 required />
               {formik.touched.email && formik.errors.email ?
                 <span className="mt-2 text-sm text-red-600">{formik.errors.email}</span> : null}
             </div>
-            <div class="w-full md:w-full px-3 mb-6">
-              <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for='Password'>Code Telp.</label>
+            <div className="w-full md:w-full px-3 mb-6">
+              <label className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" htmlFor='Password'>Code Telp.</label>
               <select
                 id="PontyCode"
                 name="PontyCode"
@@ -155,21 +155,24 @@ export default function signup() {
                 onChange={formik.handleChange}
                 onBlur={formik.handleBlur}
                 autoComplete="PontyCode"
-                class="appearance-none block w-full bg-white text-gray-900 font-medium border border-gray-400 rounded-lg py-3 px-3 leading-tight focus:outline-none"
+                className="appearance-none block w-full bg-white text-gray-900 font-medium border border-gray-400 rounded-lg py-3 px-3 leading-tight focus:outline-none"
                 placeholder="Code Telp."
               >
-                <option value="Cell" label="Cell">
+                <option value="">
+                  Select Your Choice
+                </option>
+                <option value="Cell">
                   Cell
                 </option>
-                <option value="Home" label="Home">
+                <option value="Home">
                   Home
                 </option>
               </select>
               {formik.touched.PontyCode && formik.errors.PontyCode ?
                 <span className="mt-2 text-sm text-red-600">{formik.errors.PontyCode}</span> : null}
             </div>
-            <div class="w-full md:w-full px-3 mb-6">
-              <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for='Password'>Phone Number</label>
+            <div className="w-full md:w-full px-3 mb-6">
+              <label className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" htmlFor='Password'>Phone Number</label>
               <input
                 id="Number"
                 name="Number"
@@ -178,14 +181,14 @@ export default function signup() {
                 onChange={formik.handleChange}
                 onBlur={formik.handleBlur}
                 autoComplete="Number"
-                class="appearance-none block w-full bg-white text-gray-900 font-medium border border-gray-400 rounded-lg py-3 px-3 leading-tight focus:outline-none"
+                className="appearance-none block w-full bg-white text-gray-900 font-medium border border-gray-400 rounded-lg py-3 px-3 leading-tight focus:outline-none"
                 placeholder="Number Telp."
                 required />
               {formik.touched.Number && formik.errors.Number ?
                 <span className="mt-2 text-sm text-red-600">{formik.errors.Number}</span> : null}
             </div>
-            <div class="w-full md:w-full px-3 mb-6">
-              <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for='Password'>Role Type</label>
+            <div className="w-full md:w-full px-3 mb-6">
+              <label className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" htmlFor='Password'>Role Type</label>
               <select
                 id="RoleId"
                 name="RoleId"
@@ -194,7 +197,7 @@ export default function signup() {
                 onChange={formik.handleChange}
                 onBlur={formik.handleBlur}
                 autoComplete="RoleId"
-                class="appearance-none block w-full bg-white text-gray-900 font-medium border border-gray-400 rounded-lg py-3 px-3 leading-tight focus:outline-none"
+                className="appearance-none block w-full bg-white text-gray-900 font-medium border border-gray-400 rounded-lg py-3 px-3 leading-tight focus:outline-none"
                 placeholder="Role Type"
               >
                 <option value="1">
@@ -207,8 +210,8 @@ export default function signup() {
               {formik.touched.RoleId && formik.errors.RoleId ?
                 <span className="mt-2 text-sm text-red-600">{formik.errors.RoleId}</span> : null}
             </div>
-            <div class="w-full md:w-full px-3 mb-6">
-              <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for='Password'>Password</label>
+            <div className="w-full md:w-full px-3 mb-6">
+              <label className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" htmlFor='Password'>Password</label>
               <input
                 id="password"
                 name="password"
@@ -217,15 +220,15 @@ export default function signup() {
                 onChange={formik.handleChange}
                 onBlur={formik.handleBlur}
                 autoComplete="current-password"
-                class="appearance-none block w-full bg-white text-gray-900 font-medium border border-gray-400 rounded-lg py-3 px-3 leading-tight focus:outline-none"
+                className="appearance-none block w-full bg-white text-gray-900 font-medium border border-gray-400 rounded-lg py-3 px-3 leading-tight focus:outline-none"
                 placeholder="Password"
                 required />
               {formik.touched.password && formik.errors.password ?
                 <span className="mt-2 text-sm text-red-600">{formik.errors.password}</span>
                 : null}
             </div>
-            <div class="w-full md:w-full px-3 mb-6">
-              <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for='Password'>Confirm Password</label>
+            <div className="w-full md:w-full px-3 mb-6">
+              <label className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" htmlFor='Password'>Confirm Password</label>
               <input
                 id="confirmPassword"
                 name="confirmPassword"
@@ -234,15 +237,15 @@ export default function signup() {
                 onChange={formik.handleChange}
                 onBlur={formik.handleBlur}
                 autoComplete="current-password"
-                class="appearance-none block w-full bg-white text-gray-900 font-medium border border-gray-400 rounded-lg py-3 px-3 leading-tight focus:outline-none"
+                className="appearance-none block w-full bg-white text-gray-900 font-medium border border-gray-400 rounded-lg py-3 px-3 leading-tight focus:outline-none"
                 placeholder="Confirm Password"
                 required />
               {formik.touched.confirmPassword && formik.errors.confirmPassword ?
                 <span className="mt-2 text-sm text-red-600">{formik.errors.confirmPassword}</span>
                 : null}
             </div>
-            <div class="w-full md:w-full px-3 mb-6">
-              <button onClick={formik.handleSubmit} class="appearance-none block w-full bg-blue-600 text-gray-100 font-bold border border-gray-200 rounded-lg py-3 px-3 leading-tight hover:bg-blue-500 focus:outline-none focus:bg-white focus:border-gray-500">Sign Up</button>
+            <div className="w-full md:w-full px-3 mb-6">
+              <button onClick={formik.handleSubmit} className="appearance-none block w-full bg-blue-600 text-gray-100 font-bold border border-gray-200 rounded-lg py-3 px-3 leading-tight hover:bg-blue-500 focus:outline-none focus:bg-white focus:border-gray-500">Sign Up</button>
             </div>
           </div>
         </form>
