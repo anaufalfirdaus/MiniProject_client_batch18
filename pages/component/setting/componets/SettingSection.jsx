@@ -6,7 +6,7 @@ export default function SettingSection({
 }) {
   return (
     <div className='border border-black border-opacity-20 rounded-md shadow-sm text-gray-800'>
-      <div className='flex items-center justify-between py-1 px-2 text-xl text-gray-600 font-semibold tracking-wider border-b border-gray-300'>
+      <div className='flex items-center justify-between py-1 px-2 text-xl text-gray-900 font-semibold tracking-wider border-b border-gray-300'>
         <h4>{sectionTitle}</h4>
         <div>
           {getModals ? (

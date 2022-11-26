@@ -31,6 +31,7 @@ import {
 } from '@heroicons/react/solid';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
+import Breadcrump from '../breadcrump';
 
 const navigation = [
   {
@@ -109,17 +110,23 @@ export default function AppLayout(props) {
   const { children } = props;
 
   const dispatch = useDispatch();
+  const isLoading = useSelector((state) => state.usrStated.isLoading);
   const { UserProfile } = useSelector((state) => state.usrStated);
   const [user, setUser] = useState({});
+
   useEffect(() => {
     setUser(UserProfile);
-  }, []);
-  console.log(UserProfile);
-  console.log(user);
+  }, [UserProfile]);
+  // console.log(UserProfile);
+  // console.log(user);
   const onLogout = () => {
     dispatch(doPushSignoutRequest());
     router.push('/');
   };
+
+  if (isLoading) {
+    return <p>Loading...</p>;
+  }
 
   return (
     <div className='h-screen flex overflow-hidden bg-white'>
@@ -129,7 +136,7 @@ export default function AppLayout(props) {
           static
           className='fixed inset-0 flex z-40 lg:hidden'
           open={sidebarOpen}
-          onClose={setSidebarOpen}
+          onClose={() => setSidebarOpen(!sidebarOpen)}
         >
           <Transition.Child
             as={Fragment}
@@ -164,7 +171,7 @@ export default function AppLayout(props) {
                 <div className='absolute top-0 right-0 -mr-12 pt-2'>
                   <button
                     className='ml-1 flex items-center justify-center h-10 w-10 rounded-full focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white'
-                    onClick={() => setSidebarOpen(false)}
+                    onClick={() => setSidebarOpen(!sidebarOpen)}
                   >
                     <span className='sr-only'>Close sidebar</span>
                     <XIcon className='h-6 w-6 text-white' aria-hidden='true' />
@@ -174,8 +181,8 @@ export default function AppLayout(props) {
               <div className='flex-shrink-0 flex items-center px-4'>
                 <Image
                   className='h-10 w-auto'
-                  height={10}
-                  width={10}
+                  height={120}
+                  width={120}
                   src='/assets/images/codeid.png'
                   alt='codeid'
                 />
@@ -185,7 +192,7 @@ export default function AppLayout(props) {
                   <div className='space-y-1'>
                     {navigation
                       .filter((item) =>
-                        item.roles.includes(user.roles || UserProfile.roles)
+                        item.roles.includes(user?.roles || UserProfile?.roles)
                       )
                       .map((item) => (
                         <Link
@@ -258,10 +265,10 @@ export default function AppLayout(props) {
                           />
                           <span className='flex-1 flex flex-col min-w-0'>
                             <span className='text-gray-900 text-sm font-medium truncate'>
-                              {user.username || UserProfile.username}
+                              {user?.username || UserProfile?.username}
                             </span>
                             <span className='text-gray-500 text-sm truncate'>
-                              {user.email || UserProfile.email}
+                              {user?.email || UserProfile?.email}
                             </span>
                           </span>
                         </span>
@@ -394,7 +401,7 @@ export default function AppLayout(props) {
               <div className='space-y-1'>
                 {navigation
                   .filter((item) =>
-                    item.roles.includes(user.roles || UserProfile.roles)
+                    item.roles.includes(user?.roles || UserProfile?.roles)
                   )
                   .map((item) => (
                     <Link
@@ -431,7 +438,7 @@ export default function AppLayout(props) {
         <div className='relative z-10 flex-shrink-0 flex h-16 bg-white border-b border-gray-200 lg:hidden'>
           <button
             className='px-4 border-r border-gray-200 text-gray-500 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-purple-500 lg:hidden'
-            onClick={() => setSidebarOpen(true)}
+            onClick={() => setSidebarOpen(!sidebarOpen)}
           >
             <span className='sr-only'>Open sidebar</span>
             <MenuAlt1Icon className='h-6 w-6' aria-hidden='true' />
@@ -465,7 +472,7 @@ export default function AppLayout(props) {
                       <Menu.Button className='max-w-xs bg-white flex items-center text-sm rounded-full focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500'>
                         <span className='sr-only'>Open user menu</span>
                         <Image
-                          className='w-10 h-10 bg-gray-300 object-cover rounded-full flex-shrink-0'
+                          className='w-10 h-auto bg-gray-300 object-cover rounded-full flex-shrink-0'
                           height={10}
                           width={10}
                           src='/assets/images/yuri.jpg'
@@ -594,6 +601,9 @@ export default function AppLayout(props) {
         </div>
         <main className='flex-1 relative z-0 overflow-y-auto focus:outline-none'>
           {/* Page title & actions */}
+          <div className='py-3 px-5'>
+            <Breadcrump />
+          </div>
           {children}
         </main>
       </div>
