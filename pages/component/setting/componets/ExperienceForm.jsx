@@ -1,4 +1,9 @@
-import { PencilIcon } from '@heroicons/react/solid';
+import {
+  PlusIcon,
+  SaveIcon,
+  ArrowNarrowLeftIcon,
+  BookOpenIcon,
+} from '@heroicons/react/solid';
 import { Dialog, Transition } from '@headlessui/react';
 import { Fragment, useState } from 'react';
 import { useFormik } from 'formik';
@@ -6,6 +11,7 @@ import * as Yup from 'yup';
 
 export default function ExperienceForm() {
   let [isOpen, setIsOpen] = useState(false);
+
   const months = [
     'January',
     'February',
@@ -23,6 +29,7 @@ export default function ExperienceForm() {
 
   const expType = ['Company', 'Voluntieer', 'Organization', 'Reward'];
   const empType = ['Full-time', 'Contract', 'Freelance', 'Remote'];
+
   function closeModal() {
     setIsOpen(false);
   }
@@ -33,40 +40,15 @@ export default function ExperienceForm() {
 
   const formik = useFormik({
     initialValues: {
-      title: '',
-      headline: '',
-      company: '',
-      city: '',
-      startMonth: '',
-      startYear: '',
-      untilMonth: '',
-      untilYear: '',
-      industry: '',
-      employementType: '',
-      description: '',
-      experienceType: '',
+      newEmail: '',
     },
     validationSchema: Yup.object().shape({
-      title: Yup.string()
-        .min(3, 'minimal 3 character')
-        .max(50, 'max 50 character')
-        .required('please provite a title'),
-      headline: Yup.string()
-        .min(3, 'minimal 3 character')
-        .max(50, 'max 50 character')
-        .required('please provite a title'),
-      company: Yup.string()
-        .min(3, 'minimal 3 character')
-        .max(50, 'max 50 character')
-        .required('please provite a title'),
-      city: Yup.string()
-        .min(3, 'minimal 3 character')
-        .max(50, 'max 50 character')
-        .required('please provite a title'),
+      newEmail: Yup.string().email().required(),
     }),
 
-    onSubmit: (values) => {
+    onSubmit: async (values) => {
       console.log(values);
+      // await UserApi.addEmail(userId, values.newEmail);
     },
   });
 
@@ -76,24 +58,11 @@ export default function ExperienceForm() {
         <button
           type='button'
           onClick={openModal}
-          className='text-sm font-bold text-gray-700 hover:text-gray-500  focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75'
+          className='m-0 px-3 py-1 bg-transparent border-2 rounded-lg text-sm font-bold tracking-tight border-gray-700/75 hover:border-gray-700/25  text-gray-700/75 hover:text-gray-700/25 hover:scale-105 active:scale-90 active:shadow-md duration-300'
         >
-          <div className='flex items-center'>
-            <svg
-              xmlns='http://www.w3.org/2000/svg'
-              fill='none'
-              viewBox='0 0 24 24'
-              strokeWidth={1.5}
-              stroke='currentColor'
-              className='w-6 h-6'
-            >
-              <path
-                strokeLinecap='round'
-                strokeLinejoin='round'
-                d='M12 4.5v15m7.5-7.5h-15'
-              />
-            </svg>
-            Add Experience
+          <div className='flex items-center space-x-1'>
+            <PlusIcon className='w-5 h-5 inline-block' />
+            <span>Add Experience</span>
           </div>
         </button>
       </div>
@@ -123,15 +92,16 @@ export default function ExperienceForm() {
                 leaveFrom='opacity-100 scale-100'
                 leaveTo='opacity-0 scale-95'
               >
-                <Dialog.Panel className='transform overflow-hidden rounded-md bg-white p-6 text-left align-middle shadow-xl transition-all w-1/2'>
+                <Dialog.Panel className='transform overflow-hidden rounded-md bg-white p-6 text-left align-middle shadow-xl transition-all w-3/5 mx-auto'>
                   <Dialog.Title
                     as='h3'
-                    className='text-lg font-medium leading-6 text-gray-900'
+                    className='text-lg font-medium leading-6 flex items-center gap-3 mb-3 text-gray-700'
                   >
+                    <BookOpenIcon className='w-6 h-6 inline-block' />
                     Add Experience
                   </Dialog.Title>
 
-                  <div className='mt-2'>
+                  <div>
                     <form
                       onSubmit={formik.handleSubmit}
                       className='flex flex-col gap-3'
@@ -333,17 +303,23 @@ export default function ExperienceForm() {
                       <div className='mt-4 flex gap-2 justify-end'>
                         <button
                           type='submit'
-                          className='inline-flex justify-center rounded-md border border-transparent bg-green-300 px-4 py-2 text-sm font-medium text-green-900 hover:bg-blue-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2'
+                          className='m-0 px-3 py-1 bg-transparent border-2 rounded-lg text-sm font-bold tracking-tight border-gray-700/75 hover:border-gray-700/25  text-gray-700/75 hover:text-gray-700/25 hover:scale-105 active:scale-90 active:shadow-md duration-300'
                           // onClick={closeModal}
                         >
-                          Save
+                          <div className='flex items-center space-x-1'>
+                            <SaveIcon className='w-5 h-5 inline-block' />
+                            <span>Save</span>
+                          </div>
                         </button>
                         <button
                           type='button'
-                          className='inline-flex justify-center rounded-md border border-transparent bg-yellow-300 px-4 py-2 text-sm font-medium text-yellow-900 hover:bg-blue-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2'
+                          className='m-0 px-3 py-1 bg-transparent border-2 rounded-lg text-sm font-bold tracking-tight border-gray-700/75 hover:border-gray-700/25  text-gray-700/75 hover:text-gray-700/25 hover:scale-105 active:scale-90 active:shadow-md duration-300'
                           onClick={closeModal}
                         >
-                          Cancel
+                          <div className='flex items-center space-x-1'>
+                            <ArrowNarrowLeftIcon className='w-5 h-5 inline-block' />
+                            <span>Cancel</span>
+                          </div>
                         </button>
                       </div>
                     </form>

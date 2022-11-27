@@ -1,4 +1,9 @@
-import { PencilIcon } from '@heroicons/react/solid';
+import {
+  PencilAltIcon,
+  SaveIcon,
+  ArrowNarrowLeftIcon,
+  LockClosedIcon,
+} from '@heroicons/react/solid';
 import { Dialog, Transition } from '@headlessui/react';
 import { Fragment, useState } from 'react';
 import { useFormik } from 'formik';
@@ -47,11 +52,11 @@ export default function LoginForm() {
         <button
           type='button'
           onClick={openModal}
-          className='text-sm font-bold text-gray-700 hover:text-gray-500  focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75'
+          className='m-0 px-3 py-1 bg-transparent border-2 rounded-lg text-sm font-bold tracking-tight border-gray-700/75 hover:border-gray-700/25  text-gray-700/75 hover:text-gray-700/25 hover:scale-105 active:scale-90 active:shadow-md duration-300'
         >
-          <div className='grid grid-cols-2 items-center'>
-            <PencilIcon className='w-5 h-5' />
-            <span className='block'>Edit</span>
+          <div className='flex items-center space-x-1'>
+            <PencilAltIcon className='w-5 h-5 inline-block' />
+            <span>Change Password</span>
           </div>
         </button>
       </div>
@@ -84,8 +89,9 @@ export default function LoginForm() {
                 <Dialog.Panel className='transform overflow-hidden rounded-md bg-white p-6 text-left align-middle shadow-xl transition-all'>
                   <Dialog.Title
                     as='h3'
-                    className='text-lg font-medium leading-6 text-gray-900'
+                    className='text-lg font-medium leading-6 flex items-center gap-3 mb-3 text-gray-700'
                   >
+                    <LockClosedIcon className='w-6 h-6 inline-block' />
                     Login Edit
                   </Dialog.Title>
 
@@ -129,17 +135,23 @@ export default function LoginForm() {
                       <div className='mt-4 flex gap-2 justify-end'>
                         <button
                           type='submit'
-                          className='inline-flex justify-center rounded-md border border-transparent bg-green-300 px-4 py-2 text-sm font-medium text-green-900 hover:bg-blue-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2'
+                          className='m-0 px-3 py-1 bg-transparent border-2 rounded-lg text-sm font-bold tracking-tight border-gray-700/75 hover:border-gray-700/25  text-gray-700/75 hover:text-gray-700/25 hover:scale-105 active:scale-90 active:shadow-md duration-300'
                           // onClick={closeModal}
                         >
-                          Save
+                          <div className='flex items-center space-x-1'>
+                            <SaveIcon className='w-5 h-5 inline-block' />
+                            <span>Save</span>
+                          </div>
                         </button>
                         <button
                           type='button'
-                          className='inline-flex justify-center rounded-md border border-transparent bg-yellow-300 px-4 py-2 text-sm font-medium text-yellow-900 hover:bg-blue-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2'
+                          className='m-0 px-3 py-1 bg-transparent border-2 rounded-lg text-sm font-bold tracking-tight border-gray-700/75 hover:border-gray-700/25  text-gray-700/75 hover:text-gray-700/25 hover:scale-105 active:scale-90 active:shadow-md duration-300'
                           onClick={closeModal}
                         >
-                          Cancel
+                          <div className='flex items-center space-x-1'>
+                            <ArrowNarrowLeftIcon className='w-5 h-5 inline-block' />
+                            <span>Cancel</span>
+                          </div>
                         </button>
                       </div>
                     </form>

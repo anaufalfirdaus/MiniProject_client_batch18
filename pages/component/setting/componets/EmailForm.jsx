@@ -1,13 +1,15 @@
+import {
+  PlusIcon,
+  SaveIcon,
+  ArrowNarrowLeftIcon,
+  MailIcon,
+} from '@heroicons/react/solid';
 import { Dialog, Transition } from '@headlessui/react';
-import { PlusIcon } from '@heroicons/react/solid';
 import { Fragment, useState } from 'react';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
-import { useSelector, useDispatch } from 'react-redux';
-import UserApi from '../../../api/UserApi';
 
 export default function EmailForm() {
-  const userId = useSelector((state) => state.profile.profile.userEntityId);
   let [isOpen, setIsOpen] = useState(false);
 
   function closeModal() {
@@ -28,7 +30,7 @@ export default function EmailForm() {
 
     onSubmit: async (values) => {
       console.log(values);
-      await UserApi.addEmail(userId, values.newEmail);
+      // await UserApi.addEmail(userId, values.newEmail);
     },
   });
 
@@ -38,11 +40,11 @@ export default function EmailForm() {
         <button
           type='button'
           onClick={openModal}
-          className='text-sm font-bold text-gray-700 hover:text-gray-500  focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75'
+          className='m-0 px-3 py-1 bg-transparent border-2 rounded-lg text-sm font-bold tracking-tight border-gray-700/75 hover:border-gray-700/25  text-gray-700/75 hover:text-gray-700/25 hover:scale-105 active:scale-90 active:shadow-md duration-300'
         >
-          <div className='flex items-center'>
-            <PlusIcon className='w-6 h-6' />
-            Add Email
+          <div className='flex items-center space-x-1'>
+            <PlusIcon className='w-5 h-5 inline-block' />
+            <span>Add Email</span>
           </div>
         </button>
       </div>
@@ -75,13 +77,17 @@ export default function EmailForm() {
                 <Dialog.Panel className='transform overflow-hidden rounded-md bg-white p-6 text-left align-middle shadow-xl transition-all'>
                   <Dialog.Title
                     as='h3'
-                    className='text-lg font-medium leading-6 text-gray-900'
+                    className='text-lg font-medium leading-6 flex items-center gap-3 mb-3 text-gray-700'
                   >
-                    Add New Email
+                    <MailIcon className='w-6 h-6 inline-block' />
+                    Add Email
                   </Dialog.Title>
 
                   <div>
-                    <form onSubmit={formik.handleSubmit}>
+                    <form
+                      className='flex flex-col gap-3'
+                      onSubmit={formik.handleSubmit}
+                    >
                       <div className='grid grid-cols-2 items-center mt-2 gap-3'>
                         <label htmlFor='newEmail'>New Email</label>
                         <input
@@ -96,17 +102,23 @@ export default function EmailForm() {
                       <div className='mt-4 flex gap-2 justify-end'>
                         <button
                           type='submit'
-                          className='inline-flex justify-center rounded-md border border-transparent bg-green-300 px-4 py-2 text-sm font-medium text-green-900 hover:bg-blue-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2'
+                          className='m-0 px-3 py-1 bg-transparent border-2 rounded-lg text-sm font-bold tracking-tight border-gray-700/75 hover:border-gray-700/25  text-gray-700/75 hover:text-gray-700/25 hover:scale-105 active:scale-90 active:shadow-md duration-300'
                           // onClick={closeModal}
                         >
-                          Save
+                          <div className='flex items-center space-x-1'>
+                            <SaveIcon className='w-5 h-5 inline-block' />
+                            <span>Save</span>
+                          </div>
                         </button>
                         <button
                           type='button'
-                          className='inline-flex justify-center rounded-md border border-transparent bg-yellow-300 px-4 py-2 text-sm font-medium text-yellow-900 hover:bg-blue-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2'
+                          className='m-0 px-3 py-1 bg-transparent border-2 rounded-lg text-sm font-bold tracking-tight border-gray-700/75 hover:border-gray-700/25  text-gray-700/75 hover:text-gray-700/25 hover:scale-105 active:scale-90 active:shadow-md duration-300'
                           onClick={closeModal}
                         >
-                          Cancel
+                          <div className='flex items-center space-x-1'>
+                            <ArrowNarrowLeftIcon className='w-5 h-5 inline-block' />
+                            <span>Cancel</span>
+                          </div>
                         </button>
                       </div>
                     </form>

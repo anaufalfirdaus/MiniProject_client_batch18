@@ -1,5 +1,6 @@
 import { PlusIcon, DesktopComputerIcon, XIcon } from '@heroicons/react/solid';
 import { useSelector } from 'react-redux';
+import SkillForm from './componets/SkillForm';
 
 export default function SkillSection() {
   const { usersSkills } = useSelector((state) => state.profile.profile);
@@ -11,12 +12,7 @@ export default function SkillSection() {
           <DesktopComputerIcon className='w-6 h-6 inline-block' />
           <span className='font-semibold text-lg'>Skills</span>
         </h2>
-        <button className='m-0 px-3 py-1 bg-transparent border-2 rounded-lg text-sm font-bold tracking-tight border-gray-700/75 hover:border-gray-700/25  text-gray-700/75 hover:text-gray-700/25 hover:scale-105 active:scale-90 active:shadow-md duration-300'>
-          <div className='flex items-center space-x-1'>
-            <PlusIcon className='w-5 h-5 inline-block' />
-            <span>Add Skill</span>
-          </div>
-        </button>
+        <SkillForm />
       </div>
       <div className='grid lg:grid-cols-3 md:grid-cols-2 sm:grid-cols-1 gap-3 m-3 px-5 py-5 bg-white border border-gray-500/10 rounded-xl'>
         {usersSkills?.map((skill) => (
