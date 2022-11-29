@@ -4,8 +4,6 @@ import { GetContRequest } from "../redux-saga/Action/ContAction";
 import LandingPage from "../component/layout/LandingPage";
 import styles from '../component/pages/njs.module.scss';
 
-
-
 export default function nodejs(){
     const dispatch = useDispatch()
     const [refresh, setRefresh] = useState(false)
