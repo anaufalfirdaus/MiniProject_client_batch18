@@ -21,4 +21,4 @@ function* handleGetOneSkte(action){
     }
 }
 
-export default { handleGetSkte, handleGetOneSkte }
+export { handleGetSkte, handleGetOneSkte }

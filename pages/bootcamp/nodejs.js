@@ -1,18 +1,18 @@
-import React, { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { GetContRequest } from "../redux-saga/Action/ContAction";
-import LandingPage from "../component/layout/LandingPage";
-import styles from '../component/pages/njs.module.scss';
-import { Dropdown } from "flowbite-react";
+import React, { useEffect } from "react"
+import { useDispatch, useSelector } from "react-redux"
+import { GetContRequest } from "../redux-saga/Action/ContAction"
+import LandingPage from "../component/layout/LandingPage"
+import styles from '../component/pages/njs.module.scss'
 
 
-export default function nodejs(){
-    const dispatch = useDispatch()
-    const [refresh, setRefresh] = useState(false)
-    const { content } = useSelector(state => state.contStated)
+export default function nodejs() {
+    const dispatch = useDispatch();
+    const content = useSelector(
+        (state) => state.contStated
+        );
     useEffect(() => {
-        dispatch(GetContRequest()) 
-    }, [])
+        dispatch(GetContRequest()); 
+    })
 
     return <div>
         <LandingPage>

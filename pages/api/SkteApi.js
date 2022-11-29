@@ -4,8 +4,7 @@ import { domain } from "../config/config";
 const list = async()=>{
     try {
         const result = await axios.get(`${domain}/api/skilltemplate`)
-        const data = result.data
-        return data
+        return result.data
     } catch (error) {
         return await error.message
     }

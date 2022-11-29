@@ -21,4 +21,4 @@ function* handleGetOneCore(action){
     }
 }
 
-export default { handleGetCore, handleGetOneCore }
+export { handleGetCore, handleGetOneCore }

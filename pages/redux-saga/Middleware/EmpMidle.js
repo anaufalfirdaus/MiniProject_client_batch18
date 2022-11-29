@@ -21,4 +21,4 @@ function* handleGetOneEmp(action){
     }
 }
 
-export default { handleGetEmp, handleGetOneEmp }
+export { handleGetEmp, handleGetOneEmp }

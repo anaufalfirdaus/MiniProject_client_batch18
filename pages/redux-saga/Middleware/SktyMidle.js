@@ -21,4 +21,4 @@ function* handleGetOneSkty(action){
     }
 }
 
-export default { handleGetSkty, handleGetOneSkty }
+export { handleGetSkty, handleGetOneSkty }

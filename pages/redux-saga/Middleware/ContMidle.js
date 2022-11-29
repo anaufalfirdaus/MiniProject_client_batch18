@@ -21,4 +21,4 @@ function* handleGetOneCont(action){
     }
 }
 
-export default { handleGetCont, handleGetOneCont }
+export { handleGetCont, handleGetOneCont }
