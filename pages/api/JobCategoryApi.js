@@ -11,36 +11,6 @@ const List = async () => {
   }
 };
 
-const Delete = async (id) => {
-  try {
-    const result = await axios.delete(`${domain}/api/jobcategory/${id}`);
-    return result;
-  } catch (error) {
-    return await error.message;
-  }
-};
-
-const Create = async (payload) => {
-  try {
-    const result = await axios.post(`${domain}/api/jobcategory/`, payload);
-    return result;
-  } catch (error) {
-    return await error.message;
-  }
-};
-
-const Update = async (data) => {
-  try {
-    const result = await axios.put(
-      `${domain}/api/jobcategory/${data.jotyId}`,
-      data
-    );
-    return result;
-  } catch (error) {
-    return await error.message;
-  }
-};
-
 const FindOne = async (id) => {
   try {
     const result = await axios.get(`${domain}/api/jobcategory/${id}`);
@@ -50,4 +20,4 @@ const FindOne = async (id) => {
   }
 };
 
-export default { List, Delete, Create, Update, FindOne };
+export default { List, FindOne };
