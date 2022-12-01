@@ -8,10 +8,16 @@ import { Dialog, Transition } from '@headlessui/react';
 import { Fragment, useState } from 'react';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
+import { updateProfileRequest } from '../../../redux-saga/Action/profileAction';
 
-export default function ProfileForm({ user }) {
+export default function ProfileForm() {
   let [isOpen, setIsOpen] = useState(false);
+  const id = useSelector((state) => state.profile.profile.userId);
+  const { username, firstname, lastname } = useSelector(
+    (state) => state.profile.profile
+  );
+  const dispatch = useDispatch();
 
   function closeModal() {
     setIsOpen(false);
@@ -23,27 +29,29 @@ export default function ProfileForm({ user }) {
 
   const formik = useFormik({
     initialValues: {
-      username: 'kflmattuk',
-      firstName: 'Sulkifli',
-      lastName: 'Asmunandar',
+      userId: id,
+      userName: username,
+      userFirstName: firstname,
+      userLastName: lastname,
     },
     validationSchema: Yup.object().shape({
-      username: Yup.string()
+      userName: Yup.string()
         .min(3, 'minimal 3 character')
         .max(25, 'maximal 25 character')
-        .required(),
-      firstName: Yup.string()
+        .required('username name is required, please enter username'),
+      userFirstName: Yup.string()
         .min(3, 'minimal 3 character')
         .max(25, 'maximal 25 character')
-        .required(),
-      lastName: Yup.string()
+        .required('firstname name is required, please enter firstname'),
+      userLastName: Yup.string()
         .min(3, 'minimal 3 character')
         .max(25, 'maximal 25 character')
-        .required(),
+        .required('lastname name is required, please enter lastname'),
     }),
 
-    onSubmit: (values) => {
-      console.log(values);
+    onSubmit: async (values) => {
+      dispatch(updateProfileRequest(values));
+      setIsOpen(false);
     },
   });
 
@@ -102,41 +110,61 @@ export default function ProfileForm({ user }) {
                       onSubmit={formik.handleSubmit}
                     >
                       <div className='flex flex-col'>
-                        <label htmlFor='username'>Username</label>
+                        <label htmlFor='userName'>Username</label>
                         <input
-                          value={formik.values.username}
+                          value={formik.values.userName}
                           onChange={formik.handleChange}
+                          onBlur={formik.handleBlur}
                           className='py-2 rounded-xl text-gray-700 placeholder-gray-400'
                           type='text'
-                          name='username'
-                          id='username'
+                          name='userName'
+                          id='userName'
                           placeholder='ex. johndoe'
                         />
+                        {formik.touched.userName && formik.errors.userName ? (
+                          <span className='mt-2 text-sm text-red-600'>
+                            {formik.errors.userName}
+                          </span>
+                        ) : null}
                       </div>
                       <div className='flex gap-3'>
                         <div className=' flex flex-col'>
-                          <label htmlFor='firstName'>First Name</label>
+                          <label htmlFor='userFirstName'>First Name</label>
                           <input
-                            value={formik.values.firstName}
+                            value={formik.values.userFirstName}
                             onChange={formik.handleChange}
+                            onBlur={formik.handleBlur}
                             className='py-2 rounded-xl text-gray-700 placeholder-gray-400'
                             type='text'
-                            name='firstName'
-                            id='firstName'
+                            name='userFirstName'
+                            id='userFirstName'
                             placeholder='ex. John'
                           />
+                          {formik.touched.userFirstName &&
+                          formik.errors.userFirstName ? (
+                            <span className='mt-2 text-sm text-red-600'>
+                              {formik.errors.userFirstName}
+                            </span>
+                          ) : null}
                         </div>
                         <div className=' flex flex-col'>
-                          <label htmlFor='lastName'>Last Name</label>
+                          <label htmlFor='userLastName'>Last Name</label>
                           <input
-                            value={formik.values.lastName}
+                            value={formik.values.userLastName}
                             onChange={formik.handleChange}
+                            onBlur={formik.handleBlur}
                             className='py-2 rounded-xl text-gray-700 placeholder-gray-400'
                             type='text'
-                            name='lastName'
-                            id='lastName'
+                            name='userLastName'
+                            id='userLastName'
                             placeholder='ex. Doe'
                           />
+                          {formik.touched.userLastName &&
+                          formik.errors.userLastName ? (
+                            <span className='mt-2 text-sm text-red-600'>
+                              {formik.errors.userLastName}
+                            </span>
+                          ) : null}
                         </div>
                       </div>
                       <div className='mt-4 flex gap-2 justify-end'>

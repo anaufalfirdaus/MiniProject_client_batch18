@@ -1,10 +1,10 @@
 import { AcademicCapIcon, PencilAltIcon, XIcon } from '@heroicons/react/solid';
-import { PlusIcon } from '@heroicons/react/outline';
 import { useSelector } from 'react-redux';
 import EducationForm from './componets/EducationForm';
+import RemoveModal from './componets/RemoveModal';
 
 export default function EducationSection() {
-  const { usersEducations } = useSelector((state) => state.profile.profile);
+  const { educations } = useSelector((state) => state.profile);
 
   return (
     <div className='px-5 py-3 bg-white border border-gray-500/15 rounded-xl shadow-sm'>
@@ -12,12 +12,12 @@ export default function EducationSection() {
         <h2 className='tracking-tighter text-gray-700 flex items-center gap-3'>
           <AcademicCapIcon className='w-6 h-6 inline-block' />
           <span className='font-semibold text-lg'>
-            {usersEducations?.length > 1 ? 'Educations' : 'Education'}
+            {educations?.length > 1 ? 'Educations' : 'Education'}
           </span>
         </h2>
         <EducationForm />
       </div>
-      {usersEducations?.map((education) => (
+      {educations?.map((education) => (
         <div
           key={education.usduId}
           className='relative text-gray-700 m-3 px-5 py-5 bg-white border border-gray-500/10 rounded-xl space-y-2'
@@ -88,12 +88,10 @@ export default function EducationSection() {
                   <span>Edit</span>
                 </div>
               </button>
-              <button className=' m-0 px-3 py-1 bg-transparent border-2 rounded-lg text-sm font-bold tracking-tight border-gray-700/75 hover:border-gray-700/25  text-gray-700/75 hover:text-gray-700/25 hover:scale-105 active:scale-90 active:shadow-md duration-300'>
-                <div className='flex items-center space-x-1'>
-                  <XIcon className='w-5 h-5 inline-block' />
-                  <span>Delete</span>
-                </div>
-              </button>
+              <RemoveModal modalTitle={'education'} id={education.usduId}>
+                Are you sure want to delete Education from this{' '}
+                <span className='font-semibold'>{education.usduSchool}</span> ?
+              </RemoveModal>
             </div>
           </div>
         </div>

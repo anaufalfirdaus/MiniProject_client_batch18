@@ -1,6 +1,7 @@
 import {
   PlusIcon,
   SaveIcon,
+  PencilAltIcon,
   ArrowNarrowLeftIcon,
   MailIcon,
 } from '@heroicons/react/solid';
@@ -8,9 +9,18 @@ import { Dialog, Transition } from '@headlessui/react';
 import { Fragment, useState } from 'react';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
+import { useSelector, useDispatch } from 'react-redux';
+import {
+  addEmailRequest,
+  updateEmailRequest,
+} from '../../../redux-saga/Action/profileAction';
 
-export default function EmailForm() {
+export default function EmailForm({ edit }) {
   let [isOpen, setIsOpen] = useState(false);
+
+  const id = useSelector((state) => state.profile.profile.userId);
+
+  const dispatch = useDispatch();
 
   function closeModal() {
     setIsOpen(false);
@@ -22,31 +32,65 @@ export default function EmailForm() {
 
   const formik = useFormik({
     initialValues: {
-      newEmail: '',
+      userId: Number(id),
+      emailId: edit ? Number(edit.pmailId) : '',
+      email: edit ? edit.pmailAddress : '',
     },
     validationSchema: Yup.object().shape({
-      newEmail: Yup.string().email().required(),
+      userId: Yup.number().required(),
+      email: Yup.string('email shoult be a string')
+        .max(50, 'max character email is 50')
+        .email('please provite correct email')
+        .required('please insert your email'),
     }),
 
     onSubmit: async (values) => {
-      console.log(values);
-      // await UserApi.addEmail(userId, values.newEmail);
+      if (edit) {
+        const payload = {
+          emailId: values.emailId,
+          userId: values.userId,
+          pmailAddress: values.email,
+        };
+        dispatch(updateEmailRequest(payload));
+        console.log(payload);
+        closeModal();
+        return;
+      }
+      dispatch(addEmailRequest(values));
+      closeModal();
+      formik.resetForm();
     },
   });
 
   return (
     <>
       <div>
-        <button
-          type='button'
-          onClick={openModal}
-          className='m-0 px-3 py-1 bg-transparent border-2 rounded-lg text-sm font-bold tracking-tight border-gray-700/75 hover:border-gray-700/25  text-gray-700/75 hover:text-gray-700/25 hover:scale-105 active:scale-90 active:shadow-md duration-300'
-        >
-          <div className='flex items-center space-x-1'>
-            <PlusIcon className='w-5 h-5 inline-block' />
-            <span>Add Email</span>
-          </div>
-        </button>
+        {edit ? (
+          <>
+            <button
+              onClick={openModal}
+              className='m-0 px-3 py-1 bg-transparent border-2 rounded-lg text-sm font-bold tracking-tight border-gray-700/75 hover:border-gray-700/25  text-gray-700/75 hover:text-gray-700/25 hover:scale-105 active:scale-90 active:shadow-md duration-300'
+            >
+              <div className='flex items-center space-x-1'>
+                <PencilAltIcon className='w-5 h-5 inline-block' />
+                <span>Edit</span>
+              </div>
+            </button>
+          </>
+        ) : (
+          <>
+            <button
+              type='button'
+              onClick={openModal}
+              className='m-0 px-3 py-1 bg-transparent border-2 rounded-lg text-sm font-bold tracking-tight border-gray-700/75 hover:border-gray-700/25  text-gray-700/75 hover:text-gray-700/25 hover:scale-105 active:scale-90 active:shadow-md duration-300'
+            >
+              <div className='flex items-center space-x-1'>
+                <PlusIcon className='w-5 h-5 inline-block' />
+                <span>Add Email</span>
+              </div>
+            </button>
+          </>
+        )}
       </div>
 
       <Transition appear show={isOpen} as={Fragment}>
@@ -80,7 +124,7 @@ export default function EmailForm() {
                     className='text-lg font-medium leading-6 flex items-center gap-3 mb-3 text-gray-700'
                   >
                     <MailIcon className='w-6 h-6 inline-block' />
-                    Add Email
+                    {edit ? 'Update' : 'Add'} Email
                   </Dialog.Title>
 
                   <div>
@@ -89,16 +133,23 @@ export default function EmailForm() {
                       onSubmit={formik.handleSubmit}
                     >
                       <div className='grid grid-cols-2 items-center mt-2 gap-3'>
-                        <label htmlFor='newEmail'>New Email</label>
+                        <label htmlFor='email'>New Email</label>
                         <input
-                          value={formik.values.newEmail}
+                          value={formik.values.email}
                           onChange={formik.handleChange}
+                          onBlur={formik.handleBlur}
                           className='rounded-lg px-2 py-1'
                           type='email'
-                          name='newEmail'
-                          id='newEmail'
+                          name='email'
+                          id='email'
+                          placeholder='ex. johndoe@gmail.com'
                         />
                       </div>
+                      {formik.touched.email && formik.errors.email ? (
+                        <span className='mt-2 text-sm text-red-600'>
+                          {formik.errors.email}
+                        </span>
+                      ) : null}
                       <div className='mt-4 flex gap-2 justify-end'>
                         <button
                           type='submit'
@@ -107,7 +158,7 @@ export default function EmailForm() {
                         >
                           <div className='flex items-center space-x-1'>
                             <SaveIcon className='w-5 h-5 inline-block' />
-                            <span>Save</span>
+                            <span>{edit ? 'Update' : 'Save'}</span>
                           </div>
                         </button>
                         <button

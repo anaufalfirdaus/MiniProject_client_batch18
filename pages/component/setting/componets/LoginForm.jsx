@@ -8,12 +8,19 @@ import { Dialog, Transition } from '@headlessui/react';
 import { Fragment, useState } from 'react';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
+import { useSelector, useDispatch } from 'react-redux';
+import { updatePasswordRequest } from '../../../redux-saga/Action/profileAction';
 
 export default function LoginForm() {
   let [isOpen, setIsOpen] = useState(false);
 
+  const id = useSelector((state) => state.profile.profile.userId);
+
+  const dispatch = useDispatch();
+
   function closeModal() {
     setIsOpen(false);
+    formik.resetForm();
   }
 
   function openModal() {
@@ -22,27 +29,38 @@ export default function LoginForm() {
 
   const formik = useFormik({
     initialValues: {
+      userId: id,
       currentPassword: '',
-      newPassword: '',
-      reNewPassword: '',
+      userPassword: '',
+      reUserPassword: '',
     },
     validationSchema: Yup.object().shape({
       currentPassword: Yup.string()
         .min(3, 'minimal 3 character')
         .max(25, 'maximal 25 character')
         .required(),
-      newPassword: Yup.string()
+      userPassword: Yup.string()
         .min(3, 'minimal 3 character')
         .max(25, 'maximal 25 character')
         .required(),
-      reNewPassword: Yup.string()
-        .min(3, 'minimal 3 character')
-        .max(25, 'maximal 25 character')
-        .required(),
+      reUserPassword: Yup.string().when('userPassword', {
+        is: (val) => (val && val.length > 0 ? true : false),
+        then: Yup.string().oneOf(
+          [Yup.ref('userPassword')],
+          'Both password need to be the same'
+        ),
+      }),
     }),
 
     onSubmit: (values) => {
-      console.log(values);
+      const payload = {
+        userId: values.userId,
+        currentPassword: values.currentPassword,
+        userPassword: values.userPassword,
+      };
+      dispatch(updatePasswordRequest(payload));
+      setIsOpen(false);
+      formik.resetForm();
     },
   });
 
@@ -101,36 +119,63 @@ export default function LoginForm() {
                         <label htmlFor='currentPassword'>
                           Current Password
                         </label>
-                        <input
-                          value={formik.values.currentPassword}
-                          onChange={formik.handleChange}
-                          className='rounded-lg px-2 py-1'
-                          type='password'
-                          name='currentPassword'
-                          id='currentPassword'
-                        />
+                        <div className='flex flex-col'>
+                          <input
+                            value={formik.values.currentPassword}
+                            onChange={formik.handleChange}
+                            onBlur={formik.handleBlur}
+                            className='rounded-lg px-2 py-1'
+                            type='password'
+                            name='currentPassword'
+                            id='currentPassword'
+                          />
+                          {formik.touched.currentPassword &&
+                          formik.errors.currentPassword ? (
+                            <span className='mt-2 text-sm text-red-600'>
+                              {formik.errors.currentPassword}
+                            </span>
+                          ) : null}
+                        </div>
 
-                        <label htmlFor='newPassword'>New Password</label>
-                        <input
-                          value={formik.values.newPassword}
-                          onChange={formik.handleChange}
-                          className='rounded-lg px-2 py-1'
-                          type='password'
-                          name='newPassword'
-                          id='newPassword'
-                        />
+                        <label htmlFor='userPassword'>New Password</label>
+                        <div className='flex flex-col'>
+                          <input
+                            value={formik.values.userPassword}
+                            onChange={formik.handleChange}
+                            onBlur={formik.handleBlur}
+                            className='rounded-lg px-2 py-1'
+                            type='password'
+                            name='userPassword'
+                            id='userPassword'
+                          />
+                          {formik.touched.userPassword &&
+                          formik.errors.userPassword ? (
+                            <span className='mt-2 text-sm text-red-600'>
+                              {formik.errors.userPassword}
+                            </span>
+                          ) : null}
+                        </div>
 
-                        <label htmlFor='reNewPassword'>
+                        <label htmlFor='reUserPassword'>
                           Re-Type New Password
                         </label>
-                        <input
-                          value={formik.values.reNewPassword}
-                          onChange={formik.handleChange}
-                          className='rounded-lg px-2 py-1'
-                          type='password'
-                          name='reNewPassword'
-                          id='reNewPassword'
-                        />
+                        <div className='flex flex-col'>
+                          <input
+                            value={formik.values.reUserPassword}
+                            onChange={formik.handleChange}
+                            onBlur={formik.handleBlur}
+                            className='rounded-lg px-2 py-1'
+                            type='password'
+                            name='reUserPassword'
+                            id='reUserPassword'
+                          />
+                          {formik.touched.reUserPassword &&
+                          formik.errors.reUserPassword ? (
+                            <span className='mt-2 text-sm text-red-600'>
+                              {formik.errors.reUserPassword}
+                            </span>
+                          ) : null}
+                        </div>
                       </div>
                       <div className='mt-4 flex gap-2 justify-end'>
                         <button

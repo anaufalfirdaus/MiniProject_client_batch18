@@ -8,9 +8,15 @@ import { Dialog, Transition } from '@headlessui/react';
 import { Fragment, useState } from 'react';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
+import { useSelector, useDispatch } from 'react-redux';
+import { addSkillRequest } from '../../../redux-saga/Action/profileAction';
 
 export default function SkillForm() {
   let [isOpen, setIsOpen] = useState(false);
+  const dispatch = useDispatch();
+  const id = useSelector((state) => state.profile.profile.userId);
+  const skillsType = useSelector((state) => state.profile.skillType);
+  const oneOfSkill = skillsType.map((skill) => skill.sktyName);
 
   function closeModal() {
     setIsOpen(false);
@@ -22,26 +28,20 @@ export default function SkillForm() {
 
   const formik = useFormik({
     initialValues: {
-      currentPassword: '',
-      newPassword: '',
-      reNewPassword: '',
+      userId: id,
+      skillName: '',
     },
     validationSchema: Yup.object().shape({
-      currentPassword: Yup.string()
-        .min(3, 'minimal 3 character')
-        .max(25, 'maximal 25 character')
-        .required(),
-      newPassword: Yup.string()
-        .min(3, 'minimal 3 character')
-        .max(25, 'maximal 25 character')
-        .required(),
-      reNewPassword: Yup.string()
-        .min(3, 'minimal 3 character')
-        .max(25, 'maximal 25 character')
-        .required(),
+      userId: Yup.number().required(),
+      skillName: Yup.string()
+        .oneOf(oneOfSkill, 'Please Choose the Skill provided')
+        .required('Please Choose Skill'),
     }),
 
-    onSubmit: (values) => {
+    onSubmit: async (values) => {
+      dispatch(addSkillRequest(values));
+      closeModal();
+      formik.resetForm();
       console.log(values);
     },
   });
@@ -98,19 +98,32 @@ export default function SkillForm() {
                   <div>
                     <form onSubmit={formik.handleSubmit}>
                       <div className='grid grid-cols-3 items-center mt-2 gap-3'>
-                        <label className='col-span-1' htmlFor='newSkills'>
+                        <label className='col-span-1' htmlFor='skillName'>
                           Skills
                         </label>
-                        {/* TODO: update to SELECT Options and take skill type from database to make a list */}
-                        <input
-                          value={formik.values.newSkills}
-                          onChange={formik.handleChange}
-                          className='rounded-lg px-2 py-1 col-span-2'
-                          type='email'
-                          name='newSkills'
-                          id='newSkills'
-                        />
+                        <select
+                          value={formik.values.skillName}
+                          onBlur={formik.handleBlur}
+                          onChange={(e) =>
+                            formik.setFieldValue('skillName', e.target.value)
+                          }
+                          className='rounded-lg px-2 py-1 col-span-1'
+                          name='skillName'
+                          id='skillName'
+                        >
+                          <option value='Bachelor'>-- Chosee Skill --</option>
+                          {skillsType?.map((skill) => (
+                            <option key={skill.sktyName} value={skill.sktyName}>
+                              {skill.sktyName}
+                            </option>
+                          ))}
+                        </select>
                       </div>
+                      {formik.touched.skillName && formik.errors.skillName ? (
+                        <span className='mt-2 text-sm text-red-600'>
+                          {formik.errors.skillName}
+                        </span>
+                      ) : null}
                       <div className='mt-4 flex gap-2 justify-end'>
                         <button
                           type='submit'

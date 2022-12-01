@@ -3,14 +3,25 @@ import {
   SaveIcon,
   ArrowNarrowLeftIcon,
   PhoneIcon,
+  PencilAltIcon,
 } from '@heroicons/react/solid';
 import { Dialog, Transition } from '@headlessui/react';
 import { Fragment, useState } from 'react';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
+import { useSelector, useDispatch } from 'react-redux';
+import {
+  addPhoneRequest,
+  updatePhoneRequest,
+} from '../../../redux-saga/Action/profileAction';
 
-export default function PhoneForm() {
+export default function PhoneForm({ edit }) {
   let [isOpen, setIsOpen] = useState(false);
+
+  const dispatch = useDispatch();
+  const phoneCode = ['Cell', 'Home'];
+
+  const id = useSelector((state) => state.profile.profile.userId);
 
   function closeModal() {
     setIsOpen(false);
@@ -22,31 +33,64 @@ export default function PhoneForm() {
 
   const formik = useFormik({
     initialValues: {
-      newPhone: '',
+      userId: id,
+      phone: edit ? edit.uspoPhone : '',
+      code: edit ? edit.pontyCode : '',
     },
     validationSchema: Yup.object().shape({
-      newPhone: Yup.string().required(),
+      userId: Yup.number().required(),
+      phone: Yup.string().required('Please provite your number'),
+      code: Yup.string()
+        .oneOf(phoneCode, 'Please Choose Phone Type')
+        .required('Please Choose Phone Type'),
     }),
 
     onSubmit: async (values) => {
-      console.log(values);
-      // await UserApi.addEmail(userId, values.newEmail);
+      if (edit) {
+        const payload = {
+          uspoPhoneId: edit.uspoPhoneId,
+          uspoEntity: values.userId,
+          uspoPhone: values.phone,
+          pontyCode: values.code,
+        };
+        dispatch(updatePhoneRequest(payload));
+      } else {
+        dispatch(addPhoneRequest(values));
+        formik.resetForm();
+      }
+      closeModal();
     },
   });
 
   return (
     <>
       <div>
-        <button
-          type='button'
-          onClick={openModal}
-          className='m-0 px-3 py-1 bg-transparent border-2 rounded-lg text-sm font-bold tracking-tight border-gray-700/75 hover:border-gray-700/25  text-gray-700/75 hover:text-gray-700/25 hover:scale-105 active:scale-90 active:shadow-md duration-300'
-        >
-          <div className='flex items-center space-x-1'>
-            <PlusIcon className='w-5 h-5 inline-block' />
-            <span>Add Phone</span>
-          </div>
-        </button>
+        {edit ? (
+          <>
+            <button
+              onClick={openModal}
+              className='m-0 px-3 py-1 bg-transparent border-2 rounded-lg text-sm font-bold tracking-tight border-gray-700/75 hover:border-gray-700/25  text-gray-700/75 hover:text-gray-700/25 hover:scale-105 active:scale-90 active:shadow-md duration-300'
+            >
+              <div className='flex items-center space-x-1'>
+                <PencilAltIcon className='w-5 h-5 inline-block' />
+                <span>Edit</span>
+              </div>
+            </button>
+          </>
+        ) : (
+          <>
+            <button
+              type='button'
+              onClick={openModal}
+              className='m-0 px-3 py-1 bg-transparent border-2 rounded-lg text-sm font-bold tracking-tight border-gray-700/75 hover:border-gray-700/25  text-gray-700/75 hover:text-gray-700/25 hover:scale-105 active:scale-90 active:shadow-md duration-300'
+            >
+              <div className='flex items-center space-x-1'>
+                <PlusIcon className='w-5 h-5 inline-block' />
+                <span>Add Phone</span>
+              </div>
+            </button>
+          </>
+        )}
       </div>
 
       <Transition appear show={isOpen} as={Fragment}>
@@ -80,7 +124,7 @@ export default function PhoneForm() {
                     className='text-lg font-medium leading-6 flex items-center gap-3 mb-3 text-gray-700'
                   >
                     <PhoneIcon className='w-6 h-6 inline-block' />
-                    Add Phone
+                    {edit ? 'Update' : 'Add'} Phone
                   </Dialog.Title>
 
                   <div>
@@ -89,16 +133,49 @@ export default function PhoneForm() {
                       onSubmit={formik.handleSubmit}
                     >
                       <div className='grid grid-cols-2 items-center mt-2 gap-3'>
-                        <label htmlFor='newPhone'>New Phone</label>
+                        <label htmlFor='phone'>New Phone</label>
                         <input
-                          value={formik.values.newPhone}
+                          value={formik.values.phone}
                           onChange={formik.handleChange}
+                          onBlur={formik.handleBlur}
                           className='rounded-lg px-2 py-1'
                           type='text'
-                          name='newPhone'
-                          id='newPhone'
+                          name='phone'
+                          id='phone'
+                          placeholder='ex. 083456789098'
                         />
                       </div>
+                      {formik.touched.phone && formik.errors.phone ? (
+                        <span className='mt-2 text-sm text-red-600'>
+                          {formik.errors.phone}
+                        </span>
+                      ) : null}
+                      <div className='grid grid-cols-2 items-center mt-2 gap-3'>
+                        <label htmlFor='code'>Phone Type</label>
+                        <select
+                          value={formik.values.code}
+                          onSelect={formik.handleChange}
+                          onBlur={formik.handleBlur}
+                          onChange={(e) =>
+                            formik.setFieldValue('code', e.target.value)
+                          }
+                          className='rounded-lg px-2 py-1 col-span-1'
+                          name='code'
+                          id='code'
+                        >
+                          <option value='Bachelor'>-- Phone Type --</option>
+                          {phoneCode.map((code, i) => (
+                            <option key={i} value={code}>
+                              {code}
+                            </option>
+                          ))}
+                        </select>
+                      </div>
+                      {formik.touched.code && formik.errors.code ? (
+                        <span className='mt-2 text-sm text-red-600'>
+                          {formik.errors.code}
+                        </span>
+                      ) : null}
                       <div className='mt-4 flex gap-2 justify-end'>
                         <button
                           type='submit'
@@ -107,7 +184,7 @@ export default function PhoneForm() {
                         >
                           <div className='flex items-center space-x-1'>
                             <SaveIcon className='w-5 h-5 inline-block' />
-                            <span>Save</span>
+                            <span>{edit ? 'Update' : 'Save'}</span>
                           </div>
                         </button>
                         <button

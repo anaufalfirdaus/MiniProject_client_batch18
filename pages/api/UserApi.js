@@ -41,59 +41,205 @@ const getProfile = async (id) => {
   }
 };
 
-const getEmails = async (id) => {
+//TODO: Update
+const updateProfile = async (data) => {
+  console.log(data, 'API');
   try {
-    const result = await axios.get(`${domain}/getemails/${id}`);
+    const result = await axios.patch(`${domain}/profileupdate`, data);
     return result;
-  } catch (error) {
-    return error.message;
+  } catch (err) {
+    return err.message;
   }
 };
 
-const addEmail = async (id, email) => {
+const updateEmail = async (data) => {
   try {
-    const result = await axios.post(`${domain}/addemail/${id}`, { email });
+    const result = await axios.patch(`${domain}/updateemail`, data);
+    return result;
+  } catch (err) {
+    return err.message;
+  }
+};
+
+const updatePhone = async (data) => {
+  try {
+    const result = await axios.patch(`${domain}/updatephone`, data);
+    return result;
+  } catch (err) {
+    return err.message;
+  }
+};
+
+const updateAddress = async (data) => {
+  try {
+    const result = await axios.patch(`${domain}/updateaddress`, data);
+    return result;
+  } catch (err) {
+    return err.message;
+  }
+};
+
+const updatePassword = async (data) => {
+  try {
+    const result = await axios.patch(`${domain}/passwordupdate`, data);
+    return result;
+  } catch (err) {
+    return err.message;
+  }
+};
+
+const updateEducation = async (data) => {
+  try {
+    const result = await axios.patch(`${domain}/updateeducation`, data);
+    return result;
+  } catch (err) {
+    return err.message;
+  }
+};
+
+const updateExperience = async (data) => {
+  try {
+    const result = await axios.patch(`${domain}/updateExperience`, data);
+    return result;
+  } catch (err) {
+    return err.message;
+  }
+};
+
+//TODO: Add
+const addEmail = async (data) => {
+  try {
+    const result = await axios.post(`${domain}/addemail`, data);
     return result;
   } catch (err) {
     return err;
   }
 };
 
-const removeEmail = async (id) => {
+const addPhone = async (data) => {
   try {
-    const result = await axios.get(`${domain}/removeemail/${id}`);
+    const result = await axios.post(`${domain}/addphone`, data);
     return result;
   } catch (err) {
     return err;
   }
 };
 
-const addPhone = async (id, phone) => {
+const addAddress = async (data) => {
   try {
-    const result = await axios.post(`${domain}/addphone/${id}`, { phone });
+    const result = await axios.post(`${domain}/addaddress`, data);
     return result;
   } catch (err) {
     return err;
   }
 };
 
-const addAddress = async (id, data) => {
+const addEducation = async (data) => {
   try {
-    const result = await axios.post(`${domain}/addaddress/${id}`, { ...data });
+    const result = await axios.post(`${domain}/addeducation`, data);
+    return result;
+  } catch (err) {
+    return err.message;
+  }
+};
+
+const addExperience = async (data) => {
+  try {
+    const result = await axios.post(`${domain}/addexperience`, data);
+    return result;
+  } catch (err) {
+    return err.message;
+  }
+};
+
+const addSkill = async (data) => {
+  try {
+    const result = await axios.post(`${domain}/addskill`, data);
+    return result;
+  } catch (err) {
+    return err.message;
+  }
+};
+
+//TODO: Delete/Remove
+const removeEmail = async (emailId) => {
+  try {
+    const result = await axios.delete(`${domain}/removeemail/${emailId}`);
     return result;
   } catch (err) {
     return err;
   }
 };
 
-export default {
+const removePhone = async (phoneId) => {
+  try {
+    const result = await axios.delete(`${domain}/removePhone/${phoneId}`);
+    return result;
+  } catch (err) {
+    return err;
+  }
+};
+
+const removeAddress = async (addressId) => {
+  try {
+    const result = await axios.delete(`${domain}/removeaddress/${addressId}`);
+    return result;
+  } catch (err) {
+    return err;
+  }
+};
+
+const removeEducation = async (educationId) => {
+  try {
+    const result = await axios.delete(
+      `${domain}/removeeducation/${educationId}`
+    );
+    return result;
+  } catch (err) {
+    return err;
+  }
+};
+
+const removeExperience = async (expId) => {
+  try {
+    const result = await axios.delete(`${domain}/removeexperience/${expId}`);
+    return result;
+  } catch (err) {
+    return err;
+  }
+};
+
+const removeSkill = async (skillId) => {
+  try {
+    const result = await axios.delete(`${domain}/removeskill/${skillId}`);
+    return result;
+  } catch (err) {
+    return err;
+  }
+};
+
+export {
   signin,
   signup,
   profile,
   getProfile,
-  getEmails,
   addEmail,
-  removeEmail,
   addPhone,
   addAddress,
+  addEducation,
+  addExperience,
+  addSkill,
+  updateProfile,
+  updatePassword,
+  updateEmail,
+  updatePhone,
+  updateAddress,
+  updateEducation,
+  updateExperience,
+  removeEmail,
+  removePhone,
+  removeAddress,
+  removeEducation,
+  removeExperience,
+  removeSkill,
 };

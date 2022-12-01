@@ -6,9 +6,10 @@ import {
 } from '@heroicons/react/solid';
 import { useSelector } from 'react-redux';
 import ExperienceForm from './componets/ExperienceForm';
+import RemoveModal from './componets/RemoveModal';
 
 export default function ExperienceSection() {
-  const { usersExperiences } = useSelector((state) => state.profile.profile);
+  const { experiences } = useSelector((state) => state.profile);
 
   return (
     <div className='px-5 py-3 bg-white border border-gray-500/15 rounded-xl shadow-sm'>
@@ -16,12 +17,12 @@ export default function ExperienceSection() {
         <h2 className='tracking-tighter text-gray-700 flex items-center gap-3'>
           <BookOpenIcon className='w-6 h-6 inline-block' />
           <span className='font-semibold text-lg'>
-            {usersExperiences?.length > 1 ? 'Experiences' : 'Experience'}
+            {experiences?.length > 1 ? 'Experiences' : 'Experience'}
           </span>
         </h2>
         <ExperienceForm />
       </div>
-      {usersExperiences?.map((exp) => (
+      {experiences?.map((exp) => (
         <div
           key={exp.usexId}
           className=' text-gray-700 m-3 px-5 py-5 bg-white border border-gray-500/10 rounded-xl space-y-2'
@@ -68,12 +69,11 @@ export default function ExperienceSection() {
                   <span>Edit</span>
                 </div>
               </button>
-              <button className=' m-0 px-3 py-1 bg-transparent border-2 rounded-lg text-sm font-bold tracking-tight border-gray-700/75 hover:border-gray-700/25  text-gray-700/75 hover:text-gray-700/25 hover:scale-105 active:scale-90 active:shadow-md duration-300'>
-                <div className='flex items-center space-x-1'>
-                  <XIcon className='w-5 h-5 inline-block' />
-                  <span>Delete</span>
-                </div>
-              </button>
+              <RemoveModal modalTitle={'experience'} id={exp.usexId}>
+                Are you sure want to delete this{' '}
+                <span className='font-semibold'>{exp.usexTitle}</span>{' '}
+                experience ?
+              </RemoveModal>
             </div>
           </div>
         </div>

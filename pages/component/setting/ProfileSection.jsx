@@ -1,10 +1,10 @@
 import Image from 'next/image';
 import { useSelector } from 'react-redux';
-import { UserIcon, PencilAltIcon } from '@heroicons/react/solid';
+import { UserIcon } from '@heroicons/react/solid';
 import ProfileForm from './componets/ProfileForm';
 
 export default function ProfileSection() {
-  const { userName, userFirstName, userLastName } = useSelector(
+  const { username, firstname, lastname } = useSelector(
     (state) => state.profile.profile
   );
   const { defaultEmail } = useSelector((state) => state.profile.profile);
@@ -37,9 +37,9 @@ export default function ProfileSection() {
           />
           <div className='col-span-4 flex flex-col'>
             <span className='font-bold font-mono tracking-tight text-gray-700 text-lg'>
-              {userFirstName} {userLastName}{' '}
+              {firstname} {lastname}{' '}
               <span className='font-medium text-gray-600 text-sm'>
-                {userName}
+                {username}
               </span>
             </span>
             <span className='italic font-sans text-gray-600 font-semibold'>

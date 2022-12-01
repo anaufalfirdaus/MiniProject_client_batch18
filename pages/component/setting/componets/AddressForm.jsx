@@ -8,18 +8,18 @@ import { Dialog, Transition } from '@headlessui/react';
 import { Fragment, useState } from 'react';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
+import { useSelector, useDispatch } from 'react-redux';
+import { addAddressRequest } from '../../../redux-saga/Action/profileAction';
 
 export default function AddressForm() {
   let [isOpen, setIsOpen] = useState(false);
+  const dispatch = useDispatch();
+  const id = useSelector((state) => state.profile.profile.userId);
 
-  const addressTypes = [
-    'home',
-    'main Office',
-    'primary',
-    'shipping',
-    'billing',
-    'archive',
-  ];
+  const addressTypes = useSelector((state) => state.profile.addressType);
+  const { city } = useSelector((state) => state.profile);
+  const oneOfCity = city?.map((ci) => ci.cityId);
+  const oneOfaddress = addressTypes.map((addrs) => addrs.adtyId);
 
   function closeModal() {
     setIsOpen(false);
@@ -31,19 +31,36 @@ export default function AddressForm() {
 
   const formik = useFormik({
     initialValues: {
-      newAddress: '',
-      postalCode: '',
-      city: '',
-      addressType: 1,
+      userId: id,
+      addressLine1: '',
+      addressLine2: '',
+      addressPostalCode: '',
+      cityId: '',
+      addressType: '',
     },
     validationSchema: Yup.object().shape({
-      newAddress: Yup.string().required('please provite your new Address'),
-      postalCode: Yup.string().required('please provite a postal code'),
-      city: Yup.string().required('please insert city'),
-      addressType: Yup.number().required('please Choose the address type'),
+      userId: Yup.number().required(),
+      addressLine1: Yup.string()
+        .min(5)
+        .max(255)
+        .required('please provite your new Address'),
+      addressLine2: Yup.string()
+        .min(5)
+        .max(255)
+        .required('please provite your new Address'),
+      addressPostalCode: Yup.number().required('please provite a postal code'),
+      cityId: Yup.number()
+        .oneOf(oneOfCity, 'Pleace Choose City that we Provided')
+        .required('please insert city'),
+      addressType: Yup.number()
+        .oneOf(oneOfaddress, 'Please Choose Address Type that we Provided')
+        .required('please Choose the address type'),
     }),
-    onSubmit: (values) => {
+    onSubmit: async (values) => {
       console.log(values);
+      dispatch(addAddressRequest(values));
+      closeModal();
+      formik.resetForm();
     },
   });
 
@@ -102,37 +119,64 @@ export default function AddressForm() {
                       className='flex flex-col gap-3'
                     >
                       <div className='flex flex-col'>
-                        <label htmlFor='newAddress'>New Address</label>
+                        <label htmlFor='addressLine1'>New Address</label>
                         <input
-                          value={formik.values.newAddress}
+                          value={formik.values.addressLine1}
                           onChange={formik.handleChange}
                           className='rounded-lg px-2 py-1'
                           type='text'
-                          name='newAddress'
-                          id='newAddress'
+                          name='addressLine1'
+                          id='addressLine1'
+                          placeholder='ex. Jl.Melati no.10'
+                        />
+                      </div>
+                      <div className='flex flex-col'>
+                        <label htmlFor='addressLine2'>Address Line</label>
+                        <input
+                          value={formik.values.addressLine2}
+                          onChange={formik.handleChange}
+                          className='rounded-lg px-2 py-1'
+                          type='text'
+                          name='addressLine2'
+                          id='addressLine2'
+                          placeholder='ex . Kec. Baru / Kab. Gowa'
                         />
                       </div>
                       <div className='flex items-center gap-3'>
-                        <label htmlFor='postalCode'>Postal Code</label>
+                        <label htmlFor='addressPostalCode'>Postal Code</label>
                         <input
-                          value={formik.values.postalCode}
+                          value={formik.values.addressPostalCode}
                           onChange={formik.handleChange}
                           className='rounded-lg px-2 py-1'
                           type='text'
-                          name='postalCode'
-                          id='postalCode'
-                          placeholder='Postal Code...'
+                          name='addressPostalCode'
+                          id='addressPostalCode'
+                          placeholder='ex. 34045'
                         />
-                        <label htmlFor='city'>City</label>
-                        <input
-                          value={formik.values.city}
-                          onChange={formik.handleChange}
-                          className='rounded-lg px-2 py-1'
-                          type='text'
-                          name='city'
-                          id='coty'
-                          placeholder='city'
-                        />
+                        <label htmlFor='cityId'>City</label>
+                        <select
+                          value={formik.values.cityId}
+                          onChange={(e) =>
+                            formik.setFieldValue(
+                              'cityId',
+                              Number(e.target.value)
+                            )
+                          }
+                          className='rounded-lg px-2 py-1 w-2/5 capitalize'
+                          name='cityId'
+                          id='cityId'
+                        >
+                          <option>-Choose City-</option>
+                          {city?.map((ci) => (
+                            <option
+                              className='capitalize'
+                              key={ci.cityId}
+                              value={ci.cityId}
+                            >
+                              {ci.cityName}
+                            </option>
+                          ))}
+                        </select>
                       </div>
                       <div className='flex gap-3 items-center'>
                         <label htmlFor='addressType'>Address Type</label>
@@ -145,16 +189,42 @@ export default function AddressForm() {
                           name='addressType'
                           id='addressType'
                         >
-                          {addressTypes.map((type, i) => (
+                          <option>-Address Type-</option>
+                          {addressTypes?.map((type) => (
                             <option
                               className='capitalize'
-                              key={i}
-                              value={i + 1}
+                              key={type.adtyId}
+                              value={type.adtyId}
                             >
-                              {type}
+                              {type.adtyName}
                             </option>
                           ))}
                         </select>
+                      </div>
+                      <div className='flex flex-col space-x-1'>
+                        {formik.touched.addressLine1 &&
+                        formik.errors.addressLine1 ? (
+                          <span className='mt-2 text-sm text-red-600'>
+                            {formik.errors.addressLine1}
+                          </span>
+                        ) : null}
+                        {formik.touched.addressPostalCode &&
+                        formik.errors.addressPostalCode ? (
+                          <span className='mt-2 text-sm text-red-600'>
+                            {formik.errors.addressPostalCode}
+                          </span>
+                        ) : null}
+                        {formik.touched.cityId && formik.errors.cityId ? (
+                          <span className='mt-2 text-sm text-red-600'>
+                            {formik.errors.cityId}
+                          </span>
+                        ) : null}
+                        {formik.touched.addressType &&
+                        formik.errors.addressType ? (
+                          <span className='mt-2 text-sm text-red-600'>
+                            {formik.errors.addressType}
+                          </span>
+                        ) : null}
                       </div>
                       <div className='mt-4 flex gap-2 justify-end'>
                         <button

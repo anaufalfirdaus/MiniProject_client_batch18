@@ -11,15 +11,10 @@ import AddressSection from '../../component/setting/AddressSection';
 import EducationSection from '../../component/setting/EducationSection';
 import ExperienceSection from '../../component/setting/ExperienceSection';
 import SkillSection from '../../component/setting/SkillSection';
-// ** MAKE THIS PAGE JUST HANDLE COMPONENTS
-// *TODO : MOVE EVERY SETTINGS SECTION TO INDIVIDUAL COMPONENT ✅
-// *TODO : USE FORMIK ON EVERY MODALS ?
-// *TODO : SETT UP REDUX & REDUX SAGA
 
 export default function SettingPage() {
   const dispatch = useDispatch();
-  // const { userId } = useSelector((state) => state.usrStated.UserProfile);
-  let userId = 42;
+  const { userId } = useSelector((state) => state.usrStated.UserProfile);
   const isLoading = useSelector((state) => state.profile.isLoading);
   useEffect(() => {
     dispatch(getProfileRequest(userId));
