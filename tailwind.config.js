@@ -1,20 +1,24 @@
 module.exports = {
-    content: [
-      "./pages/**/*.{js,jsx,ts,tsx}",
-    ],
-    theme: {
-        listStyleType: {
-          none: 'none',
-          disc: 'disc',
-          decimal: 'decimal',
-          square: 'square',
-          roman: 'upper-roman',
-        },
-      extend: {},
+  content: [
+    "./node_modules/flowbite-react/**/*.js",
+    ,
+    "./pages/**/*.{js,jsx,ts,tsx}",
+    "./public/**/*.html",
+  ],
+  theme: {
+    listStyleType: {
+      none: "none",
+      disc: "disc",
+      decimal: "decimal",
+      square: "square",
+      roman: "upper-roman",
     },
-    plugins: [
-      require('@tailwindcss/forms'),
-      require('@tailwindcss/aspect-ratio'),
-      require('@tailwindcss/typography'),
-    ],
-  }
+    extend: {},
+  },
+  plugins: [
+    require("@tailwindcss/forms"),
+    require("@tailwindcss/aspect-ratio"),
+    require("@tailwindcss/typography"),
+    require("flowbite/plugin"),
+  ],
+};
