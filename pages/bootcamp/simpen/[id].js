@@ -7,8 +7,6 @@ export default function TesLink() {
   return (
     <div>
       <h1>id:{id}</h1>
-      <h1>gua bagas</h1>
-      <Link href={`/bootcamp`}>balik lagi</Link>
     </div>
   );
 }
