@@ -22,6 +22,7 @@ const initial_state = {
   employeementType: [],
   skillType: [],
   statusType: [],
+  listAddresses: [],
   isLoading: false,
   message: {},
   errors: null,
@@ -261,6 +262,7 @@ const setPorfile = (state, action) => {
     employeementType: [...payload.jobType],
     skillType: [...payload.skillType],
     statusType: [...payload.statusType],
+    listAddresses: [...payload.listAddresses],
   };
 };
 
@@ -451,11 +453,37 @@ const updateAddress = (state, action) => {
 };
 
 const updateEducation = (state, action) => {
-  return state;
+  const { payload } = action;
+  const { educations } = state;
+  const updEducations = educations.map((education) => {
+    if (education.usduId === payload.usduId) {
+      Object.assign(education, payload);
+      return education;
+    }
+    return education;
+  });
+  return {
+    ...state,
+    isLoading: false,
+    phones: [...updEducations],
+  };
 };
 
 const updateExperience = (state, action) => {
-  return state;
+  const { payload } = action;
+  const { experiences } = state;
+  const updExperiences = experiences.map((experience) => {
+    if (experience.usexId === payload.usexId) {
+      Object.assign(experience, payload);
+      return experience;
+    }
+    return experience;
+  });
+  return {
+    ...state,
+    isLoading: false,
+    phones: [...updExperiences],
+  };
 };
 
 export default profileReducer;

@@ -3,23 +3,39 @@ import {
   SaveIcon,
   ArrowNarrowLeftIcon,
   LocationMarkerIcon,
+  SearchIcon,
 } from '@heroicons/react/solid';
-import { Dialog, Transition } from '@headlessui/react';
+import { Dialog, Transition, Combobox } from '@headlessui/react';
 import { Fragment, useState } from 'react';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import { useSelector, useDispatch } from 'react-redux';
-import { addAddressRequest } from '../../../redux-saga/Action/profileAction';
+import {
+  addAddressRequest,
+  updateAddressRequest,
+} from '../../../redux-saga/Action/profileAction';
 
-export default function AddressForm() {
-  let [isOpen, setIsOpen] = useState(false);
+export default function AddressForm({ edit }) {
   const dispatch = useDispatch();
   const id = useSelector((state) => state.profile.profile.userId);
-
+  const addresses = useSelector((state) => state.profile.listAddresses);
   const addressTypes = useSelector((state) => state.profile.addressType);
   const { city } = useSelector((state) => state.profile);
+
+  const [query, setQuery] = useState('');
+  const [selectedAddress, setSelectedAddress] = useState('');
+  let [isOpen, setIsOpen] = useState(false);
+
   const oneOfCity = city?.map((ci) => ci.cityId);
   const oneOfaddress = addressTypes.map((addrs) => addrs.adtyId);
+
+  const filteredAddress = query
+    ? addresses.filter((address) =>
+        address.addrLine1.toLowerCase().includes(query.toLowerCase())
+      )
+    : [];
+
+  console.log(filteredAddress);
 
   function closeModal() {
     setIsOpen(false);
@@ -57,10 +73,15 @@ export default function AddressForm() {
         .required('please Choose the address type'),
     }),
     onSubmit: async (values) => {
+      if (edit) {
+        const payload = {};
+        dispatch(updateAddressRequest(payload));
+      } else {
+        dispatch(addAddressRequest(values));
+        formik.resetForm();
+      }
       console.log(values);
-      dispatch(addAddressRequest(values));
       closeModal();
-      formik.resetForm();
     },
   });
 
@@ -110,7 +131,7 @@ export default function AddressForm() {
                     className='text-lg font-medium leading-6 flex items-center gap-3 mb-3 text-gray-700'
                   >
                     <LocationMarkerIcon className='w-6 h-6 inline-block' />
-                    Add Address
+                    {edit ? 'Update' : 'Add'} Address
                   </Dialog.Title>
 
                   <div>
@@ -141,6 +162,50 @@ export default function AddressForm() {
                           id='addressLine2'
                           placeholder='ex . Kec. Baru / Kab. Gowa'
                         />
+                      </div>
+                      <div className='flex flex-col space-x-1'>
+                        <label
+                          className='ml-2 text-gray-600 text-sm font-semibold tracking-tight'
+                          htmlFor='address'
+                        >
+                          Address
+                        </label>
+                        <input
+                          type='text'
+                          onChange={(event) => setQuery(event.target.value)}
+                          className='rounded-lg px-2 py-1'
+                          placeholder='type your address here...'
+                        />
+                        {filteredAddress.length > 0 ? (
+                          <>
+                            <div className=''>
+                              <div className='w-full flex flex-col max-h-94 overflow-y-auto overflow-x-hidden space-x-1 bg-white'>
+                                {filteredAddress.map((address) => (
+                                  <button
+                                    key={address.addrId}
+                                    type='button'
+                                    onClick={() => console.log(address)}
+                                    className='hover:bg-blue-500 truncate p-1 w-full rounded-lg  border border-gray-500/75'
+                                  >
+                                    <div className='text-sm'>
+                                      <span className='font-semibold text-gray-700'>
+                                        {address.addrLine1}{' '}
+                                      </span>
+                                      <span className='text-gray-600'>
+                                        {address.addrLine2}{' '}
+                                      </span>
+                                      <span className='text-gray-500 text-xs tracking-wide'>
+                                        {address.addrPostalCode}
+                                      </span>
+                                    </div>
+                                  </button>
+                                ))}
+                              </div>
+                            </div>
+                          </>
+                        ) : (
+                          <></>
+                        )}
                       </div>
                       <div className='flex items-center gap-3'>
                         <label htmlFor='addressPostalCode'>Postal Code</label>
@@ -234,7 +299,7 @@ export default function AddressForm() {
                         >
                           <div className='flex items-center space-x-1'>
                             <SaveIcon className='w-5 h-5 inline-block' />
-                            <span>Save</span>
+                            <span>{edit ? 'Update' : 'Save'}</span>
                           </div>
                         </button>
                         <button

@@ -3,15 +3,19 @@ import {
   SaveIcon,
   ArrowNarrowLeftIcon,
   BookOpenIcon,
+  PencilAltIcon,
 } from '@heroicons/react/solid';
 import { Dialog, Transition } from '@headlessui/react';
 import { Fragment, useState } from 'react';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import { useSelector, useDispatch } from 'react-redux';
-import { addExperienceRequest } from '../../../redux-saga/Action/profileAction';
+import {
+  addExperienceRequest,
+  updateExperienceRequest,
+} from '../../../redux-saga/Action/profileAction';
 
-export default function ExperienceForm() {
+export default function ExperienceForm({ edit }) {
   let [isOpen, setIsOpen] = useState(false);
   const dispatch = useDispatch();
   const id = useSelector((state) => state.profile.profile.userId);
@@ -61,19 +65,19 @@ export default function ExperienceForm() {
   const formik = useFormik({
     initialValues: {
       userId: id,
-      title: '',
-      profileHeadline: '',
-      employeementType: '',
-      companyName: '',
-      isCurrent: '0',
-      startYear: '',
-      startMonth: '',
-      endYear: '',
-      endMonth: '',
-      industry: '',
-      description: '',
+      title: edit ? edit.usexTitle : '',
+      profileHeadline: edit ? edit.usexProfileHeadline : '',
+      employeementType: edit ? edit.usexEmploymentType : '',
+      companyName: edit ? edit.usexCompanyName : '',
+      isCurrent: edit ? edit.usexIsCurrent : '0',
+      startYear: edit ? new Date(edit.usexStartDate).getFullYear() : '',
+      startMonth: edit ? new Date(edit.usexStartDate).getMonth() : '',
+      endYear: edit ? new Date(edit.usexEndDate).getFullYear() : '',
+      endMonth: edit ? new Date(edit.usexEndDate).getMonth() : '',
+      industry: edit ? edit.usexIndustry : '',
+      description: edit ? edit.usexDescription : '',
       city: '',
-      experienceType: '',
+      experienceType: edit ? edit.usexExperienceType : '',
     },
     validationSchema: Yup.object().shape({
       userId: Yup.number().required(),
@@ -121,25 +125,61 @@ export default function ExperienceForm() {
     }),
 
     onSubmit: async (values) => {
-      dispatch(addExperienceRequest(values));
+      if (edit) {
+        const payload = {
+          usexId: edit.usexId,
+          usexTitle: values.title,
+          usexProfileHeadline: values.profileHeadline,
+          usexEmploymentType: values.employeementType,
+          usexCompanyName: values.companyName,
+          usexIsCurrent: values.isCurrent,
+          startMonth: values.startMonth,
+          startYear: values.startYear,
+          endMonth: values.endMonth,
+          endYear: values.endYear,
+          usexIndustry: values.industry,
+          usexDescription: values.description,
+          usexExperienceType: values.experienceType,
+        };
+        dispatch(updateExperienceRequest(payload));
+      } else {
+        dispatch(addExperienceRequest(values));
+        formik.resetForm();
+      }
       closeModal();
-      formik.resetForm();
     },
   });
 
   return (
     <>
       <div>
-        <button
-          type='button'
-          onClick={openModal}
-          className='m-0 px-3 py-1 bg-transparent border-2 rounded-lg text-sm font-bold tracking-tight border-gray-700/75 hover:border-gray-700/25  text-gray-700/75 hover:text-gray-700/25 hover:scale-105 active:scale-90 active:shadow-md duration-300'
-        >
-          <div className='flex items-center space-x-1'>
-            <PlusIcon className='w-5 h-5 inline-block' />
-            <span>Add Experience</span>
-          </div>
-        </button>
+        {edit ? (
+          <>
+            <button
+              type='button'
+              onClick={openModal}
+              className='m-0 px-3 py-1 bg-transparent border-2 rounded-lg text-sm font-bold tracking-tight border-gray-700/75 hover:border-gray-700/25  text-gray-700/75 hover:text-gray-700/25 hover:scale-105 active:scale-90 active:shadow-md duration-300'
+            >
+              <div className='flex items-center space-x-1'>
+                <PencilAltIcon className='w-5 h-5 inline-block' />
+                <span>Edit</span>
+              </div>
+            </button>
+          </>
+        ) : (
+          <>
+            <button
+              type='button'
+              onClick={openModal}
+              className='m-0 px-3 py-1 bg-transparent border-2 rounded-lg text-sm font-bold tracking-tight border-gray-700/75 hover:border-gray-700/25  text-gray-700/75 hover:text-gray-700/25 hover:scale-105 active:scale-90 active:shadow-md duration-300'
+            >
+              <div className='flex items-center space-x-1'>
+                <PlusIcon className='w-5 h-5 inline-block' />
+                <span>Add Experience</span>
+              </div>
+            </button>
+          </>
+        )}
       </div>
 
       <Transition appear show={isOpen} as={Fragment}>
@@ -173,7 +213,7 @@ export default function ExperienceForm() {
                     className='text-lg font-medium leading-6 flex items-center gap-3 mb-3 text-gray-700'
                   >
                     <BookOpenIcon className='w-6 h-6 inline-block' />
-                    Add Experience
+                    {edit ? 'Update' : 'Add'} Experience
                   </Dialog.Title>
 
                   <div>
@@ -472,7 +512,7 @@ export default function ExperienceForm() {
                         >
                           <div className='flex items-center space-x-1'>
                             <SaveIcon className='w-5 h-5 inline-block' />
-                            <span>Save</span>
+                            <span>{edit ? 'Update' : 'Save'}</span>
                           </div>
                         </button>
                         <button

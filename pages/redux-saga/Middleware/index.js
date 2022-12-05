@@ -1,5 +1,6 @@
 import { takeEvery, takeLatest, all } from 'redux-saga/effects';
 import * as ActionTypeUsr from '../Constants/UsrConstant';
+import { actionTypesCurriculum } from '../Constants/curriculumType';
 import { actionTypesProfile } from '../Constants/profileType';
 import { handleUsrSignin, handleUsrSignout, handleUsrSignup } from './UsrMidle';
 import {
@@ -24,6 +25,8 @@ import {
   handlerUpdateEducation,
   handlerUpdateExperience,
 } from './profileMiddleware';
+import { handlerGetCurriculum } from './curriculumMiddleware';
+
 function* watchAll() {
   yield all([
     takeEvery(ActionTypeUsr.GET_SIGNIN_REQUEST, handleUsrSignin),
@@ -61,6 +64,10 @@ function* watchAll() {
     ),
     takeLatest(actionTypesProfile.ADD_SKILL_REQUEST, handlerAddSkill),
     takeLatest(actionTypesProfile.REM_SKILL_REQUEST, handlerRemoveSkill),
+    takeLatest(
+      actionTypesCurriculum.GET_CURRICULUMS_REQEUST,
+      handlerGetCurriculum
+    ),
   ]);
 }
 

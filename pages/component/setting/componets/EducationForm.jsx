@@ -3,15 +3,19 @@ import {
   SaveIcon,
   ArrowNarrowLeftIcon,
   AcademicCapIcon,
+  PencilAltIcon,
 } from '@heroicons/react/solid';
 import { Dialog, Transition } from '@headlessui/react';
 import { Fragment, useState } from 'react';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import { useSelector, useDispatch } from 'react-redux';
-import { addEducationRequest } from '../../../redux-saga/Action/profileAction';
+import {
+  addEducationRequest,
+  updateEducationRequest,
+} from '../../../redux-saga/Action/profileAction';
 
-export default function EducationForm() {
+export default function EducationForm({ edit }) {
   let [isOpen, setIsOpen] = useState(false);
 
   const dispatch = useDispatch();
@@ -61,16 +65,16 @@ export default function EducationForm() {
   const formik = useFormik({
     initialValues: {
       userId: id,
-      school: '',
-      degree: '',
-      fieldStudy: '',
-      startYear: '',
-      startMonth: '',
-      endYear: '',
-      endMonth: '',
-      grade: '',
-      activities: '',
-      description: '',
+      school: edit ? edit.usduSchool : '',
+      degree: edit ? edit.usduDegree : '',
+      fieldStudy: edit ? edit.usduFieldStudy : '',
+      startYear: edit ? new Date(edit.usduStartDate).getFullYear() : '',
+      startMonth: edit ? new Date(edit.usduStartDate).getMonth() : '',
+      endYear: edit ? new Date(edit.usduEndDate).getFullYear() : '',
+      endMonth: edit ? new Date(edit.usduEndDate).getMonth() : '',
+      grade: edit ? edit.usduGrade : '',
+      activities: edit ? edit.usduActivities : '',
+      description: edit ? edit.usduDescription : '',
     },
     validationSchema: Yup.object().shape({
       userId: Yup.number().required(),
@@ -105,26 +109,60 @@ export default function EducationForm() {
       description: Yup.string().notRequired(),
     }),
     onSubmit: (values) => {
-      console.log(values);
-      dispatch(addEducationRequest(values));
+      if (edit) {
+        const payload = {
+          usduId: edit.usduId,
+          usduEntityId: values.userId,
+          usduSchool: values.school,
+          usduDegree: values.degree,
+          usduFieldStudy: values.fieldStudy,
+          startMonth: values.startMonth,
+          startYear: values.startYear,
+          endMonth: values.endMonth,
+          endYear: values.endYear,
+          usduGrade: values.grade,
+          usduActivities: values.activities,
+          usduDescription: values.description,
+        };
+        dispatch(updateEducationRequest(payload));
+      } else {
+        dispatch(addEducationRequest(values));
+        formik.resetForm();
+      }
       closeModal();
-      formik.resetForm();
     },
   });
 
   return (
     <>
       <div>
-        <button
-          type='button'
-          onClick={openModal}
-          className='m-0 px-3 py-1 bg-transparent border-2 rounded-lg text-sm font-bold tracking-tight border-gray-700/75 hover:border-gray-700/25  text-gray-700/75 hover:text-gray-700/25 hover:scale-105 active:scale-90 active:shadow-md duration-300'
-        >
-          <div className='flex items-center space-x-1'>
-            <PlusIcon className='w-5 h-5 inline-block' />
-            <span>Add Education</span>
-          </div>
-        </button>
+        {edit ? (
+          <>
+            <button
+              type='button'
+              onClick={openModal}
+              className='m-0 px-3 py-1 bg-transparent border-2 rounded-lg text-sm font-bold tracking-tight border-gray-700/75 hover:border-gray-700/25  text-gray-700/75 hover:text-gray-700/25 hover:scale-105 active:scale-90 active:shadow-md duration-300'
+            >
+              <div className='flex items-center space-x-1'>
+                <PencilAltIcon className='w-5 h-5 inline-block' />
+                <span>Edit</span>
+              </div>
+            </button>
+          </>
+        ) : (
+          <>
+            <button
+              type='button'
+              onClick={openModal}
+              className='m-0 px-3 py-1 bg-transparent border-2 rounded-lg text-sm font-bold tracking-tight border-gray-700/75 hover:border-gray-700/25  text-gray-700/75 hover:text-gray-700/25 hover:scale-105 active:scale-90 active:shadow-md duration-300'
+            >
+              <div className='flex items-center space-x-1'>
+                <PlusIcon className='w-5 h-5 inline-block' />
+                <span>Add Education</span>
+              </div>
+            </button>
+          </>
+        )}
       </div>
 
       <Transition appear show={isOpen} as={Fragment}>
