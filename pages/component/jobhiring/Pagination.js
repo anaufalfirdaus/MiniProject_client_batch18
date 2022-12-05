@@ -1,14 +1,14 @@
 import React from "react";
 
 const Pagination = ({
-  countriesPerPage,
-  totalCountries,
+  jopoPerPage,
+  totalData,
   setCurrentPage,
   currentPage,
 }) => {
   let pages = [];
 
-  for (let i = 1; i <= Math.ceil(totalCountries / countriesPerPage); i++) {
+  for (let i = 1; i <= Math.ceil(totalData / jopoPerPage); i++) {
     pages.push(i);
   }
 
@@ -40,7 +40,7 @@ const Pagination = ({
           <button
             key={index}
             className={`group relative flex w-full justify-center rounded-md border-2 border-gray-200 py-2 px-4 text-sm font-medium text-gray-800 hover:bg-gray-200 ${
-              page === currentPage ? "bg-gray-800 text-white" : ""
+              page === currentPage ? "bg-gray-200 text-white" : ""
             }`}
             onClick={() => setCurrentPage(page)}
           >

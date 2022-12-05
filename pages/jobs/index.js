@@ -5,16 +5,19 @@ import { useDispatch, useSelector } from "react-redux";
 import { GetJobTypeRequest } from "../redux-saga/Action/JobTypeAction";
 import { GetJobCategoryRequest } from "../redux-saga/Action/JobCategoryAction";
 import { GetJobPostRequest } from "../redux-saga/Action/JobPostAction";
+import { GetClientRequest } from "../redux-saga/Action/ClientAction";
 import Head from "next/head";
 import JobDisclosure from "../component/jobhiring/JobDisclosure";
 import JobCard from "../component/jobhiring/JobCard";
 import Pagination from "../component/jobhiring/Pagination";
+import { Carousel } from "flowbite-react";
 
 const Jobs = () => {
   const dispatch = useDispatch();
   const { jobtypes } = useSelector((state) => state.jotyStated);
   const { jobcategories } = useSelector((state) => state.jocaStated);
   const { jobposts } = useSelector((state) => state.jopoStated);
+  const { clients } = useSelector((state) => state.clitStated);
 
   const [keyword, setKeyword] = useState("");
   const [searchTerm, setSearchTerm] = useState("");
@@ -22,9 +25,59 @@ const Jobs = () => {
   const [location, setLocation] = useState("Indonesia");
   const [viewKeyword, setViewKeyword] = useState("");
   const [category, setCategory] = useState("1");
-  const [filteredJopo, setFilteredJopo] = useState();
-  const [jotyTerm, setJotyTerm] = useState(["5"]);
-  const [expTerm, setExpTerm] = useState(["1"]);
+  const [jotyTerm, setJotyTerm] = useState(["1", "2", "3", "4", "5", "6"]);
+  const [updTerm, setUpdTerm] = useState("365");
+  const [expTerm, setExpTerm] = useState(["1", "1,3", "5,10", "10"]);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [newest, setNewest] = useState(false);
+  const [match, setMatch] = useState(false);
+  const jopoPerPage = 8;
+
+  const exps = [
+    {
+      expValue: "1",
+      expMin: 0,
+      expMax: 1,
+      expName: "< 1 Tahun"
+    },
+    {
+      expValue: "1,3",
+      expMin: 1,
+      expMax: 3,
+      expName: "1-3 Tahun"
+    },
+    {
+      expValue: "5,10",
+      expMin: 5,
+      expMax: 10,
+      expName: "5-10 Tahun"
+    },
+    {
+      expValue: "10",
+      expMin: 10,
+      expMax: null,
+      expName: "> 10 Tahun"
+    },
+  ]
+
+  const updates = [
+    {
+      updValue: 1,
+      updName: "24 Jam Terakhir"
+    },
+    {
+      updValue: 7,
+      updName: "Seminggu Terakhir"
+    },
+    {
+      updValue: 30,
+      updName: "Sebulan Terakhir"
+    },
+    {
+      updValue: 365,
+      updName: "Kapan Pun"
+    },
+  ]
 
   const handleSearch = () => {
     setSearchTerm(keyword);
@@ -33,6 +86,7 @@ const Jobs = () => {
 
   const filteredJopos = useMemo(() => {
     if (categoryTerm.length > 0 || searchTerm.length > 0) {
+      setCurrentPage(1);
       setViewKeyword(searchTerm);
       return jobposts.filter((jopo) =>
       {
@@ -62,28 +116,54 @@ const Jobs = () => {
     }
     setExpTerm(newArray);
   };
-
-  useEffect(() => {
-    setFilteredJopo(jobposts);
-  }, [jobposts]);
-
+  
   useEffect(() => {
     dispatch(GetJobPostRequest());
+  }, [match]);
+
+  useEffect(() => {
     dispatch(GetJobTypeRequest());
     dispatch(GetJobCategoryRequest());
+    dispatch(GetClientRequest());
   }, []);
 
-  const logos = [
-    "https://upload.wikimedia.org/wikipedia/commons/thumb/1/14/ASTRA_international.svg/320px-ASTRA_international.svg.png",
-    "https://upload.wikimedia.org/wikipedia/commons/thumb/5/5c/Bank_Central_Asia.svg/320px-Bank_Central_Asia.svg.png",
-    "https://static.wixstatic.com/media/ab2f5c_4090dbbaeafb4b0d975bd44c6cd498f6~mv2_d_5000_3314_s_4_2.png/v1/fill/w_262,h_78,al_c,q_85,usm_0.66_1.00_0.01,enc_auto/code-colored.png",
-    "https://static.wixstatic.com/media/62eb01_fc70b342a57f453897a70430a9e7dd10~mv2_d_5000_1300_s_2.png/v1/fill/w_181,h_46,al_c,q_85,usm_0.66_1.00_0.01,enc_auto/BNP%20Paribas.png",
-    // "https://static.wixstatic.com/media/62eb01_b64d1391272f47bfbde9f4cd4e2da7d4~mv2.png/v1/fill/w_208,h_32,al_c,q_85,usm_0.66_1.00_0.01,enc_auto/CIMB%20Niaga.png",
-    // "https://static.wixstatic.com/media/62eb01_03a53ec2fff64aa283688eb5974750bc~mv2.png/v1/fill/w_157,h_103,al_c,q_85,usm_0.66_1.00_0.01,enc_auto/Bank%20Danamon.png",
-    // "https://static.wixstatic.com/media/62eb01_9bb807787f98493a9cf8f1811d0b3c3f~mv2.png/v1/fill/w_164,h_74,al_c,q_85,usm_0.66_1.00_0.01,enc_auto/Prudential.png",
-    // "https://static.wixstatic.com/media/62eb01_441352dc7d2f47dfab7b4361cbd6214e~mv2.png/v1/fill/w_150,h_83,al_c,q_85,usm_0.66_1.00_0.01,enc_auto/Erajaya.png",
-    // "https://static.wixstatic.com/media/62eb01_06aba73de47c4d3dbc0e4a9d09a02865~mv2.png/v1/fill/w_181,h_124,al_c,q_85,usm_0.66_1.00_0.01,enc_auto/Logo%20Bank%20Mandiri.png"
-  ];
+  // Pagination
+  const lastJopoIndex = currentPage * jopoPerPage;
+  const firstJopoIndex = lastJopoIndex - jopoPerPage;
+  const currentJopo = filteredJopos.slice(firstJopoIndex, lastJopoIndex);
+
+  const compare = (a, b) => {
+    if ( a.jopoPublishDate > b.jopoPublishDate ){
+      return -1;
+    }
+    if ( a.jopoPublishDate < b.jopoPublishDate ){
+      return 1;
+    }
+    return 0;
+  }
+
+  const handleNewest = () => {
+    setNewest(true);
+    filteredJopos.sort(compare);
+  }
+  
+  const handleMatch = () => {
+    console.log("match", match);
+    setMatch(!match);
+    setNewest(false);
+  }
+
+  console.log("updTerm: ", updTerm);
+
+  const calculateDate = (publishDate) => {
+    const date = new Date(publishDate);
+    const currentTime = new Date();
+  
+    const diff = (currentTime - date);
+    const elapsed = Math.round(diff/(1000*60*60*24));
+    return elapsed;
+  }
+
 
   return (
     <LandingPage>
@@ -96,14 +176,16 @@ const Jobs = () => {
         {/* Carousel */}
         <div className="flex gap-x-5 py-6 justify-center items-center px-16 border shadow my-5 rounded overflow-scroll md:overflow-auto">
           <ChevronLeftIcon className="h-16 w-16 text-gray-600 cursor-pointer" />
-          {logos.map((logo) => (
+          <Carousel>
+          {clients.map((clit) => (
             <img
-              key={logo}
-              src={logo}
+              key={clit.clitName}
+              src={`./assets/images/${clit.clitLogo}`}
               className="h-12"
               alt="network-logo"
             />
           ))}
+            </Carousel>
           <ChevronRightIcon className="h-16 w-16 text-gray-600 cursor-pointer" />
         </div>
 
@@ -156,10 +238,10 @@ const Jobs = () => {
 
             <JobDisclosure title="Tampilkan Berdasarkan">
               <div className="flex gap-2 justify-around">
-                <button className="whitespace-nowrap inline-flex items-center justify-center px-4 py-1 border border-transparent rounded-md shadow-sm text-sm  text-white bg-orange-600 hover:bg-orange-700 font-medium">
+                <button onClick={handleMatch} className={`whitespace-nowrap inline-flex items-center justify-center px-4 py-1 rounded-lg shadow-sm text-sm border border-gray-400 text-gray-500 bg-gray-300 hover:text-orange-600 font-medium ${!newest && `border text-orange-600 border-orange-400 bg-orange-200 hover:bg-gray-300 hover:border-gray-400`}`}>
                   Match
                 </button>
-                <button className="whitespace-nowrap inline-flex items-center justify-center px-4 py-1 border border-transparent rounded-md shadow-sm text-sm text-white bg-orange-600 hover:bg-orange-700 font-medium">
+                <button onClick={handleNewest} className={`whitespace-nowrap inline-flex items-center justify-center px-4 py-1 rounded-lg shadow-sm text-sm border border-gray-400 text-gray-500 bg-gray-300 hover:text-orange-600 font-medium ${newest && `border text-orange-600 border-orange-400 bg-orange-200 hover:bg-gray-300 hover:border-gray-400`}`}>
                   Newest
                 </button>
               </div>
@@ -186,130 +268,57 @@ const Jobs = () => {
             </JobDisclosure>
             <JobDisclosure title="Pengalaman">
               <div className="ml-3 text-gray-700 text-[14px] font-medium">
-                <input
-                  type="checkbox"
-                  id="1"
-                  name="1"
-                  value="&lt;1 Tahun"
-                  className="mr-2"
-                  checked={(e) => expTerm.includes(e.target.name)}
-                  onChange={handleExpChange}
-                />
-                <label for="1tahun">&lt;1 Tahun</label>
-                <br />
-                <input
-                  type="checkbox"
-                  id="3tahun"
-                  name="1,3"
-                  value="1-3 Tahun"
-                  className="mr-2"
-                  onChange={handleExpChange}
-                />
-                <label for="3tahun">1-3 Tahun</label>
-                <br />
-                <input
-                  type="checkbox"
-                  id="5tahun"
-                  name="5,10"
-                  value="5-10 Tahun"
-                  className="mr-2"
-                  onChange={handleExpChange}
-                />
-                <label for="5tahun">5-10 Tahun</label>
-                <br />
-                <input
-                  type="checkbox"
-                  id="10tahun"
-                  name="10"
-                  value="> 10 Tahun"
-                  className="mr-2"
-                  onChange={handleExpChange}
-                />
-                <label for="10tahun">10 Tahun</label>
-                <br />
+                {exps.map((exp) => (
+                  <>
+                  <input
+                    type="checkbox"
+                    id={exp.expValue}
+                    name={exp.expValue}
+                    value={exp.expValue}
+                    className="mr-2"
+                    checked={expTerm.includes(exp.expValue.toString())}
+                    onChange={handleExpChange}
+                    />
+                  <label for={exp.expName}>{exp.expName}</label>
+                  <br/>
+                    </>
+                ))}
               </div>
             </JobDisclosure>
             <JobDisclosure title="Terupdate">
               <div className="ml-3 text-gray-700 text-[14px] font-medium">
-                <input
-                  type="radio"
-                  id="24jam"
-                  name="updated"
-                  value="24 Jam Terakhir"
-                  className="mr-2"
-                />
-                <label for="24jam">24 Jam Terakhir</label>
-                <br />
-                <input
-                  type="radio"
-                  id="seminggu"
-                  name="updated"
-                  value="Seminggu Terakhir"
-                  className="mr-2"
-                />
-                <label for="seminggu">Seminggu Terakhir</label>
-                <br />
-                <input
-                  type="radio"
-                  id="sebulan"
-                  name="updated"
-                  value="Sebulan Terakhir"
-                  className="mr-2"
-                />
-                <label for="sebulan">Sebulan Terakhir</label>
-                <br />
-                <input
-                  type="radio"
-                  id="kapanpun"
-                  name="updated"
-                  value="Kapan pun"
-                  className="mr-2"
-                />
-                <label for="kapanpun">Kapan pun</label>
+                {updates.map((update) => (
+                       <>
+                       <input
+                   type="radio"
+                   id={update.updValue}
+                   name="update"
+                   value={update.updValue}
+                   className="mr-2"
+                   onChange={() => setUpdTerm(update.updValue)}
+                   checked={updTerm == update.updValue}
+                 />
+                 <label for={update.updValue}>{update.updName}</label>
+                 <br />
+                   </>
+                ))}
               </div>
             </JobDisclosure>
           </div>
           {/* Job Card */}
           <div>
             <div className="min-w-8/12 grid grid-cols-1 lg:grid-cols-2 grid-rows-4 grid-flow-row gap-4">
-              {/* <div className="max-w-8/12 flex flex-wrap gap-4"> */}
-              {/* {jobposts.length !== 0 ? (
-                jobposts
-                  .filter((jopo) => {
-                    if (keyword) {
-                      return jopo.jopoTitle
-                        .toLowerCase()
-                        .includes(keyword.toLowerCase());
-                    }
-                    return jopo;
-                  })
-                  .map((jopo) => (
-                    <JobCard
-                      key={jopo.jopoId}
-                      title={jopo.jopoTitle}
-                      publishDate={jopo.jopoPublishDate}
-                      minExp={jopo.jopoMinExperience}
-                      maxExp={jopo.jopoMaxExperience}
-                      clitName={jopo.jopoClit.clitName}
-                      clitLogo={jopo.jopoClit.clitLogo}
-                    />
-                  ))
-              ) : (
-                <p>No Job Available</p>
-              )} */}
-              {filteredJopos && filteredJopos.length > 0 ? (
-                filteredJopos
-                  // .filter((jopo) => (
-                  //   (jopo.jopoTitle.toLowerCase().includes(keyword.toLowerCase()) ||
-                  //       jopo.jopoClit.clitName.toLowerCase().includes(keyword.toLowerCase()))
-                  //       && jopo.jopoJoca.jocaId == category
-                  // ))
+              {currentJopo && currentJopo.length > 0 ? (
+                currentJopo
                   .filter((jopo) =>
-                    jotyTerm.includes(jopo.jopoJoty.jotyId.toString())
+                    jotyTerm.includes(jopo.jopoJoty.jotyId.toString()) &&
+                    updTerm >= calculateDate(jopo.jopoPublishDate)
+                    // calculateDate(jopo.jopoPublishDate) <= updTerm 
                   )
                   .map((jopo) => (
                     <JobCard
                       key={jopo.jopoId}
+                      id={jopo.jopoId}
                       title={jopo.jopoTitle}
                       publishDate={jopo.jopoPublishDate}
                       minExp={jopo.jopoMinExperience}
@@ -326,7 +335,7 @@ const Jobs = () => {
             </div>
             <div className="mt-5 flex justify-center items-end">
               {filteredJopos.length > 0 &&
-              <Pagination />
+              <Pagination totalData={filteredJopos.length} jopoPerPage={jopoPerPage} setCurrentPage={setCurrentPage} currentPage={currentPage}/>
               }
             </div>
           </div>

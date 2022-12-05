@@ -3,6 +3,7 @@ import * as ActionTypeUsr from "../Constants/UsrConstant";
 import * as ActionTypeJobType from "../Constants/JobTypeConstant";
 import * as ActionTypeJobCategory from "../Constants/JobCategoryConstant";
 import * as ActionTypeJobPost from "../Constants/JobPostConstant";
+import * as ActionTypeClient from "../Constants/ClientConstant";
 import { handleUsrSignin, handleUsrSignout, handleUsrSignup } from "./UsrMidle";
 import {
   handleGetJobType,
@@ -16,6 +17,7 @@ import {
   handleGetJobPost,
   handleGetOneJobPost,
 } from "./JobPostMiddle";
+import { handleGetClient, handleGetOneClient } from "./ClientMiddle"
 function* watchAll() {
   yield all([
     takeEvery(ActionTypeUsr.GET_SIGNIN_REQUEST, handleUsrSignin),
@@ -33,6 +35,8 @@ function* watchAll() {
     ),
     takeEvery(ActionTypeJobPost.GET_JOBPOST_REQUEST, handleGetJobPost),
     takeEvery(ActionTypeJobPost.GETONE_JOBPOST_REQUEST, handleGetOneJobPost),
+    takeEvery(ActionTypeClient.GET_CLIENT_REQUEST, handleGetClient),
+    takeEvery(ActionTypeClient.GETONE_CLIENT_REQUEST, handleGetOneClient),
   ]);
 }
 
