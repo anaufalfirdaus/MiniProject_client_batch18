@@ -5,12 +5,14 @@ import * as ActionTypeCore from '../Constants/CoreConstant'
 import * as ActionTypeEmp from '../Constants/EmpConstant'
 import * as ActionTypeSkte from '../Constants/SkteConstant'
 import * as ActionTypeSkty from '../Constants/SktyConstant'
+import * as ActionTypeProg from '../Constants/ProgConstant'
 import { handleUsrSignin,handleUsrSignout,handleUsrSignup } from "./UsrMidle";
 import { handleGetCont, handleGetOneCont } from "./ContMidle"
 import { handleGetCore, handleGetOneCore } from "./CoreMidle"
 import { handleGetEmp, handleGetOneEmp } from "./EmpMidle"
 import { handleGetSkte, handleGetOneSkte } from "./SkteMidle"
 import { handleGetSkty, handleGetOneSkty } from "./SktyMidle"
+import { handleGetProg, handleGetOneProg } from "./ProgMidle"
 
 function* watchAll(){
     yield all([
@@ -27,7 +29,9 @@ function* watchAll(){
         takeEvery(ActionTypeSkte.GET_SKTE_REQUEST,handleGetSkte),
         takeEvery(ActionTypeSkte.GETONE_SKTE_REQUEST,handleGetOneSkte),
         takeEvery(ActionTypeSkty.GET_SKTY_REQUEST,handleGetSkty),
-        takeEvery(ActionTypeSkty.GETONE_SKTY_REQUEST,handleGetOneSkty)
+        takeEvery(ActionTypeSkty.GETONE_SKTY_REQUEST,handleGetOneSkty),
+        takeEvery(ActionTypeProg.GET_PROG_REQUEST,handleGetProg),
+        takeEvery(ActionTypeProg.GETONE_PROG_REQUEST,handleGetOneProg)
     ])
 }
 

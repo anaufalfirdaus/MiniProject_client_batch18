@@ -5,6 +5,7 @@ import CoreReducer from "./CoreReducer";
 import EmpReducer from "./EmpReducer";
 import SkteReducer from "./SkteReducer";
 import SktyReducer from "./SktyReducer";
+import ProgReducer from "./ProgReducer";
 
 const rootReducer = combineReducers({
     usrStated: UsrReducer,
@@ -13,6 +14,7 @@ const rootReducer = combineReducers({
     empStated: EmpReducer,
     skteStated: SkteReducer,
     sktyStated: SktyReducer,
+    progStated: ProgReducer,
 })
 
 export default rootReducer
