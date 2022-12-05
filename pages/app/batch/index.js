@@ -9,7 +9,7 @@ export default function Batch() {
       <Page
         title='Batch'
         titleButton='Create'
-        onClick={() => navigate('/app/batch/new')}
+        onClick={() => navigate.push('/app/batch/new')}
       >
         <h2>Test</h2>
       </Page>

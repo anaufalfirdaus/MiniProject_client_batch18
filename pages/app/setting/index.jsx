@@ -1,4 +1,6 @@
-import { useEffect } from 'react';
+'use client';
+
+import { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { getProfileRequest } from '../../redux-saga/Action/profileAction';
 import { CogIcon } from '@heroicons/react/solid';
@@ -14,11 +16,13 @@ import SkillSection from '../../component/setting/SkillSection';
 
 export default function SettingPage() {
   const dispatch = useDispatch();
-  const { userId } = useSelector((state) => state.usrStated.UserProfile);
+  const { UserProfile } = useSelector((state) => state.usrStated);
+  const [user, setUser] = useState({});
   const isLoading = useSelector((state) => state.profile.isLoading);
   useEffect(() => {
-    dispatch(getProfileRequest(userId));
-  }, [dispatch, userId]);
+    setUser(UserProfile);
+    dispatch(getProfileRequest(user?.userId || UserProfile?.userId));
+  }, [dispatch, user, UserProfile]);
 
   if (isLoading) {
     return (

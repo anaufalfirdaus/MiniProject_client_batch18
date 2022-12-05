@@ -20,62 +20,60 @@ export default function Curriculum() {
     dispatch(getCurriculumsReq());
   }, []);
 
-  // console.log(curriculum);
-
-  const curriculum = [
-    {
-      id: 1,
-      name: 'Nodejs',
-      title: 'Develop with Javasript',
-      duration: '3 Month',
-      total: {
-        members: 150,
-        batchs: 15,
-      },
-      type: 'offline',
-      rating: 4,
-      status: 'ongoing',
-    },
-    {
-      id: 2,
-      name: 'Java Basics',
-      title: 'Login & Solving Problems',
-      duration: '2 Weeks',
-      total: {
-        members: 15,
-        batchs: 2,
-      },
-      type: 'offline',
-      rating: 5,
-      status: 'ongoing',
-    },
-    {
-      id: 3,
-      name: 'Nest Js Backend',
-      title: 'Make Backend Easy',
-      duration: '5 Weeks',
-      total: {
-        members: 10,
-        batchs: 2,
-      },
-      type: 'offline',
-      rating: 3,
-      status: 'completed',
-    },
-    {
-      id: 4,
-      name: 'Next Js Frondend',
-      title: 'Make Frondend Easy',
-      duration: '5 Weeks',
-      total: {
-        members: 20,
-        batchs: 3,
-      },
-      type: 'offline',
-      rating: 4,
-      status: 'waiting',
-    },
-  ];
+  // const curriculum = [
+  //   {
+  //     id: 1,
+  //     name: 'Nodejs',
+  //     title: 'Develop with Javasript',
+  //     duration: '3 Month',
+  //     total: {
+  //       members: 150,
+  //       batchs: 15,
+  //     },
+  //     type: 'offline',
+  //     rating: 4,
+  //     status: 'ongoing',
+  //   },
+  //   {
+  //     id: 2,
+  //     name: 'Java Basics',
+  //     title: 'Login & Solving Problems',
+  //     duration: '2 Weeks',
+  //     total: {
+  //       members: 15,
+  //       batchs: 2,
+  //     },
+  //     type: 'offline',
+  //     rating: 5,
+  //     status: 'ongoing',
+  //   },
+  //   {
+  //     id: 3,
+  //     name: 'Nest Js Backend',
+  //     title: 'Make Backend Easy',
+  //     duration: '5 Weeks',
+  //     total: {
+  //       members: 10,
+  //       batchs: 2,
+  //     },
+  //     type: 'offline',
+  //     rating: 3,
+  //     status: 'completed',
+  //   },
+  //   {
+  //     id: 4,
+  //     name: 'Next Js Frondend',
+  //     title: 'Make Frondend Easy',
+  //     duration: '5 Weeks',
+  //     total: {
+  //       members: 20,
+  //       batchs: 3,
+  //     },
+  //     type: 'offline',
+  //     rating: 4,
+  //     status: 'waiting',
+  //   },
+  // ];
 
   const [searchKeyword, setSearchKeyword] = useState('');
   const [statusFilter, setStatusFilter] = useState('');
@@ -166,11 +164,12 @@ export default function Curriculum() {
         </div>
 
         <div className='border border-gray-300 relative shadow-md sm:rounded-lg'>
-          <table className='table-fixed w-full duration-200'>
+          <table className='table-auto w-full duration-200'>
             <thead>
               <tr className='text-gray-600 bg-gray-100 text-sm font-semibold tracking-wide uppercase'>
-                <th className='p-2'>Name</th>
+                <th className='p-2'>No.</th>
                 <th className='p-2'>Title</th>
+                <th className='p-2'>Headline</th>
                 <th className='p-2'>Duration</th>
                 <th className='p-2'>Total</th>
                 <th className='p-2'>Type</th>
@@ -180,22 +179,24 @@ export default function Curriculum() {
             </thead>
             <tbody className='p-2 divide-y font-medium'>
               {!isLoading
-                ? filteredCuriculum?.map((curriculum) => (
+                ? filteredCuriculum?.map((curriculum, i) => (
                     <tr
                       key={curriculum?.id}
                       className='divide-x text-sm text-gray-500'
                     >
                       <td className='py-1 px-5'>
-                        <div className='line-clamp-2'>{curriculum?.name}</div>
+                        <div className='text-center'>{i + 1}</div>
                       </td>
-                      <td
-                        className='py-1 px-5 line-clamp-2'
-                        alt={curriculum?.title}
-                      >
-                        {curriculum?.title}
+                      <td className='py-1 px-5'>
+                        <div className='line-clamp-2' title={curriculum?.name}>
+                          {curriculum?.name}
+                        </div>
+                      </td>
+                      <td className='py-1 px-5' title={curriculum?.title}>
+                        <div className='line-clamp-2'>{curriculum?.title}</div>
                       </td>
                       <td className='py-1 px-5 text-center'>
-                        {curriculum.duration}
+                        <span>{curriculum.duration}</span>
                       </td>
                       <td className='py-1 px-5 flex flex-col h-auto my-auto'>
                         <span>
@@ -214,10 +215,10 @@ export default function Curriculum() {
                         </span>
                       </td>
                       <td className='py-1 px-5 text-center'>
-                        {curriculum?.type}
+                        <span>{curriculum?.type}</span>
                       </td>
                       <td className='py-1 px-5'>
-                        <div className=' flex place-content-center'>
+                        <div className='flex place-content-center'>
                           {Array(5)
                             .fill(curriculum?.rating)
                             .map((rate, i) => (

@@ -1,5 +1,4 @@
 import {
-  XIcon,
   ArrowNarrowLeftIcon,
   TrashIcon,
   DocumentRemoveIcon,
@@ -68,19 +67,19 @@ export default function RemoveModal({ modalTitle, id, children }) {
         <>
           <button
             onClick={openModal}
-            className='border-2 border-gray-700/75 rounded-full bg-transparent hover:border-gray-700/25  text-gray-700/75 hover:text-gray-700/25 hover:scale-105 active:scale-90 active:shadow-md duration-300 p-1'
+            className='border-2 border-orange-500/75 rounded-full bg-transparent hover:border-orange-700/25  text-orange-500/75 hover:text-orange-700/25 hover:scale-105 active:scale-90 active:shadow-md duration-300 p-1'
           >
-            <XIcon className='w-5 h-5 ' />
+            <TrashIcon className='w-5 h-5 ' />
           </button>
         </>
       ) : (
         <>
           <button
             onClick={openModal}
-            className='m-0 px-3 py-1 bg-transparent border-2 rounded-lg text-sm font-bold tracking-tight border-gray-700/75 hover:border-gray-700/25  text-gray-700/75 hover:text-gray-700/25 hover:scale-105 active:scale-90 active:shadow-md duration-300'
+            className='px-4 py-2 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-orange-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500 sm:order-1 sm:ml-3'
           >
             <div className='flex items-center space-x-1'>
-              <XIcon className='w-5 h-5 inline-block' />
+              <TrashIcon className='w-5 h-5 inline-block' />
               <span>Delete</span>
             </div>
           </button>

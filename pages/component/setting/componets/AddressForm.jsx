@@ -3,7 +3,7 @@ import {
   SaveIcon,
   ArrowNarrowLeftIcon,
   LocationMarkerIcon,
-  SearchIcon,
+  PencilAltIcon,
 } from '@heroicons/react/solid';
 import { Dialog, Transition, Combobox } from '@headlessui/react';
 import { Fragment, useState } from 'react';
@@ -87,18 +87,37 @@ export default function AddressForm({ edit }) {
 
   return (
     <>
-      <div>
-        <button
-          type='button'
-          onClick={openModal}
-          className='m-0 px-3 py-1 bg-transparent border-2 rounded-lg text-sm font-bold tracking-tight border-gray-700/75 hover:border-gray-700/25  text-gray-700/75 hover:text-gray-700/25 hover:scale-105 active:scale-90 active:shadow-md duration-300'
-        >
-          <div className='flex items-center space-x-1'>
-            <PlusIcon className='w-5 h-5 inline-block' />
-            <span>Add Address</span>
+      {edit ? (
+        <>
+          <div>
+            <button
+              type='button'
+              onClick={openModal}
+              className='px-4 py-2 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-orange-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500 sm:order-1 sm:ml-3'
+            >
+              <div className='flex items-center space-x-1'>
+                <PencilAltIcon className='w-5 h-5 inline-block' />
+                <span>Edit Address</span>
+              </div>
+            </button>
           </div>
-        </button>
-      </div>
+        </>
+      ) : (
+        <>
+          <div>
+            <button
+              type='button'
+              onClick={openModal}
+              className='px-4 py-2 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-orange-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500 sm:order-1 sm:ml-3'
+            >
+              <div className='flex items-center space-x-1'>
+                <PlusIcon className='w-5 h-5 inline-block' />
+                <span>Add Address</span>
+              </div>
+            </button>
+          </div>
+        </>
+      )}
 
       <Transition appear show={isOpen} as={Fragment}>
         <Dialog as='div' className='relative z-10' onClose={closeModal}>

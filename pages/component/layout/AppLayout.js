@@ -33,84 +33,115 @@ import Link from 'next/link';
 import { useRouter } from 'next/router';
 import Breadcrump from '../breadcrump';
 
-const navigation = [
-  {
-    name: 'Home',
-    href: '/app',
-    icon: HomeIcon,
-    current: true,
-    roles: ['Administrator', 'Recuirter', 'Sales', 'Instructor'],
-  },
-  {
-    name: 'Candidat',
-    href: '/app/candidat',
-    icon: AcademicCapIcon,
-    current: false,
-    roles: ['Administrator', 'Recuirter', 'Instructor'],
-  },
-  {
-    name: 'Batch',
-    href: '/app/batch',
-    icon: ViewGridAddIcon,
-    current: false,
-    roles: ['Administrator', 'Recuirter', 'Instructor'],
-  },
-  {
-    name: 'Talent',
-    href: '/app/talent',
-    icon: UserGroupIcon,
-    current: false,
-    roles: ['Administrator', 'Recuirter', 'Instructor', 'Sales'],
-  },
-  {
-    name: 'Placement',
-    href: '/app/placement',
-    icon: UserGroupIcon,
-    current: false,
-    roles: ['Administrator', 'Recuirter', 'Sales'],
-  },
-  {
-    name: 'Curriculum',
-    href: '/app/curriculum',
-    icon: BookOpenIcon,
-    current: false,
-    roles: ['Administrator', 'Instructor'],
-  },
-  {
-    name: 'Hiring',
-    href: '/app/hiring',
-    icon: PhoneOutgoingIcon,
-    current: false,
-    roles: ['Administrator', 'Recuirter', 'Sales'],
-  },
-  {
-    name: 'Setting',
-    href: '/app/setting',
-    icon: CogIcon,
-    current: false,
-    roles: [
-      'Administrator',
-      'Recuirter',
-      'Sales',
-      'Instructor',
-      'Candidat',
-      'Talent',
-      'Outsource',
-    ],
-  },
-];
-
-function classNames(...classes) {
-  return classes.filter(Boolean).join(' ');
-}
-
 export default function AppLayout(props) {
   const router = useRouter();
+
+  const navigation = [
+    {
+      name: 'Home',
+      href: '/app',
+      icon: HomeIcon,
+      current:
+        router.asPath.split('/')[router.asPath.split('/').length - 1] === 'app'
+          ? true
+          : false,
+      roles: ['Administrator', 'Recuirter', 'Sales', 'Instructor'],
+    },
+    {
+      name: 'Candidat',
+      href: '/app/candidat',
+      icon: AcademicCapIcon,
+      current:
+        router.asPath.split('/')[router.asPath.split('/').length - 1] ===
+        'candidat'
+          ? true
+          : false,
+      roles: ['Administrator', 'Recuirter', 'Instructor'],
+    },
+    {
+      name: 'Batch',
+      href: '/app/batch',
+      icon: ViewGridAddIcon,
+      current:
+        router.asPath.split('/')[router.asPath.split('/').length - 1] ===
+        'batch'
+          ? true
+          : false,
+      roles: ['Administrator', 'Recuirter', 'Instructor'],
+    },
+    {
+      name: 'Talent',
+      href: '/app/talent',
+      icon: UserGroupIcon,
+      current:
+        router.asPath.split('/')[router.asPath.split('/').length - 1] ===
+        'talent'
+          ? true
+          : false,
+      roles: ['Administrator', 'Recuirter', 'Instructor', 'Sales'],
+    },
+    {
+      name: 'Placement',
+      href: '/app/placement',
+      icon: UserGroupIcon,
+      current:
+        router.asPath.split('/')[router.asPath.split('/').length - 1] ===
+        'placement'
+          ? true
+          : false,
+      roles: ['Administrator', 'Recuirter', 'Sales'],
+    },
+    {
+      name: 'Curriculum',
+      href: '/app/curriculum',
+      icon: BookOpenIcon,
+      current:
+        router.asPath.split('/')[router.asPath.split('/').length - 1] ===
+        'curriculum'
+          ? true
+          : false,
+      roles: ['Administrator', 'Instructor'],
+    },
+    {
+      name: 'Hiring',
+      href: '/app/hiring',
+      icon: PhoneOutgoingIcon,
+      current:
+        router.asPath.split('/')[router.asPath.split('/').length - 1] ===
+        'hiring'
+          ? true
+          : false,
+      roles: ['Administrator', 'Recuirter', 'Sales'],
+    },
+    {
+      name: 'Setting',
+      href: '/app/setting',
+      icon: CogIcon,
+      current:
+        router.asPath.split('/')[router.asPath.split('/').length - 1] ===
+        'setting'
+          ? true
+          : false,
+      roles: [
+        'Administrator',
+        'Recuirter',
+        'Sales',
+        'Instructor',
+        'Candidat',
+        'Talent',
+        'Outsource',
+      ],
+    },
+  ];
+
+  function classNames(...classes) {
+    return classes.filter(Boolean).join(' ');
+  }
+
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const { children } = props;
 
   const dispatch = useDispatch();
-  const isLoading = useSelector((state) => state.usrStated.isLoading);
   const { UserProfile } = useSelector((state) => state.usrStated);
   const [user, setUser] = useState({});
 
@@ -123,10 +154,6 @@ export default function AppLayout(props) {
     dispatch(doPushSignoutRequest());
     router.push('/');
   };
-
-  if (isLoading) {
-    return <p>Loading...</p>;
-  }
 
   return (
     <div className='h-screen flex overflow-hidden bg-white'>

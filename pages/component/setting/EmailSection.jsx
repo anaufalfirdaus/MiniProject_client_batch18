@@ -1,4 +1,4 @@
-import { MailIcon, PencilAltIcon, XIcon } from '@heroicons/react/solid';
+import { MailIcon } from '@heroicons/react/solid';
 import { useSelector } from 'react-redux';
 import EmailForm from './componets/EmailForm';
 import RemoveModal from './componets/RemoveModal';
