@@ -8,86 +8,44 @@ import Link from 'next/link';
 import AppLayout from '../../component/layout/AppLayout';
 import ButtonMenu from '../../component/curriculum/ButtonMenu';
 import ListBox from '../../component/curriculum/ListBox';
-import { useEffect, useState } from 'react';
+import Pagination from '../../component/curriculum/pagination';
+import { useEffect, useMemo, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { getCurriculumsReq } from '../../redux-saga/Action/curriculumAction';
 
+const paginate = (items, pageNumber, pageSize) => {
+  const startIndex = (pageNumber - 1) * pageSize;
+  return _(items).slice(startIndex).take(pageSize).value();
+};
+
 export default function Curriculum() {
-  const dispatch = useDispatch();
-  const curriculums = useSelector((state) => state.curriculum.curriculums);
-  const { isLoading } = useSelector((state) => state.curriculum);
-  useEffect(() => {
-    dispatch(getCurriculumsReq());
-  }, []);
-
-  // const curriculum = [
-  //   {
-  //     id: 1,
-  //     name: 'Nodejs',
-  //     title: 'Develop with Javasript',
-  //     duration: '3 Month',
-  //     total: {
-  //       members: 150,
-  //       batchs: 15,
-  //     },
-  //     type: 'offline',
-  //     rating: 4,
-  //     status: 'ongoing',
-  //   },
-  //   {
-  //     id: 2,
-  //     name: 'Java Basics',
-  //     title: 'Login & Solving Problems',
-  //     duration: '2 Weeks',
-  //     total: {
-  //       members: 15,
-  //       batchs: 2,
-  //     },
-  //     type: 'offline',
-  //     rating: 5,
-  //     status: 'ongoing',
-  //   },
-  //   {
-  //     id: 3,
-  //     name: 'Nest Js Backend',
-  //     title: 'Make Backend Easy',
-  //     duration: '5 Weeks',
-  //     total: {
-  //       members: 10,
-  //       batchs: 2,
-  //     },
-  //     type: 'offline',
-  //     rating: 3,
-  //     status: 'completed',
-  //   },
-  //   {
-  //     id: 4,
-  //     name: 'Next Js Frondend',
-  //     title: 'Make Frondend Easy',
-  //     duration: '5 Weeks',
-  //     total: {
-  //       members: 20,
-  //       batchs: 3,
-  //     },
-  //     type: 'offline',
-  //     rating: 4,
-  //     status: 'waiting',
-  //   },
-  // ];
-
+  const [currentPage, setCurrentPage] = useState(1);
+  const pageSize = 10;
   const [searchKeyword, setSearchKeyword] = useState('');
   const [statusFilter, setStatusFilter] = useState('');
+
+  const dispatch = useDispatch();
+  const { isLoading } = useSelector((state) => state.curriculum);
+  const [curriculums, setCurriculums] = useState(
+    useSelector((state) => state.curriculum.curriculums)
+  );
+  useEffect(() => {
+    dispatch(getCurriculumsReq());
+  }, [dispatch]);
 
   const handleChange = (e) => {
     setSearchKeyword(e.target.value);
   };
   const handleChangeStatus = (status) => {
     setStatusFilter(status);
-    // console.log(statusFilter.status);
   };
 
-  const filteredCuriculum =
-    statusFilter.status === 'all'
+  const handlePageChange = (page) => {
+    setCurrentPage(page);
+  };
+
+  const filteredCuriculum = useMemo(() => {
+    return statusFilter.status === 'all'
       ? searchKeyword.length > 0
         ? curriculums.filter(
             (curriculum) =>
@@ -110,10 +68,13 @@ export default function Curriculum() {
                 .toLowerCase()
                 .includes(searchKeyword.toLowerCase())
           );
+  }, [curriculums, searchKeyword, statusFilter]);
+
+  const paginateCurriculum = paginate(filteredCuriculum, currentPage, pageSize);
 
   return (
     <AppLayout>
-      <div className='sm:w-5/5  mx-auto px-5 pb-3 flex flex-col gap-3'>
+      <div className='sm:w-5/5 mt-2 mx-auto px-5 pb-3 flex flex-col gap-5'>
         <div className='px-5 py-3 bg-white border border-gray-500/15 rounded-xl shadow-sm'>
           <div className='flex justify-between items-center'>
             <h2 className='tracking-tight text-gray-700 flex items-center gap-2'>
@@ -179,13 +140,19 @@ export default function Curriculum() {
             </thead>
             <tbody className='p-2 divide-y font-medium'>
               {!isLoading
-                ? filteredCuriculum?.map((curriculum, i) => (
+                ? paginateCurriculum?.map((curriculum, i) => (
                     <tr
                       key={curriculum?.id}
                       className='divide-x text-sm text-gray-500'
                     >
                       <td className='py-1 px-5'>
-                        <div className='text-center'>{i + 1}</div>
+                        <div className='text-center'>
+                          {currentPage > 1
+                            ? i === 9
+                              ? currentPage * (i + 1)
+                              : `${currentPage - 1}${i + 1}`
+                            : i + 1}
+                        </div>
                       </td>
                       <td className='py-1 px-5'>
                         <div className='line-clamp-2' title={curriculum?.name}>
@@ -196,6 +163,7 @@ export default function Curriculum() {
                         <div className='line-clamp-2'>{curriculum?.title}</div>
                       </td>
                       <td className='py-1 px-5 text-center'>
+                        {/* //TODO Not Actual Duration */}
                         <span>{curriculum.duration}</span>
                       </td>
                       <td className='py-1 px-5 flex flex-col h-auto my-auto'>
@@ -208,9 +176,11 @@ export default function Curriculum() {
                         <span>
                           batchs:{' '}
                           <span className='italic text-xs'>
-                            {curriculum.total.batchs
+                            {/* {curriculum.total.batchs
                               ? curriculum.total.batchs
-                              : 0}
+                              : 0} */}
+                            {/* //TODO: Not Actual total batchs */}
+                            {Math.ceil(curriculum?.total?.members / 10)}
                           </span>
                         </span>
                       </td>
@@ -260,6 +230,12 @@ export default function Curriculum() {
           )}
         </div>
       </div>
+      <Pagination
+        items={filteredCuriculum.length}
+        currentPage={currentPage}
+        pageSize={pageSize}
+        onPageChange={handlePageChange}
+      />
     </AppLayout>
   );
 }

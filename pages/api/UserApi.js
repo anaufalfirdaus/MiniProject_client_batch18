@@ -61,6 +61,15 @@ const updateEmail = async (data) => {
   }
 };
 
+const uploadPhoto = async (data) => {
+  try {
+    const result = await axios.patch(`${domain}/uploadphoto`, data);
+    return result;
+  } catch (error) {
+    return error.message;
+  }
+};
+
 const updatePhone = async (data) => {
   try {
     const result = await axios.patch(`${domain}/updatephone`, data);
@@ -234,6 +243,7 @@ export {
   updateEmail,
   updatePhone,
   updateAddress,
+  uploadPhoto,
   updateEducation,
   updateExperience,
   removeEmail,

@@ -89,6 +89,7 @@ export default function LandingPage(props) {
                       height={120}
                       src='/assets/images/codeid.png'
                       alt='codeid'
+                      priority
                     />
                   </Link>
                 </div>
@@ -193,7 +194,11 @@ export default function LandingPage(props) {
                             className='h-10 w-10 object-cover rounded-full'
                             width={120}
                             height={120}
-                            src='/assets/images/yuri.jpg'
+                            src={
+                              user.userPhoto
+                                ? user.userPhoto
+                                : '/assets/images/dummy-profile.jpg'
+                            }
                             alt='profile'
                           />
                         </Menu.Button>

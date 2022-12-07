@@ -6,6 +6,7 @@ const initial_state = {
     username: '',
     firstname: '',
     lastname: '',
+    userPhoto: '',
     defaultEmail: '',
     defaultPhone: '',
     defaultRole: '',
@@ -230,6 +231,15 @@ const profileReducer = (state = initial_state, action) => {
     case actionTypesProfile.UPD_EXPERIENCE_FAILED: {
       return { ...state, isLoading: false, errors: action.payload };
     }
+    case actionTypesProfile.UPD_PHOTO_PROFILE_REQ: {
+      return { ...state, isLoading: true };
+    }
+    case actionTypesProfile.UPD_PHOTO_PROFILE_SUC: {
+      return updatePhoto(state, action);
+    }
+    case actionTypesProfile.UPD_PHOTO_PROFILE_FAL: {
+      return { ...state, isLoading: false, errors: action.payload };
+    }
     default: {
       return { ...state };
     }
@@ -246,6 +256,7 @@ const setPorfile = (state, action) => {
       username: payload.userName,
       firstname: payload.userFirstName,
       lastname: payload.userLastName,
+      userPhoto: payload.userPhoto,
       defaultEmail: payload.defaultEmail,
       defaultPhone: payload.defaultPhone,
       defaultRole: payload.defaultRole,
@@ -483,6 +494,17 @@ const updateExperience = (state, action) => {
     ...state,
     isLoading: false,
     phones: [...updExperiences],
+  };
+};
+
+const updatePhoto = (state, action) => {
+  const { payload } = action;
+  return {
+    ...state,
+    isLoading: false,
+    profile: {
+      userPhoto: payload.userPhoto,
+    },
   };
 };
 

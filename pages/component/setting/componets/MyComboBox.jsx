@@ -3,7 +3,7 @@ import { Combobox } from '@headlessui/react';
 import { SearchIcon } from '@heroicons/react/solid';
 import { useSelector } from 'react-redux';
 export default function MyComboBox() {
-  const { addresses } = useState((state) => state.profile);
+  const { addresses } = useSelector((state) => state.profile);
   return (
     <p>
       <div className='flex flex-col'>

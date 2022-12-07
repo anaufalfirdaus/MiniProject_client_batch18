@@ -9,6 +9,7 @@ import {
   updateEmail,
   removePhone,
   updatePhone,
+  uploadPhoto,
   addAddress,
   removeAddress,
   updateAddress,
@@ -62,6 +63,8 @@ import {
   removeExperienceFailed,
   removeSkillSuccess,
   removeSkillFailed,
+  uploadPhotoSuc,
+  uploadPhotoFal,
 } from '../Action/profileAction';
 
 function* handleGetProfile(action) {
@@ -269,6 +272,16 @@ function* handlerRemoveSkill(action) {
   }
 }
 
+function* handlerUploadPhoto(action) {
+  try {
+    const { payload } = action;
+    const uploadPic = yield call(uploadPhoto, payload);
+    yield put(uploadPhotoSuc(uploadPic.data));
+  } catch (error) {
+    yield put(uploadPhotoFal(error.message));
+  }
+}
+
 export {
   handleGetProfile,
   handlerAddEmail,
@@ -290,4 +303,5 @@ export {
   handlerUpdateAddress,
   handlerUpdateEducation,
   handlerUpdateExperience,
+  handlerUploadPhoto,
 };

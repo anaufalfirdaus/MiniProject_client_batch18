@@ -56,11 +56,11 @@ export default function SettingPage() {
 
   return (
     <AppLayout>
-      <div className='lg:w-4/5 sm:w-5/5  mx-auto px-5 pb-3 flex flex-col gap-3'>
+      <div className='antialiased lg:w-4/5 sm:w-5/5  mx-auto px-5 pb-3 flex flex-col gap-3'>
         {/* HEADER SETTING */}
         <div className='px-5 py-3 bg-white border border-gray-500/15 rounded-xl shadow-sm'>
           <div className='flex flex-col space-y-1'>
-            <h2 className='tracking-tight text-gray-700 flex items-center gap-2'>
+            <h2 className='tracking-wide text-gray-700 flex items-center gap-2'>
               <CogIcon className='w-6 h-6 inline-block' />
               <span className='font-bold text-2xl'>Setting</span>
             </h2>

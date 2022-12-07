@@ -68,6 +68,7 @@ export default function signup() {
             className='h-10 w-auto'
             src='/assets/images/codeid.png'
             alt='codeid'
+            priority
           />
         </div>
         <h2 className='text-4xl tracking-tight'>Sign up into your account</h2>

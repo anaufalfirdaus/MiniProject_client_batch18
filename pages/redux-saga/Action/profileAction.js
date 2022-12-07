@@ -322,3 +322,18 @@ export const updateSkillFailed = (payload) => ({
   type: actionTypesProfile.UPD_SKILL_FAILED,
   payload,
 });
+
+export const uploadPhotoReq = (payload) => ({
+  type: actionTypesProfile.UPD_PHOTO_PROFILE_REQ,
+  payload,
+});
+
+export const uploadPhotoSuc = (payload) => ({
+  type: actionTypesProfile.UPD_PHOTO_PROFILE_SUC,
+  payload,
+});
+
+export const uploadPhotoFal = (payload) => ({
+  type: actionTypesProfile.UPD_PHOTO_PROFILE_FAL,
+  payload,
+});

@@ -36,6 +36,7 @@ export default function ProfileForm() {
     },
     validationSchema: Yup.object().shape({
       userName: Yup.string()
+        .lowercase(`Username should use lowercase`)
         .min(3, 'minimal 3 character')
         .max(25, 'maximal 25 character')
         .required('username name is required, please enter username'),
@@ -170,7 +171,7 @@ export default function ProfileForm() {
                       <div className='mt-4 flex gap-2 justify-end'>
                         <button
                           type='submit'
-                          className='m-0 px-3 py-1 bg-transparent border-2 rounded-lg text-sm font-bold tracking-tight border-gray-700/75 hover:border-gray-700/25  text-gray-700/75 hover:text-gray-700/25 hover:scale-105 active:scale-90 active:shadow-md duration-300'
+                          className='px-4 py-2 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-orange-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500 sm:order-1 sm:ml-3'
                           // onClick={closeModal}
                         >
                           <div className='flex items-center space-x-1'>
@@ -180,7 +181,7 @@ export default function ProfileForm() {
                         </button>
                         <button
                           type='button'
-                          className='m-0 px-3 py-1 bg-transparent border-2 rounded-lg text-sm font-bold tracking-tight border-gray-700/75 hover:border-gray-700/25  text-gray-700/75 hover:text-gray-700/25 hover:scale-105 active:scale-90 active:shadow-md duration-300'
+                          className='px-4 py-2 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-orange-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500 sm:order-1 sm:ml-3'
                           onClick={closeModal}
                         >
                           <div className='flex items-center space-x-1'>

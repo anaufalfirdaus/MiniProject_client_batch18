@@ -2,13 +2,21 @@ import Image from 'next/image';
 import { useSelector } from 'react-redux';
 import { UserIcon } from '@heroicons/react/solid';
 import ProfileForm from './componets/ProfileForm';
+import { useRef } from 'react';
+import UploadModal from './componets/uploadModal';
 
+// TODO : Upload foto to Firebase
 export default function ProfileSection() {
-  const { username, firstname, lastname } = useSelector(
+  const uploadModalRef = useRef();
+  const { username, firstname, lastname, userPhoto } = useSelector(
     (state) => state.profile.profile
   );
   const { defaultEmail } = useSelector((state) => state.profile.profile);
   const { defaultRole } = useSelector((state) => state.profile.profile);
+
+  const handleOpenModalUpload = () => {
+    uploadModalRef.current.click();
+  };
 
   return (
     <div className='px-5 py-3 bg-white border border-gray-500/15 rounded-xl shadow-sm'>
@@ -17,24 +25,24 @@ export default function ProfileSection() {
           <UserIcon className='w-6 h-6 inline-block' />
           <span className='font-semibold text-lg'>Profile</span>
         </h2>
-        {/* <button className='m-0 px-3 py-1 bg-transparent border-2 rounded-lg text-sm font-bold tracking-tight border-gray-700/75 hover:border-gray-700/25  text-gray-700/75 hover:text-gray-700/25 hover:scale-105 active:scale-90 active:shadow-md duration-300'>
-          <div className='flex items-center space-x-1'>
-            <PencilAltIcon className='w-5 h-5 inline-block' />
-            <span>Edit</span>
-          </div>
-        </button> */}
         <ProfileForm />
       </div>
       <div className='m-3 px-5 py-5 bg-white border border-gray-500/10 rounded-xl'>
         <div className='grid grid-cols-5 items-center'>
-          <Image
-            className='col-span-1 rounded-full object-cover w-24 h-24 border-4 border-gray-800/10 shadow-sm'
-            src='/assets/images/yuri.jpg'
-            width={480}
-            height={480}
-            sizes='480'
-            alt='profile'
-          />
+          <div className='hidden'>
+            <UploadModal modalRef={uploadModalRef} />
+          </div>
+          <button onClick={handleOpenModalUpload}>
+            <Image
+              className='col-span-1 rounded-full object-cover w-24 h-24 border-4 border-gray-800/10 shadow-sm'
+              src={userPhoto ? userPhoto : '/assets/images/dummy-profile.jpg'}
+              priority
+              width={480}
+              height={480}
+              sizes='480'
+              alt='profile'
+            />
+          </button>
           <div className='col-span-4 flex flex-col'>
             <span className='font-bold font-mono tracking-tight text-gray-700 text-lg'>
               {firstname} {lastname}{' '}

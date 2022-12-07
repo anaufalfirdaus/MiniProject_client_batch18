@@ -24,6 +24,7 @@ import {
   handlerUpdateAddress,
   handlerUpdateEducation,
   handlerUpdateExperience,
+  handlerUploadPhoto,
 } from './profileMiddleware';
 import { handlerGetCurriculum } from './curriculumMiddleware';
 
@@ -68,6 +69,7 @@ function* watchAll() {
       actionTypesCurriculum.GET_CURRICULUMS_REQEUST,
       handlerGetCurriculum
     ),
+    takeLatest(actionTypesProfile.UPD_PHOTO_PROFILE_REQ, handlerUploadPhoto),
   ]);
 }
 

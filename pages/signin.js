@@ -49,6 +49,7 @@ export default function signin() {
             height={120}
             src='/assets/images/codeid.png'
             alt='codeid'
+            priority
           />
         </div>
         <h2 className='text-4xl tracking-tight'>Sign in into your account</h2>

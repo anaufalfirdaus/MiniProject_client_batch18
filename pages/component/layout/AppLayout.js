@@ -212,6 +212,7 @@ export default function AppLayout(props) {
                   width={120}
                   src='/assets/images/codeid.png'
                   alt='codeid'
+                  priority
                 />
               </div>
               <div className='mt-5 flex-1 h-0 overflow-y-auto'>
@@ -267,6 +268,7 @@ export default function AppLayout(props) {
                 height={128}
                 src='/assets/images/codeid.png'
                 alt='codeid'
+                priority
               />
             </Link>
           </div>
@@ -287,7 +289,13 @@ export default function AppLayout(props) {
                             className='w-10 h-10 bg-gray-300 object-cover rounded-full flex-shrink-0'
                             height={128}
                             width={128}
-                            src='/assets/images/yuri.jpg'
+                            src={
+                              user?.userPhoto
+                                ? user?.userPhoto
+                                : UserProfile?.userPhoto
+                                ? UserProfile?.userPhoto
+                                : '/assets/images/dummy-profile.jpg'
+                            }
                             alt='profile'
                           />
                           <span className='flex-1 flex flex-col min-w-0'>
@@ -502,7 +510,7 @@ export default function AppLayout(props) {
                           className='w-10 h-auto bg-gray-300 object-cover rounded-full flex-shrink-0'
                           height={10}
                           width={10}
-                          src='/assets/images/yuri.jpg'
+                          src='/assets/images/dummy-profile.jpg'
                           alt=''
                         />
                       </Menu.Button>

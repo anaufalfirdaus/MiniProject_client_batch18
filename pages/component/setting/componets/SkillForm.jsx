@@ -16,7 +16,15 @@ export default function SkillForm() {
   const dispatch = useDispatch();
   const id = useSelector((state) => state.profile.profile.userId);
   const skillsType = useSelector((state) => state.profile.skillType);
+  const { skills } = useSelector((state) => state.profile);
   const oneOfSkill = skillsType.map((skill) => skill.sktyName);
+
+  const filteredSkills = skillsType.filter(
+    (skillType) =>
+      !skills.some(
+        (skill) => skill.uskiSktyName.sktyName === skillType.sktyName
+      )
+  );
 
   function closeModal() {
     setIsOpen(false);
@@ -97,7 +105,7 @@ export default function SkillForm() {
 
                   <div>
                     <form onSubmit={formik.handleSubmit}>
-                      <div className='grid grid-cols-3 items-center mt-2 gap-3'>
+                      <div className='items-center grid grid-cols-3  mt-2 gap-3 w-[500px]'>
                         <label className='col-span-1' htmlFor='skillName'>
                           Skills
                         </label>
@@ -107,12 +115,12 @@ export default function SkillForm() {
                           onChange={(e) =>
                             formik.setFieldValue('skillName', e.target.value)
                           }
-                          className='rounded-lg px-2 py-1 col-span-1'
+                          className='rounded-lg px-2 py-1 col-span-2'
                           name='skillName'
                           id='skillName'
                         >
                           <option value='Bachelor'>-- Chosee Skill --</option>
-                          {skillsType?.map((skill) => (
+                          {filteredSkills?.map((skill) => (
                             <option key={skill.sktyName} value={skill.sktyName}>
                               {skill.sktyName}
                             </option>
@@ -127,7 +135,7 @@ export default function SkillForm() {
                       <div className='mt-4 flex gap-2 justify-end'>
                         <button
                           type='submit'
-                          className='m-0 px-3 py-1 bg-transparent border-2 rounded-lg text-sm font-bold tracking-tight border-gray-700/75 hover:border-gray-700/25  text-gray-700/75 hover:text-gray-700/25 hover:scale-105 active:scale-90 active:shadow-md duration-300'
+                          className='px-4 py-2 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-orange-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500 sm:order-1 sm:ml-3'
                           // onClick={closeModal}
                         >
                           <div className='flex items-center space-x-1'>
@@ -137,7 +145,7 @@ export default function SkillForm() {
                         </button>
                         <button
                           type='button'
-                          className='m-0 px-3 py-1 bg-transparent border-2 rounded-lg text-sm font-bold tracking-tight border-gray-700/75 hover:border-gray-700/25  text-gray-700/75 hover:text-gray-700/25 hover:scale-105 active:scale-90 active:shadow-md duration-300'
+                          className='px-4 py-2 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-orange-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500 sm:order-1 sm:ml-3'
                           onClick={closeModal}
                         >
                           <div className='flex items-center space-x-1'>
