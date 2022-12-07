@@ -2,11 +2,11 @@ import React from "react";
 import { Carousel } from "flowbite-react";
 function SlideTop() {
   return (
-    <div className="h-56 sm:h-64 xl:h-80 2xl:h-96 border-4 border-black bg-sky-500 w-[90%] ml-[5%]">
-      <Carousel>
+    <div className="h-56 sm:h-64 xl:h-80 2xl:h-96 border shadow my-6   w-[90%] ml-[5%]">
+      <Carousel className="bg-gray-200">
         {/* slide1 */}
         <div className="grid  grid-cols-2 ml-[100px]  ">
-          <div className="mb-[18    0px]">
+          <div className="mb-[1px]">
             <h1 className="text-2xl ">Bootcamp Regular</h1>
             <h3>
               Bootcamp reguler dilakukan secara offline di sentul bogor <br />{" "}
@@ -15,10 +15,10 @@ function SlideTop() {
               <br /> dan kamu bisa belajar bareng bersama mentor dan teman2mu
             </h3>
           </div>
-
           <div className="mr-[150px] mt-[10px]">
+            {/* gambar slide 1 */}
             <img
-              className="w-auto h-[200px]  "
+              className="w-auto h-[200px]  border shadow my-6"
               src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSEVG8-k0zPmvHb-jQavBj9kY-jyKls8SdTTg&usqp=CAU"
             />
           </div>
@@ -36,9 +36,9 @@ function SlideTop() {
             </h3>
           </div>
 
-          <div className="mr-[150px] mt-[10px]">
+          <div className="mr-[150px] mt-[10px] ">
             <img
-              className="w-auto h-[200px]  "
+              className="w-auto h-[200px] border shadow my-6 "
               src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSEVG8-k0zPmvHb-jQavBj9kY-jyKls8SdTTg&usqp=CAU"
             />
           </div>
@@ -57,10 +57,10 @@ function SlideTop() {
             </h3>
           </div>
 
-          <div className="mr-[150px] mt-[10px]">
+          <div className="mr-[150px] mt-[10px] ">
             <img
-              className="w-auto h-[200px]  "
-              src="https://zetizen.radarcirebon.com/wp-content/uploads/2022/07/Pikachu-2.jpg"
+              className="w-auto h-[200px] border shadow my-6"
+              src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSEVG8-k0zPmvHb-jQavBj9kY-jyKls8SdTTg&usqp=CAU"
             />
           </div>
         </div>
