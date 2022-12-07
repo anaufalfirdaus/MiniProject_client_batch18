@@ -57,7 +57,7 @@ function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
 }
 
-export default function LandingPage(props) {
+export default function LandingPageBootcamp(props) {
   const { children } = props;
   const dispatch = useDispatch();
   const router = useRouter();
@@ -380,9 +380,7 @@ export default function LandingPage(props) {
       </header>
       <main>
         {/* display contain page like bootcamp, hiring, talent in <Outlet/>*/}
-        <div className="max-w-7xl mx-auto py-16 px-4 sm:px-6 lg:px-8">
-          {children}
-        </div>
+        <div className="">{children}</div>
       </main>
     </div>
   );

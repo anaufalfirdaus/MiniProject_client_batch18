@@ -25,7 +25,7 @@ export default function Instructor() {
               />
             </div>
             <div className="col-span-2">
-              <p>Kang Dian</p>
+              <p>Pak Dian</p>
               <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
             </div>
           </div>
