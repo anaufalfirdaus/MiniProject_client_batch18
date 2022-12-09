@@ -1,11 +1,20 @@
 import { MailIcon } from '@heroicons/react/solid';
 import { useSelector } from 'react-redux';
 import EmailForm from './componets/EmailForm';
+import Loading from './componets/Loading';
 import RemoveModal from './componets/RemoveModal';
 
 export default function EmailSection() {
+  const { isLoading } = useSelector((state) => state.profile);
   const { emails } = useSelector((state) => state.profile);
   const { defaultEmail } = useSelector((state) => state.profile.profile);
+
+  if (
+    (isLoading.name === 'all' || isLoading.name === 'email') &&
+    isLoading.value
+  ) {
+    return <Loading />;
+  }
 
   return (
     <div className='px-5 py-3 bg-white border border-gray-500/15 rounded-xl shadow-sm'>
@@ -25,7 +34,7 @@ export default function EmailSection() {
               key={email.pmailId}
               className='flex items-center justify-between py-2'
             >
-              <span className='text-gray-700 font-regular'>
+              <span className='text-sm text-gray-600 font-semibold'>
                 {email?.pmailAddress}
                 {email?.pmailAddress === defaultEmail ? ' (Default)' : ''}
               </span>

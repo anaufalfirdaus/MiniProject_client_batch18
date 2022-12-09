@@ -6,10 +6,19 @@ import {
 } from '@heroicons/react/solid';
 import { useSelector } from 'react-redux';
 import ExperienceForm from './componets/ExperienceForm';
+import Loading from './componets/Loading';
 import RemoveModal from './componets/RemoveModal';
 
 export default function ExperienceSection() {
+  const { isLoading } = useSelector((state) => state.profile);
   const { experiences } = useSelector((state) => state.profile);
+
+  if (
+    (isLoading.name === 'all' || isLoading.name === 'experience') &&
+    isLoading.value
+  ) {
+    return <Loading />;
+  }
 
   return (
     <div className='px-5 py-3 bg-white border border-gray-500/15 rounded-xl shadow-sm'>
@@ -52,12 +61,8 @@ export default function ExperienceSection() {
             <span className='text-grary-600 text-lg tracking-wide'>
               {exp.usexIndustry}
             </span>
-            <span className='text-grary-600 text-justify'>
-              {exp.usexDescription} Lorem ipsum dolor sit, amet consectetur
-              adipisicing elit. Aperiam reprehenderit voluptate fugiat, error
-              amet, veniam voluptates, quod repellendus consectetur aspernatur
-              harum doloremque corporis recusandae dolorem consequatur illo vel
-              necessitatibus hic.
+            <span className='text-grary-600 text-sm text-justify'>
+              {exp.usexDescription}
             </span>
           </div>
 

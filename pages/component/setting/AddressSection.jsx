@@ -4,11 +4,20 @@ import {
   XIcon,
 } from '@heroicons/react/solid';
 import { useSelector } from 'react-redux';
+import Loading from './componets/Loading';
 import AddressForm from './componets/AddressForm';
 import RemoveModal from './componets/RemoveModal';
 
 export default function AddressSection() {
+  const { isLoading } = useSelector((state) => state.profile);
   const { addresses } = useSelector((state) => state.profile);
+
+  if (
+    (isLoading.name === 'all' || isLoading.name === 'address') &&
+    isLoading.value
+  ) {
+    return <Loading />;
+  }
 
   return (
     <div className='px-5 py-3 bg-white border border-gray-500/15 rounded-xl shadow-sm'>
@@ -28,16 +37,11 @@ export default function AddressSection() {
               key={address?.etadAddrId}
               className='flex items-center justify-between py-2'
             >
-              <span className='text-gray-700 font-regular truncate'>
+              <span className='text-sm text-gray-600 font-semibold line-clamp-1'>
                 {address?.etadAddr?.addrLine1} {address?.etadAddr?.addrLine2}{' '}
               </span>
-              <div className='space-x-3'>
-                <button className='px-4 py-2 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-orange-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500 sm:order-1 sm:ml-3'>
-                  <div className='flex items-center space-x-1'>
-                    <PencilAltIcon className='w-5 h-5 inline-block' />
-                    <span>Edit</span>
-                  </div>
-                </button>
+              <div className='flex space-x-3'>
+                <AddressForm edit={address} />
                 <RemoveModal modalTitle={'address'} id={address?.etadAddrId}>
                   Are you sure want to delete address{' '}
                   <span className='font-semibold'>

@@ -23,7 +23,7 @@ function* handleUsrSignin(action) {
       setCookie('access_token', result.data.access_token);
       const getprofile = yield call(profile);
       setCookie('profile', JSON.stringify(getprofile.data));
-      yield put(doGetSigninSuccess(profile.data));
+      yield put(doGetSigninSuccess(getprofile.data));
     }
   } catch (error) {
     yield put(

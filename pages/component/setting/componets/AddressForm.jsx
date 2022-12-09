@@ -14,6 +14,7 @@ import {
   addAddressRequest,
   updateAddressRequest,
 } from '../../../redux-saga/Action/profileAction';
+import { toast } from 'react-toastify';
 
 export default function AddressForm({ edit }) {
   const dispatch = useDispatch();
@@ -23,7 +24,6 @@ export default function AddressForm({ edit }) {
   const { city } = useSelector((state) => state.profile);
 
   const [query, setQuery] = useState('');
-  const [selectedAddress, setSelectedAddress] = useState('');
   let [isOpen, setIsOpen] = useState(false);
 
   const oneOfCity = city?.map((ci) => ci.cityId);
@@ -46,11 +46,11 @@ export default function AddressForm({ edit }) {
   const formik = useFormik({
     initialValues: {
       userId: id,
-      addressLine1: '',
-      addressLine2: '',
-      addressPostalCode: '',
+      addressLine1: edit ? edit.etadAddr.addrLine1 : '',
+      addressLine2: edit ? edit.etadAddr.addrLine2 : '',
+      addressPostalCode: edit ? edit.etadAddr.addrPostalCode : '',
       cityId: '',
-      addressType: '',
+      addressType: edit ? edit.etadAdty.adtyId : '',
     },
     validationSchema: Yup.object().shape({
       userId: Yup.number().required(),
@@ -71,8 +71,36 @@ export default function AddressForm({ edit }) {
         .required('please Choose the address type'),
     }),
     onSubmit: async (values) => {
+      const addressExsist = addresses.filter(
+        (address) =>
+          values.addressLine1 === address.addrLine1 ||
+          values.addressLine2 === address.addrLine2 ||
+          values.addressPostalCode === address.addrPostalCode
+      );
+
+      if (addressExsist.length > 0) {
+        closeModal();
+        return toast.warning('Address Exist, please try type another address', {
+          position: 'top-right',
+          autoClose: 3000,
+          hideProgressBar: true,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: 'colored',
+        });
+      }
+
       if (edit) {
-        const payload = {};
+        const payload = {
+          addressLine1: values.addressLine1,
+          addressLine2: values.addressLine2,
+          addressPostalCode: values.addressPostalCode,
+          CityId: values.cityId,
+          addressId: edit.etadAddrId,
+          addressType: values.addressType,
+        };
         dispatch(updateAddressRequest(payload));
       } else {
         dispatch(addAddressRequest(values));
@@ -85,37 +113,20 @@ export default function AddressForm({ edit }) {
 
   return (
     <>
-      {edit ? (
-        <>
-          <div>
-            <button
-              type='button'
-              onClick={openModal}
-              className='px-4 py-2 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-orange-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500 sm:order-1 sm:ml-3'
-            >
-              <div className='flex items-center space-x-1'>
-                <PencilAltIcon className='w-5 h-5 inline-block' />
-                <span>Edit Address</span>
-              </div>
-            </button>
-          </div>
-        </>
-      ) : (
-        <>
-          <div>
-            <button
-              type='button'
-              onClick={openModal}
-              className='px-4 py-2 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-orange-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500 sm:order-1 sm:ml-3'
-            >
-              <div className='flex items-center space-x-1'>
-                <PlusIcon className='w-5 h-5 inline-block' />
-                <span>Add Address</span>
-              </div>
-            </button>
-          </div>
-        </>
-      )}
+      <button
+        type='button'
+        onClick={openModal}
+        className='px-2 py-1 border border-transparent shadow-sm text-sm font-medium rounded-md text-gray-100 bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500 sm:order-1 sm:ml-3'
+      >
+        <div className={`flex items-center ${edit ? '' : 'space-x-1'}`}>
+          {edit ? (
+            <PencilAltIcon className='w-5 h-5 block' />
+          ) : (
+            <PlusIcon className='w-5 h-5 block' />
+          )}
+          <span>{edit ? '' : 'Add Address'}</span>
+        </div>
+      </button>
 
       <Transition appear show={isOpen} as={Fragment}>
         <Dialog as='div' className='relative z-10' onClose={closeModal}>
@@ -169,7 +180,7 @@ export default function AddressForm({ edit }) {
                         />
                       </div>
                       <div className='flex flex-col'>
-                        <label htmlFor='addressLine2'>Address Line</label>
+                        <label htmlFor='addressLine2'>Address Line 2</label>
                         <input
                           value={formik.values.addressLine2}
                           onChange={formik.handleChange}
@@ -179,50 +190,6 @@ export default function AddressForm({ edit }) {
                           id='addressLine2'
                           placeholder='ex . Kec. Baru / Kab. Gowa'
                         />
-                      </div>
-                      <div className='flex flex-col space-x-1'>
-                        <label
-                          className='ml-2 text-gray-600 text-sm font-semibold tracking-tight'
-                          htmlFor='address'
-                        >
-                          Address
-                        </label>
-                        <input
-                          type='text'
-                          onChange={(event) => setQuery(event.target.value)}
-                          className='rounded-lg px-2 py-1'
-                          placeholder='type your address here...'
-                        />
-                        {filteredAddress.length > 0 ? (
-                          <>
-                            <div className=''>
-                              <div className='w-full flex flex-col max-h-94 overflow-y-auto overflow-x-hidden space-x-1 bg-white'>
-                                {filteredAddress.map((address) => (
-                                  <button
-                                    key={address.addrId}
-                                    type='button'
-                                    onClick={() => console.log(address)}
-                                    className='hover:bg-blue-500 truncate p-1 w-full rounded-lg  border border-gray-500/75'
-                                  >
-                                    <div className='text-sm'>
-                                      <span className='font-semibold text-gray-700'>
-                                        {address.addrLine1}{' '}
-                                      </span>
-                                      <span className='text-gray-600'>
-                                        {address.addrLine2}{' '}
-                                      </span>
-                                      <span className='text-gray-500 text-xs tracking-wide'>
-                                        {address.addrPostalCode}
-                                      </span>
-                                    </div>
-                                  </button>
-                                ))}
-                              </div>
-                            </div>
-                          </>
-                        ) : (
-                          <></>
-                        )}
                       </div>
                       <div className='flex items-center gap-3'>
                         <label htmlFor='addressPostalCode'>Postal Code</label>
@@ -311,7 +278,7 @@ export default function AddressForm({ edit }) {
                       <div className='mt-4 flex gap-2 justify-end'>
                         <button
                           type='submit'
-                          className='px-4 py-2 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-orange-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500 sm:order-1 sm:ml-3'
+                          className='px-2 py-1 border border-transparent shadow-sm text-sm font-medium rounded-md text-gray-100 bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500 sm:order-1 sm:ml-3'
                           // onClick={closeModal}
                         >
                           <div className='flex items-center space-x-1'>
@@ -321,7 +288,7 @@ export default function AddressForm({ edit }) {
                         </button>
                         <button
                           type='button'
-                          className='px-4 py-2 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-orange-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500 sm:order-1 sm:ml-3'
+                          className='px-2 py-1 border border-transparent shadow-sm text-sm font-medium rounded-md text-gray-100 bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500 sm:order-1 sm:ml-3'
                           onClick={closeModal}
                         >
                           <div className='flex items-center space-x-1'>

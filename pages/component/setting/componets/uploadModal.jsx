@@ -2,12 +2,10 @@ import { storage } from '../../../../firebase.config';
 import { ref, uploadBytesResumable, getDownloadURL } from '@firebase/storage';
 import { Dialog, Transition } from '@headlessui/react';
 import { Fragment, useState, useRef } from 'react';
-import {
-  uploadPhotoReq,
-  getProfileRequest,
-} from '../../../redux-saga/Action/profileAction';
+import { uploadPhotoReq } from '../../../redux-saga/Action/profileAction';
 import { useSelector, useDispatch } from 'react-redux';
 import Image from 'next/image';
+import { toast } from 'react-toastify';
 
 export default function UploadModal({ modalRef }) {
   const dispatch = useDispatch();
@@ -45,33 +43,42 @@ export default function UploadModal({ modalRef }) {
       const name = upload.name;
       const storageRef = ref(storage, `image/${name}`);
       const uploadTask = uploadBytesResumable(storageRef, upload);
+      const waitUpload = new Promise((resolve, reject) => {
+        uploadTask.on(
+          'state_changed',
+          (snapshot) => {
+            const progress =
+              (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+            console.log('Upload is ' + progress + '% done');
 
-      uploadTask.on(
-        'state_changed',
-        (snapshot) => {
-          const progress =
-            (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-          console.log('Upload is ' + progress + '% done');
-          switch (snapshot.state) {
-            case 'paused':
-              console.log('Upload is paused');
-              break;
-            case 'running':
-              console.log('Upload is running');
-              break;
+            switch (snapshot.state) {
+              case 'paused':
+                console.log('Upload is paused');
+                break;
+              case 'running':
+                console.log('Upload is running');
+                break;
+            }
+          },
+          (error) => {
+            reject();
+            alert(error.message);
+          },
+          () => {
+            getDownloadURL(uploadTask.snapshot.ref).then(async (url) => {
+              setImageUrl(url);
+              resolve();
+              dispatch(uploadPhotoReq({ id: id, imageUrl: url }));
+            });
           }
-        },
-        (error) => {
-          alert(error.message);
-        },
-        () => {
-          getDownloadURL(uploadTask.snapshot.ref).then(async (url) => {
-            setImageUrl(url);
-            dispatch(uploadPhotoReq({ id: id, imageUrl: url }));
-            dispatch(getProfileRequest(id));
-          });
-        }
-      );
+        );
+      });
+
+      toast.promise(waitUpload, {
+        pending: 'Upload Photo Profile',
+        success: 'Upload Success',
+        error: 'Upload Failed',
+      });
     } else {
       alert('File not found');
     }
@@ -85,7 +92,7 @@ export default function UploadModal({ modalRef }) {
           type='button'
           ref={modalRef}
           onClick={openModal}
-          className='rounded-md bg-slate-700 bg-opacity-75 px-4 py-2 text-sm font-medium text-white hover:bg-opacity-30 focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75'
+          className='rounded-md bg-slate-700 bg-opacity-75 px-2 py-1 text-sm font-medium text-white hover:bg-opacity-30 focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75'
         >
           upload Profile
         </button>

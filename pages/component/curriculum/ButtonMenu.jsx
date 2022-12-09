@@ -2,11 +2,27 @@ import { Menu, Transition } from '@headlessui/react';
 import { Fragment, useEffect, useRef, useState } from 'react';
 import { DotsVerticalIcon } from '@heroicons/react/solid';
 import Link from 'next/link';
+import RemoveModal from '../../component/curriculum/RemoveModal';
 
 export default function ButtonMenu({ curriculum }) {
+  const removeButton = useRef();
+
+  function openRemoveModal() {
+    removeButton.current.click();
+  }
+
   return (
     <div>
       <Menu as='div' className='relative inline-block text-left'>
+        <div className='hidden'>
+          <RemoveModal
+            buttonRef={removeButton}
+            modalTitle={'Curriculum'}
+            id={curriculum.id}
+          >
+            Are you sure want to remove this {curriculum.name}
+          </RemoveModal>
+        </div>
         <div>
           <Menu.Button className='inline-flex w-full justify-center rounded-md px-4 py-2 text-sm font-medium text-white hover:bg-opacity-75 focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75'>
             <DotsVerticalIcon className='w-5 h-5 text-gray-500' />
@@ -50,8 +66,8 @@ export default function ButtonMenu({ curriculum }) {
             <div className='px-1 py-1'>
               <Menu.Item>
                 {({ active }) => (
-                  <Link
-                    href={`/app/curriculum/remove/${curriculum.id}`}
+                  <button
+                    onClick={() => openRemoveModal()}
                     className={`${
                       active ? 'bg-blue-500 text-white' : 'text-gray-900'
                     } group flex w-full items-center rounded-md px-2 py-2 text-sm`}
@@ -68,7 +84,7 @@ export default function ButtonMenu({ curriculum }) {
                       />
                     )}
                     Delete
-                  </Link>
+                  </button>
                 )}
               </Menu.Item>
             </div>

@@ -5,13 +5,16 @@ import {
   StarIcon,
 } from '@heroicons/react/solid';
 import Link from 'next/link';
+import Head from 'next/head';
 import AppLayout from '../../component/layout/AppLayout';
 import ButtonMenu from '../../component/curriculum/ButtonMenu';
 import ListBox from '../../component/curriculum/ListBox';
 import Pagination from '../../component/curriculum/pagination';
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useState, useMemo } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { getCurriculumsReq } from '../../redux-saga/Action/curriculumAction';
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const paginate = (items, pageNumber, pageSize) => {
   const startIndex = (pageNumber - 1) * pageSize;
@@ -22,13 +25,11 @@ export default function Curriculum() {
   const [currentPage, setCurrentPage] = useState(1);
   const pageSize = 10;
   const [searchKeyword, setSearchKeyword] = useState('');
-  const [statusFilter, setStatusFilter] = useState('');
+  const [statusFilter, setStatusFilter] = useState({ id: 0, status: 'all' });
 
   const dispatch = useDispatch();
   const { isLoading } = useSelector((state) => state.curriculum);
-  const [curriculums, setCurriculums] = useState(
-    useSelector((state) => state.curriculum.curriculums)
-  );
+  const curriculums = useSelector((state) => state.curriculum.curriculums);
   useEffect(() => {
     dispatch(getCurriculumsReq());
   }, [dispatch]);
@@ -44,36 +45,45 @@ export default function Curriculum() {
     setCurrentPage(page);
   };
 
-  const filteredCuriculum = useMemo(() => {
-    return statusFilter.status === 'all'
-      ? searchKeyword.length > 0
-        ? curriculums.filter(
-            (curriculum) =>
-              curriculum.name
-                .toLowerCase()
-                .includes(searchKeyword.toLowerCase()) ||
-              curriculum.title
-                .toLowerCase()
-                .includes(searchKeyword.toLowerCase())
-          )
+  const filteredCuriculum = useMemo(
+    () =>
+      statusFilter.status === 'all'
+        ? searchKeyword.length > 0
+          ? curriculums.filter(
+              (curriculum) =>
+                curriculum.name
+                  .toLowerCase()
+                  .includes(searchKeyword.toLowerCase()) ||
+                curriculum.title
+                  .toLowerCase()
+                  .includes(searchKeyword.toLowerCase())
+            )
+          : curriculums
         : curriculums
-      : curriculums
-          .filter((curriculum) => curriculum.learnType === statusFilter.status)
-          .filter(
-            (curriculum) =>
-              curriculum.name
-                .toLowerCase()
-                .includes(searchKeyword.toLowerCase()) ||
-              curriculum.title
-                .toLowerCase()
-                .includes(searchKeyword.toLowerCase())
-          );
-  }, [curriculums, searchKeyword, statusFilter]);
+            .filter(
+              (curriculum) => curriculum.learnType === statusFilter.status
+            )
+            .filter(
+              (curriculum) =>
+                curriculum.name
+                  .toLowerCase()
+                  .includes(searchKeyword.toLowerCase()) ||
+                curriculum.title
+                  .toLowerCase()
+                  .includes(searchKeyword.toLowerCase())
+            ),
+    [searchKeyword, statusFilter, curriculums]
+  );
 
   const paginateCurriculum = paginate(filteredCuriculum, currentPage, pageSize);
 
   return (
     <AppLayout>
+      <Head>
+        <title>Codeid | Curriculum</title>
+        <meta name='viewport' content='initial-scale=1.0, width=device-width' />
+      </Head>
+      <ToastContainer />
       <div className='sm:w-5/5 mt-2 mx-auto px-5 pb-3 flex flex-col gap-5'>
         <div className='px-5 py-3 bg-white border border-gray-500/15 rounded-xl shadow-sm'>
           <div className='flex justify-between items-center'>
@@ -179,7 +189,7 @@ export default function Curriculum() {
                             {/* {curriculum.total.batchs
                               ? curriculum.total.batchs
                               : 0} */}
-                            {/* //TODO: Not Actual total batchs */}
+                            {/* //!: Not Actual total batchs */}
                             {Math.ceil(curriculum?.total?.members / 10)}
                           </span>
                         </span>

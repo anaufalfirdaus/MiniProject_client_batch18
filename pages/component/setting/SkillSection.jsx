@@ -2,9 +2,18 @@ import { DesktopComputerIcon, XIcon } from '@heroicons/react/solid';
 import { useSelector } from 'react-redux';
 import SkillForm from './componets/SkillForm';
 import RemoveModal from './componets/RemoveModal';
+import Loading from './componets/Loading';
 
 export default function SkillSection() {
+  const { isLoading } = useSelector((state) => state.profile);
   const { skills } = useSelector((state) => state.profile);
+
+  if (
+    (isLoading.name === 'all' || isLoading.name === 'skill') &&
+    isLoading.value
+  ) {
+    return <Loading />;
+  }
 
   return (
     <div className='px-5 py-3 bg-white border border-gray-500/15 rounded-xl shadow-sm'>
@@ -21,7 +30,7 @@ export default function SkillSection() {
             key={skill.uskiId}
             className='flex items-center justify-between py-1 px-2 bg-white border border-gray-500/30 rounded-full'
           >
-            <span className='ml-3 text-gray-600 font-bold capitalize'>
+            <span className='ml-3 text-gray-500 font-semibold capitalize'>
               {skill.uskiSktyName.sktyName}
             </span>
             <RemoveModal modalTitle={'skill'} id={skill.uskiId}>

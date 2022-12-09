@@ -1,5 +1,6 @@
 import { actionTypesProfile } from '../Constants/profileType';
-
+import { setCookie, getCookie } from 'cookies-next';
+import { toast } from 'react-toastify';
 const initial_state = {
   profile: {
     userId: '',
@@ -24,7 +25,7 @@ const initial_state = {
   skillType: [],
   statusType: [],
   listAddresses: [],
-  isLoading: false,
+  isLoading: { name: 'all', value: false },
   message: {},
   errors: null,
 };
@@ -32,16 +33,20 @@ const initial_state = {
 const profileReducer = (state = initial_state, action) => {
   switch (action.type) {
     case actionTypesProfile.GET_PROFILE_REQUEST: {
-      return { ...state, isLoading: true };
+      return { ...state, isLoading: { name: 'all', value: true } };
     }
     case actionTypesProfile.GET_PROFILE_SUCCESS: {
       return setPorfile(state, action);
     }
     case actionTypesProfile.GET_PROFILE_FAILED: {
-      return { ...state, isLoading: false, errors: action.payload };
+      return {
+        ...state,
+        isLoading: { name: 'all', value: true },
+        errors: action.payload,
+      };
     }
     case actionTypesProfile.UPD_PROFILE_REQUEST: {
-      return { ...state, isLoading: true };
+      return { ...state, isLoading: { name: 'profile', value: true } };
     }
     case actionTypesProfile.UPD_PROFILE_SUCCESS: {
       return updateProfile(state, action);
@@ -50,10 +55,10 @@ const profileReducer = (state = initial_state, action) => {
       return { ...state, isLoading: false, errors: action.payload };
     }
     case actionTypesProfile.UPD_PASSWORD_REQUEST: {
-      return { ...state, isLoading: true };
+      return { ...state, isLoading: { name: 'password', value: true } };
     }
     case actionTypesProfile.UPD_PASSWORD_SUCCESS: {
-      return { ...state, isLoading: false, message: { ...action.payload } };
+      return updatePassword(state, action);
     }
     case actionTypesProfile.UPD_PASSWORD_FAILED: {
       return { ...state, isLoading: false, errors: action.payload };
@@ -61,7 +66,7 @@ const profileReducer = (state = initial_state, action) => {
     //* ADD CASE
     case actionTypesProfile.ADD_EMAIL_REQUEST: {
       // * EMAIL
-      return { ...state, isLoading: true };
+      return { ...state, isLoading: { name: 'email', value: true } };
     }
     case actionTypesProfile.ADD_EMAIL_SUCCESS: {
       return addEmail(state, action);
@@ -71,7 +76,7 @@ const profileReducer = (state = initial_state, action) => {
     }
     case actionTypesProfile.ADD_PHONE_REQUEST: {
       //* PHONE
-      return { ...state, isLoading: true };
+      return { ...state, isLoading: { name: 'phone', value: true } };
     }
     case actionTypesProfile.ADD_PHONE_SUCCESS: {
       return addPhone(state, action);
@@ -81,7 +86,7 @@ const profileReducer = (state = initial_state, action) => {
     }
     case actionTypesProfile.ADD_ADDRESS_REQUEST: {
       //* ADDRESS
-      return { ...state, isLoading: true };
+      return { ...state, isLoading: { name: 'address', value: true } };
     }
     case actionTypesProfile.ADD_ADDRESS_SUCCESS: {
       return addAddress(state, action);
@@ -91,7 +96,7 @@ const profileReducer = (state = initial_state, action) => {
     }
     case actionTypesProfile.ADD_EDUCATION_REQUEST: {
       //* EDUCATION
-      return { ...state, isLoading: true };
+      return { ...state, isLoading: { name: 'education', value: true } };
     }
     case actionTypesProfile.ADD_EDUCATION_SUCCESS: {
       return addEducation(state, action);
@@ -101,7 +106,7 @@ const profileReducer = (state = initial_state, action) => {
     }
     case actionTypesProfile.ADD_EXPERIENCE_REQUEST: {
       //* EXPERIENCE
-      return { ...state, isLoading: true };
+      return { ...state, isLoading: { name: 'experience', value: true } };
     }
     case actionTypesProfile.ADD_EXPERIENCE_SUCCESS: {
       return addExperience(state, action);
@@ -111,7 +116,7 @@ const profileReducer = (state = initial_state, action) => {
     }
     case actionTypesProfile.ADD_SKILL_REQUEST: {
       //* SKILL
-      return { ...state, isLoading: true };
+      return { ...state, isLoading: { name: 'skill', value: true } };
     }
     case actionTypesProfile.ADD_SKILL_SUCCESS: {
       return addSkill(state, action);
@@ -122,7 +127,7 @@ const profileReducer = (state = initial_state, action) => {
     //* REMOVE CASE
     case actionTypesProfile.REM_EMAIL_REQUEST: {
       //* EMAIL
-      return { ...state, isLoading: true };
+      return { ...state, isLoading: { name: 'email', value: true } };
     }
     case actionTypesProfile.REM_EMAIL_SUCCESS: {
       return removeEmail(state, action);
@@ -132,7 +137,7 @@ const profileReducer = (state = initial_state, action) => {
     }
     case actionTypesProfile.REM_PHONE_REQUEST: {
       //* PHONE
-      return { ...state, isLoading: true };
+      return { ...state, isLoading: { name: 'phone', value: true } };
     }
     case actionTypesProfile.REM_PHONE_SUCCESS: {
       return removePhone(state, action);
@@ -142,7 +147,7 @@ const profileReducer = (state = initial_state, action) => {
     }
     case actionTypesProfile.REM_ADDRESS_REQUEST: {
       //* ADDRESS
-      return { ...state, isLoading: true };
+      return { ...state, isLoading: { name: 'address', value: true } };
     }
     case actionTypesProfile.REM_ADDRESS_SUCCESS: {
       return removeAddress(state, action);
@@ -152,7 +157,7 @@ const profileReducer = (state = initial_state, action) => {
     }
     case actionTypesProfile.REM_EDUCATION_REQUEST: {
       //* EDUCATION
-      return { ...state, isLoading: true };
+      return { ...state, isLoading: { name: 'education', value: true } };
     }
     case actionTypesProfile.REM_EDUCATION_SUCCESS: {
       return removeEducation(state, action);
@@ -162,7 +167,7 @@ const profileReducer = (state = initial_state, action) => {
     }
     case actionTypesProfile.REM_EXPERIENCE_REQUEST: {
       //* EXPERIENCE
-      return { ...state, isLoading: true };
+      return { ...state, isLoading: { name: 'experience', value: true } };
     }
     case actionTypesProfile.REM_EXPERIENCE_SUCCESS: {
       return removeExperience(state, action);
@@ -172,7 +177,7 @@ const profileReducer = (state = initial_state, action) => {
     }
     case actionTypesProfile.REM_SKILL_REQUEST: {
       //* SKILL
-      return { ...state, isLoading: true };
+      return { ...state, isLoading: { name: 'skill', value: true } };
     }
     case actionTypesProfile.REM_SKILL_SUCCESS: {
       return removeSkill(state, action);
@@ -183,7 +188,7 @@ const profileReducer = (state = initial_state, action) => {
     //* UPDATE CASE
     case actionTypesProfile.UPD_EMAIL_REQUEST: {
       //* EMAIL
-      return { ...state, isLoading: true };
+      return { ...state, isLoading: { name: 'email', value: true } };
     }
     case actionTypesProfile.UPD_EMAIL_SUCCESS: {
       return updateEmail(state, action);
@@ -193,7 +198,7 @@ const profileReducer = (state = initial_state, action) => {
     }
     case actionTypesProfile.UPD_PHONE_REQUEST: {
       //* PHONE
-      return { ...state, isLoading: true };
+      return { ...state, isLoading: { name: 'phone', value: true } };
     }
     case actionTypesProfile.UPD_PHONE_SUCCESS: {
       return updatePhone(state, action);
@@ -203,7 +208,7 @@ const profileReducer = (state = initial_state, action) => {
     }
     case actionTypesProfile.UPD_ADDRESS_REQUEST: {
       //* ADDRESS
-      return { ...state, isLoading: true };
+      return { ...state, isLoading: { name: 'address', value: true } };
     }
     case actionTypesProfile.UPD_ADDRESS_SUCCESS: {
       return updateAddress(state, action);
@@ -213,7 +218,7 @@ const profileReducer = (state = initial_state, action) => {
     }
     case actionTypesProfile.UPD_EDUCATION_REQUEST: {
       //* EDUCATION
-      return { ...state, isLoading: true };
+      return { ...state, isLoading: { name: 'education', value: true } };
     }
     case actionTypesProfile.UPD_EDUCATION_SUCCESS: {
       return updateEducation(state, action);
@@ -223,7 +228,7 @@ const profileReducer = (state = initial_state, action) => {
     }
     case actionTypesProfile.UPD_EXPERIENCE_REQUEST: {
       //* EXPERIENCE
-      return { ...state, isLoading: true };
+      return { ...state, isLoading: { name: 'experience', value: true } };
     }
     case actionTypesProfile.UPD_EXPERIENCE_SUCCESS: {
       return updateExperience(state, action);
@@ -232,7 +237,7 @@ const profileReducer = (state = initial_state, action) => {
       return { ...state, isLoading: false, errors: action.payload };
     }
     case actionTypesProfile.UPD_PHOTO_PROFILE_REQ: {
-      return { ...state, isLoading: true };
+      return { ...state, isLoading: { name: 'profile', value: true } };
     }
     case actionTypesProfile.UPD_PHOTO_PROFILE_SUC: {
       return updatePhoto(state, action);
@@ -250,7 +255,7 @@ const setPorfile = (state, action) => {
   const { payload } = action;
   return {
     ...state,
-    isLoading: false,
+    isLoading: { name: 'all', value: false },
     profile: {
       userId: payload.userEntityId,
       username: payload.userName,
@@ -279,9 +284,10 @@ const setPorfile = (state, action) => {
 
 const updateProfile = (state, action) => {
   const { payload } = action;
+  showToast('Update Profile Success !');
   return {
     ...state,
-    isLoading: false,
+    isLoading: { name: 'profile', value: false },
     profile: {
       ...state.profile,
       username: payload.userName,
@@ -293,54 +299,60 @@ const updateProfile = (state, action) => {
 //* ADD FUNCTION
 const addEmail = (state, action) => {
   const { payload } = action;
+  showToast('Add Email Success !');
   return {
     ...state,
-    isLoading: false,
+    isLoading: { name: 'email', value: false },
     emails: [...state.emails, payload],
   };
 };
 
 const addPhone = (state, action) => {
   const { payload } = action;
+  showToast('Add Phone Success !');
   return {
     ...state,
-    isLoading: false,
+    isLoading: { name: 'phone', value: false },
     phones: [...state.phones, payload],
   };
 };
 
 const addAddress = (state, action) => {
   const { payload } = action;
+  showToast('Add Address Success !');
   return {
     ...state,
-    isLoading: false,
+    isLoading: { name: 'address', value: false },
     addresses: [...state.addresses, payload],
   };
 };
 
 const addEducation = (state, action) => {
   const { payload } = action;
+  showToast('Add Education Success !');
   return {
     ...state,
-    isLoading: false,
+    isLoading: { name: 'education', value: false },
     educations: [...state.educations, payload],
   };
 };
 
 const addExperience = (state, action) => {
   const { payload } = action;
+  showToast('Add Experience Success !');
   return {
     ...state,
-    isLoading: false,
+    isLoading: { name: 'experience', value: false },
     experiences: [...state.experiences, payload],
   };
 };
 
 const addSkill = (state, action) => {
   const { payload } = action;
+  showToast('Add Skill Success !');
   return {
     ...state,
-    isLoading: false,
+    isLoading: { name: 'skill', value: false },
     skills: [...state.skills, payload],
   };
 };
@@ -352,9 +364,10 @@ const removeEmail = (state, action) => {
   const filterEmails = emails.filter(
     (email) => email.pmailAddress !== payload.pmailAddress
   );
+  showToast('Remove Email Success !');
   return {
     ...state,
-    isLoading: false,
+    isLoading: { name: 'email', value: false },
     emails: [...filterEmails],
   };
 };
@@ -365,9 +378,10 @@ const removePhone = (state, action) => {
   const filterPhones = phones.filter(
     (phone) => phone.uspoPhone !== payload.uspoPhone
   );
+  showToast('Remove Phone Success !');
   return {
     ...state,
-    isLoading: false,
+    isLoading: { name: 'phone', value: false },
     phones: [...filterPhones],
   };
 };
@@ -378,9 +392,10 @@ const removeAddress = (state, action) => {
   const filterAddresses = addresses.filter(
     (address) => address.etadAddrId !== payload.etadAddrId
   );
+  showToast('Remove Address Success !');
   return {
     ...state,
-    isLoading: false,
+    isLoading: { name: 'address', value: false },
     addresses: [...filterAddresses],
   };
 };
@@ -391,9 +406,10 @@ const removeEducation = (state, action) => {
   const filterEducations = educations.filter(
     (education) => education.usduId !== payload.usduId
   );
+  showToast('Remove Education Success !');
   return {
     ...state,
-    isLoading: false,
+    isLoading: { name: 'education', value: false },
     educations: [...filterEducations],
   };
 };
@@ -404,9 +420,10 @@ const removeExperience = (state, action) => {
   const filterExperiences = experiences.filter(
     (experience) => experience.usexId !== payload.usexId
   );
+  showToast('Remove Experience Success !');
   return {
     ...state,
-    isLoading: false,
+    isLoading: { name: 'experience', value: false },
     experiences: [...filterExperiences],
   };
 };
@@ -417,9 +434,10 @@ const removeSkill = (state, action) => {
   const filterSkills = skills.filter(
     (skill) => skill.uskiId !== payload.uskiId
   );
+  showToast('Remove Skill Success !');
   return {
     ...state,
-    isLoading: false,
+    isLoading: { name: 'skill', value: false },
     skills: [...filterSkills],
   };
 };
@@ -435,9 +453,10 @@ const updateEmail = (state, action) => {
     }
     return email;
   });
+  showToast('Update Email Success !');
   return {
     ...state,
-    isLoading: false,
+    isLoading: { name: 'email', value: false },
     emails: [...updEmails],
   };
 };
@@ -452,15 +471,33 @@ const updatePhone = (state, action) => {
     }
     return phone;
   });
+  showToast('Update Phone Success !');
   return {
     ...state,
-    isLoading: false,
+    isLoading: { name: 'phone', value: false },
     phones: [...updPhones],
   };
 };
-
+// this function basicly going to replace the edit one not update it
+// cuz we add another address to address table then remove the id address that
+// we want to edit
+// and add the new id address to user address table
 const updateAddress = (state, action) => {
-  return state;
+  const { payload } = action;
+  const { addresses } = state;
+  const updAddresses = addresses.map((address) => {
+    if (address.etadAddrId === payload.etadAddrId) {
+      Object.assign(address, payload);
+      return address;
+    }
+    return address;
+  });
+  showToast('Update Address Success !');
+  return {
+    ...state,
+    isLoading: { name: 'address', value: false },
+    addresses: [...updAddresses],
+  };
 };
 
 const updateEducation = (state, action) => {
@@ -473,9 +510,10 @@ const updateEducation = (state, action) => {
     }
     return education;
   });
+  showToast('Update Education Success !');
   return {
     ...state,
-    isLoading: false,
+    isLoading: { name: 'education', value: false },
     phones: [...updEducations],
   };
 };
@@ -490,22 +528,53 @@ const updateExperience = (state, action) => {
     }
     return experience;
   });
+  showToast('Update Experience Success !');
   return {
     ...state,
-    isLoading: false,
+    isLoading: { name: 'experience', value: false },
     phones: [...updExperiences],
   };
 };
 
 const updatePhoto = (state, action) => {
   const { payload } = action;
+  const profile = JSON.parse(getCookie('profile'));
+  profile.userPhoto = payload.userPhoto;
+  setCookie('profile', JSON.stringify(profile));
+
+  showToast('Update Photo Success !');
+
   return {
     ...state,
-    isLoading: false,
+    isLoading: { name: 'profile', value: false },
     profile: {
+      ...state.profile,
       userPhoto: payload.userPhoto,
     },
   };
+};
+
+const updatePassword = (state, action) => {
+  showToast('Update password Success !');
+  return {
+    ...state,
+    isLoading: { name: 'password', value: false },
+    message: { ...action.payload },
+  };
+};
+
+// * Helper function to show Toast(Notification)
+const showToast = (message) => {
+  toast.success(message, {
+    position: 'top-right',
+    autoClose: 3000,
+    hideProgressBar: true,
+    closeOnClick: true,
+    pauseOnHover: true,
+    draggable: true,
+    progress: undefined,
+    theme: 'colored',
+  });
 };
 
 export default profileReducer;

@@ -13,6 +13,7 @@ import { addSkillRequest } from '../../../redux-saga/Action/profileAction';
 
 export default function SkillForm() {
   let [isOpen, setIsOpen] = useState(false);
+  const [changeSkill, setChangeSkill] = useState('');
   const dispatch = useDispatch();
   const id = useSelector((state) => state.profile.profile.userId);
   const skillsType = useSelector((state) => state.profile.skillType);
@@ -60,7 +61,7 @@ export default function SkillForm() {
         <button
           type='button'
           onClick={openModal}
-          className='px-4 py-2 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-orange-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500 sm:order-1 sm:ml-3'
+          className='px-2 py-1 border border-transparent shadow-sm text-sm font-medium rounded-md text-gray-100 bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500 sm:order-1 sm:ml-3'
         >
           <div className='flex items-center space-x-1'>
             <PlusIcon className='w-5 h-5 inline-block' />
@@ -135,7 +136,7 @@ export default function SkillForm() {
                       <div className='mt-4 flex gap-2 justify-end'>
                         <button
                           type='submit'
-                          className='px-4 py-2 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-orange-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500 sm:order-1 sm:ml-3'
+                          className='px-2 py-1 border border-transparent shadow-sm text-sm font-medium rounded-md text-gray-100 bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500 sm:order-1 sm:ml-3'
                           // onClick={closeModal}
                         >
                           <div className='flex items-center space-x-1'>
@@ -145,7 +146,7 @@ export default function SkillForm() {
                         </button>
                         <button
                           type='button'
-                          className='px-4 py-2 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-orange-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500 sm:order-1 sm:ml-3'
+                          className='px-2 py-1 border border-transparent shadow-sm text-sm font-medium rounded-md text-gray-100 bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500 sm:order-1 sm:ml-3'
                           onClick={closeModal}
                         >
                           <div className='flex items-center space-x-1'>

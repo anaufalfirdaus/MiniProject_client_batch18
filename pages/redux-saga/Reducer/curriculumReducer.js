@@ -1,4 +1,5 @@
 import { actionTypesCurriculum } from '../Constants/curriculumType';
+import { toast } from 'react-toastify';
 
 const initial_state = {
   curriculums: [],
@@ -18,6 +19,15 @@ const curriculumReducer = (state = initial_state, action) => {
     case actionTypesCurriculum.GET_CURRICULUMS_FAILED: {
       return { ...state, isLoading: false, errors: action.payload };
     }
+    case actionTypesCurriculum.REM_CURRICULUM_REQEUST: {
+      return { ...state, isLoading: true };
+    }
+    case actionTypesCurriculum.REM_CURRICULUM_SUCCESS: {
+      return removeCurriculum(state, action);
+    }
+    case actionTypesCurriculum.REM_CURRICULUM_FAILED: {
+      return { ...state, isLoading: false, errors: action.payload };
+    }
     default: {
       return state;
     }
@@ -27,11 +37,12 @@ const curriculumReducer = (state = initial_state, action) => {
 function getCurriculums(state, action) {
   const { payload } = action;
   const getCurriculums = payload.map((curriculum) => {
+    const randomNum = Math.floor(Math.random() * 5);
     return {
       id: curriculum.progId,
       name: curriculum.progTitle,
       title: curriculum.progHeadline,
-      duration: '3 Month',
+      duration: randomNum <= 1 ? 1 + ' Month' : randomNum + ' Months',
       total: {
         members: curriculum.progTotalStudent,
       },
@@ -45,6 +56,29 @@ function getCurriculums(state, action) {
     ...state,
     isLoading: false,
     curriculums: [...getCurriculums],
+  };
+}
+
+function removeCurriculum(state, action) {
+  const { payload } = action;
+  const { curriculums } = state;
+  const filteredCurriculums = curriculums.filter(
+    (curriculum) => curriculum.id !== payload.id
+  );
+  toast.success(`Remove Curriculum with id ${payload.id}`, {
+    position: 'top-right',
+    autoClose: 3000,
+    hideProgressBar: true,
+    closeOnClick: true,
+    pauseOnHover: true,
+    draggable: true,
+    progress: undefined,
+    theme: 'colored',
+  });
+  return {
+    ...state,
+    isLoading: false,
+    curriculums: [...filteredCurriculums],
   };
 }
 

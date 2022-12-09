@@ -1,11 +1,11 @@
-import LandingPage from "./component/layout/LandingPage";
+import LandingPage from './component/layout/LandingPage';
 
 export default function Home() {
   return (
     <div>
       <LandingPage>
-      <>Home</>
+        <>Home</>
       </LandingPage>
     </div>
-  )
+  );
 }

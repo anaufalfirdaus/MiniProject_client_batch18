@@ -26,7 +26,10 @@ import {
   handlerUpdateExperience,
   handlerUploadPhoto,
 } from './profileMiddleware';
-import { handlerGetCurriculum } from './curriculumMiddleware';
+import {
+  handlerGetCurriculum,
+  handlerRemoveCurriculum,
+} from './curriculumMiddleware';
 
 function* watchAll() {
   yield all([
@@ -70,6 +73,10 @@ function* watchAll() {
       handlerGetCurriculum
     ),
     takeLatest(actionTypesProfile.UPD_PHOTO_PROFILE_REQ, handlerUploadPhoto),
+    takeLatest(
+      actionTypesCurriculum.REM_CURRICULUM_REQEUST,
+      handlerRemoveCurriculum
+    ),
   ]);
 }
 

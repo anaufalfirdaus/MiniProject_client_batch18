@@ -36,7 +36,7 @@ export default function signin() {
         password: values.password,
       };
       dispatch(doGetSigninRequest(payload));
-      router.push('/');
+      // router.reload();
     },
   });
   return (

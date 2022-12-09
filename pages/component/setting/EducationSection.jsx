@@ -1,10 +1,19 @@
 import { AcademicCapIcon, PencilAltIcon } from '@heroicons/react/solid';
 import { useSelector } from 'react-redux';
 import EducationForm from './componets/EducationForm';
+import Loading from './componets/Loading';
 import RemoveModal from './componets/RemoveModal';
 
 export default function EducationSection() {
+  const { isLoading } = useSelector((state) => state.profile);
   const { educations } = useSelector((state) => state.profile);
+
+  if (
+    (isLoading.name === 'all' || isLoading.name === 'education') &&
+    isLoading.value
+  ) {
+    return <Loading />;
+  }
 
   return (
     <div className='px-5 py-3 bg-white border border-gray-500/15 rounded-xl shadow-sm'>
@@ -20,7 +29,7 @@ export default function EducationSection() {
       {educations?.map((education) => (
         <div
           key={education.usduId}
-          className='relative text-gray-700 m-3 px-5 py-5 bg-white border border-gray-500/10 rounded-xl space-y-2'
+          className='text-sm text-gray-600 m-3 px-5 py-5 bg-white border border-gray-500/10 rounded-xl space-y-2'
         >
           <div className='grid grid-cols-5'>
             <span className='col-span-1 font-semibold tracking-tight'>
@@ -62,11 +71,7 @@ export default function EducationSection() {
               Activity
             </span>
             <span className='col-span-4 text-justify'>
-              : {education.usduActivities} Lorem ipsum dolor sit amet
-              consectetur adipisicing elit. Quaerat distinctio odio corrupti
-              sapiente iusto, inventore quas, exercitationem esse laboriosam
-              ullam magni enim, rerum dicta quisquam dolores quasi accusantium
-              omnis iure.
+              : {education.usduActivities}
             </span>
           </div>
           <div className='grid grid-cols-5'>
@@ -74,10 +79,7 @@ export default function EducationSection() {
               Descriptions
             </span>
             <span className='col-span-4 text-justify'>
-              : {education.usduDescription} Lorem ipsum dolor sit amet
-              consectetur adipisicing elit. Eum quidem provident optio atque
-              facere voluptatibus eos, sapiente incidunt rerum alias quos
-              voluptatum officiis ullam illo nulla ipsam quisquam dolores sequi.
+              : {education.usduDescription}
             </span>
           </div>
           <div className='grid grid-flow-col place-items-end'>

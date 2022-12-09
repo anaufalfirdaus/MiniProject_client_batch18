@@ -150,6 +150,12 @@ export default function AppLayout(props) {
   }, [UserProfile]);
   // console.log(UserProfile);
   // console.log(user);
+
+  if (!user) {
+    router.push('/signin');
+    return <div>Please Login </div>;
+  }
+
   const onLogout = () => {
     dispatch(doPushSignoutRequest());
     router.push('/');

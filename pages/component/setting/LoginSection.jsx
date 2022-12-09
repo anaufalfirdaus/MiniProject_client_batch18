@@ -1,16 +1,16 @@
 import { LockClosedIcon } from '@heroicons/react/solid';
-import { useState } from 'react';
 import LoginForm from './componets/LoginForm';
 import { useSelector } from 'react-redux';
+import Loading from './componets/Loading';
 
 export default function LoginSection() {
-  const [notif, setNotif] = useState(true);
-  const message = useSelector((state) => state.profile.message);
+  const { isLoading } = useSelector((state) => state.profile);
 
-  if (notif) {
-    setTimeout(() => {
-      setNotif(false);
-    }, 3000);
+  if (
+    (isLoading.name === 'all' || isLoading.name === 'password') &&
+    isLoading.value
+  ) {
+    return <Loading />;
   }
 
   return (
@@ -20,17 +20,6 @@ export default function LoginSection() {
           <LockClosedIcon className='w-6 h-6 inline-block' />
           <span className='font-semibold text-lg'>Login</span>
         </h2>
-        {message ? (
-          <span
-            className={`text-gray-600 italic text-sm ${
-              notif && message ? '' : 'hidden'
-            }`}
-          >
-            {message?.message}
-          </span>
-        ) : (
-          ''
-        )}
         <LoginForm />
       </div>
     </div>

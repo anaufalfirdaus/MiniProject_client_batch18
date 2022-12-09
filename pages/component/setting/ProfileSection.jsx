@@ -3,10 +3,12 @@ import { useSelector } from 'react-redux';
 import { UserIcon } from '@heroicons/react/solid';
 import ProfileForm from './componets/ProfileForm';
 import { useRef } from 'react';
+import Loading from './componets/Loading';
 import UploadModal from './componets/uploadModal';
 
-// TODO : Upload foto to Firebase
+// TODO : Upload foto to Firebase ✅
 export default function ProfileSection() {
+  const { isLoading } = useSelector((state) => state.profile);
   const uploadModalRef = useRef();
   const { username, firstname, lastname, userPhoto } = useSelector(
     (state) => state.profile.profile
@@ -17,6 +19,13 @@ export default function ProfileSection() {
   const handleOpenModalUpload = () => {
     uploadModalRef.current.click();
   };
+
+  if (
+    (isLoading.name === 'all' || isLoading.name === 'profile') &&
+    isLoading.value
+  ) {
+    return <Loading />;
+  }
 
   return (
     <div className='px-5 py-3 bg-white border border-gray-500/15 rounded-xl shadow-sm'>

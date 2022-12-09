@@ -6,16 +6,9 @@ import {
 import { Dialog, Transition } from '@headlessui/react';
 import { Fragment, useState } from 'react';
 import { useDispatch } from 'react-redux';
-import {
-  removeAddressRequest,
-  removeEducationRequest,
-  removeEmailRequest,
-  removeExperienceRequest,
-  removePhoneRequest,
-  removeSkillRequest,
-} from '../../../redux-saga/Action/profileAction';
+import { removeCurriculumReq } from '../../redux-saga/Action/curriculumAction';
 
-export default function RemoveModal({ modalTitle, id, children }) {
+export default function RemoveModal({ modalTitle, id, children, buttonRef }) {
   let [isOpen, setIsOpen] = useState(false);
 
   const dispatch = useDispatch();
@@ -28,63 +21,24 @@ export default function RemoveModal({ modalTitle, id, children }) {
     setIsOpen(true);
   }
 
-  const removeAction = (name, id) => {
-    if (name === 'email') {
-      dispatch(removeEmailRequest(id));
-      closeModal();
-      return;
-    }
-    if (name === 'phone') {
-      dispatch(removePhoneRequest(id));
-      closeModal();
-      return;
-    }
-    if (name === 'address') {
-      dispatch(removeAddressRequest(id));
-      closeModal();
-      return;
-    }
-    if (name === 'education') {
-      dispatch(removeEducationRequest(id));
-      closeModal();
-      return;
-    }
-    if (name === 'experience') {
-      dispatch(removeExperienceRequest(id));
-      closeModal();
-      return;
-    }
-    if (name === 'skill') {
-      dispatch(removeSkillRequest(id));
-      closeModal();
-      return;
-    }
-  };
+  function removeAction(id) {
+    console.log(id);
+    dispatch(removeCurriculumReq(id));
+    closeModal();
+  }
 
   return (
     <>
-      {modalTitle === 'skill' ? (
-        <>
-          <button
-            onClick={openModal}
-            className='border-2  rounded-full text-gray-100 bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500 sm:order-1 sm:ml-3 hover:scale-105 active:scale-90 active:shadow-md duration-300 p-1'
-          >
-            <TrashIcon className='w-5 h-5 ' />
-          </button>
-        </>
-      ) : (
-        <>
-          <button
-            onClick={openModal}
-            className='px-2 py-1 border border-transparent shadow-sm text-sm font-medium rounded-md text-gray-100 bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500 sm:order-1 sm:ml-3'
-          >
-            <div className='flex items-center space-x-1'>
-              <TrashIcon className='w-5 h-5 inline-block' />
-              {/* <span>Delete</span> */}
-            </div>
-          </button>
-        </>
-      )}
+      <button
+        ref={buttonRef}
+        onClick={openModal}
+        className='px-4 py-2 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-orange-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500 sm:order-1 sm:ml-3'
+      >
+        <div className='flex items-center space-x-1'>
+          <TrashIcon className='w-5 h-5 inline-block' />
+          <span>Delete</span>
+        </div>
+      </button>
 
       <Transition appear show={isOpen} as={Fragment}>
         <Dialog as='div' className='relative z-10' onClose={closeModal}>
@@ -126,8 +80,8 @@ export default function RemoveModal({ modalTitle, id, children }) {
                   <div className='mt-4 flex gap-2 justify-end'>
                     <button
                       type='submit'
-                      className='px-2 py-1 border border-transparent shadow-sm text-sm font-medium rounded-md text-gray-100 bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500 sm:order-1 sm:ml-3'
-                      onClick={() => removeAction(modalTitle, id)}
+                      className='px-4 py-2 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-orange-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500 sm:order-1 sm:ml-3'
+                      onClick={() => removeAction(id)}
                     >
                       <div className='flex items-center space-x-1'>
                         <TrashIcon className='w-5 h-5 inline-block' />
@@ -136,7 +90,7 @@ export default function RemoveModal({ modalTitle, id, children }) {
                     </button>
                     <button
                       type='button'
-                      className='px-2 py-1 border border-transparent shadow-sm text-sm font-medium rounded-md text-gray-100 bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500 sm:order-1 sm:ml-3'
+                      className='px-4 py-2 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-orange-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500 sm:order-1 sm:ml-3'
                       onClick={closeModal}
                     >
                       <div className='flex items-center space-x-1'>

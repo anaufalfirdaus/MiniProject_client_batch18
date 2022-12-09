@@ -14,12 +14,13 @@ import {
   addEmailRequest,
   updateEmailRequest,
 } from '../../../redux-saga/Action/profileAction';
+import { toast } from 'react-toastify';
 
 export default function EmailForm({ edit }) {
   let [isOpen, setIsOpen] = useState(false);
 
   const id = useSelector((state) => state.profile.profile.userId);
-
+  const { emails } = useSelector((state) => state.profile);
   const dispatch = useDispatch();
 
   function closeModal() {
@@ -56,6 +57,23 @@ export default function EmailForm({ edit }) {
         closeModal();
         return;
       }
+      const emailExist = emails.filter(
+        (email) => values.email === email.pmailAddress
+      );
+      if (emailExist.length > 0) {
+        formik.resetForm();
+        closeModal();
+        return toast.warning('Email Already Exist', {
+          position: 'top-right',
+          autoClose: 3000,
+          hideProgressBar: true,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: 'colored',
+        });
+      }
       dispatch(addEmailRequest(values));
       closeModal();
       formik.resetForm();
@@ -65,32 +83,20 @@ export default function EmailForm({ edit }) {
   return (
     <>
       <div>
-        {edit ? (
-          <>
-            <button
-              onClick={openModal}
-              className='px-4 py-2 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-orange-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500 sm:order-1 sm:ml-3'
-            >
-              <div className='flex items-center space-x-1'>
-                <PencilAltIcon className='w-5 h-5 inline-block' />
-                <span>Edit</span>
-              </div>
-            </button>
-          </>
-        ) : (
-          <>
-            <button
-              type='button'
-              onClick={openModal}
-              className='px-4 py-2 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-orange-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500 sm:order-1 sm:ml-3'
-            >
-              <div className='flex items-center space-x-1'>
-                <PlusIcon className='w-5 h-5 inline-block' />
-                <span>Add Email</span>
-              </div>
-            </button>
-          </>
-        )}
+        <button
+          type='button'
+          onClick={openModal}
+          className='px-2 py-1 border border-transparent shadow-sm text-sm font-medium rounded-md text-gray-100 bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500 sm:order-1 sm:ml-3'
+        >
+          <div className={`flex items-center ${edit ? '' : 'space-x-1'}`}>
+            {edit ? (
+              <PencilAltIcon className='w-5 h-5 inline-block' />
+            ) : (
+              <PlusIcon className='w-5 h-5 inline-block' />
+            )}
+            <span>{edit ? '' : 'Add Email'}</span>
+          </div>
+        </button>
       </div>
 
       <Transition appear show={isOpen} as={Fragment}>
@@ -153,7 +159,7 @@ export default function EmailForm({ edit }) {
                       <div className='mt-4 flex gap-2 justify-end'>
                         <button
                           type='submit'
-                          className='px-4 py-2 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-orange-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500 sm:order-1 sm:ml-3'
+                          className='px-2 py-1 border border-transparent shadow-sm text-sm font-medium rounded-md text-gray-100 bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500 sm:order-1 sm:ml-3'
                           // onClick={closeModal}
                         >
                           <div className='flex items-center space-x-1'>
@@ -163,7 +169,7 @@ export default function EmailForm({ edit }) {
                         </button>
                         <button
                           type='button'
-                          className='px-4 py-2 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-orange-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500 sm:order-1 sm:ml-3'
+                          className='px-2 py-1 border border-transparent shadow-sm text-sm font-medium rounded-md text-gray-100 bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500 sm:order-1 sm:ml-3'
                           onClick={closeModal}
                         >
                           <div className='flex items-center space-x-1'>

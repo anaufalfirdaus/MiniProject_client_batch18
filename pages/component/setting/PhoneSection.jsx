@@ -1,10 +1,19 @@
 import { PhoneIcon, PencilAltIcon, XIcon } from '@heroicons/react/solid';
 import { useSelector } from 'react-redux';
+import Loading from './componets/Loading';
 import PhoneForm from './componets/PhoneForm';
 import RemoveModal from './componets/RemoveModal';
 
 export default function EmailSection() {
+  const { isLoading } = useSelector((state) => state.profile);
   const { phones } = useSelector((state) => state.profile);
+
+  if (
+    (isLoading.name === 'all' || isLoading.name === 'phone') &&
+    isLoading.value
+  ) {
+    return <Loading />;
+  }
 
   return (
     <div className='px-5 py-3 bg-white border border-gray-500/15 rounded-xl shadow-sm'>
@@ -24,7 +33,7 @@ export default function EmailSection() {
               key={phone?.uspoPhoneId}
               className='flex items-center justify-between py-2'
             >
-              <span className='text-gray-700 font-regular'>
+              <span className='text-sm text-gray-600 font-semibold'>
                 {phone?.uspoPhone}
               </span>
               <div className='flex space-x-3'>
