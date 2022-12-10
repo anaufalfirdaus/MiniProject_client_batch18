@@ -7,6 +7,8 @@ import * as ActionTypeEmp from "../Constants/EmpConstant";
 import * as ActionTypeSkte from "../Constants/SkteConstant";
 import * as ActionTypeSkty from "../Constants/SktyConstant";
 import * as ActionTypeProg from "../Constants/ProgConstant";
+import * as ActionTypeInco from "../Constants/IncoConstant";
+import * as ActionTypeCosm from "../Constants/CosmConstant";
 import { handleUsrSignin, handleUsrSignout, handleUsrSignup } from "./UsrMidle";
 import { handleGetCont, handleGetOneCont } from "./ContMidle";
 import { handleGetCore, handleGetOneCore } from "./CoreMidle";
@@ -15,6 +17,8 @@ import { handleGetEmp, handleGetOneEmp } from "./EmpMidle";
 import { handleGetSkte, handleGetOneSkte } from "./SkteMidle";
 import { handleGetSkty, handleGetOneSkty } from "./SktyMidle";
 import { handleGetProg, handleGetOneProg } from "./ProgMidle";
+import { handleGetInco, handleGetOneInco } from "./IncoMidle";
+import { handleGetCosm, handleGetOneCosm } from "./CosmMidle";
 
 function* watchAll() {
   yield all([
@@ -35,6 +39,10 @@ function* watchAll() {
     takeEvery(ActionTypeSkty.GETONE_SKTY_REQUEST, handleGetOneSkty),
     takeEvery(ActionTypeProg.GET_PROG_REQUEST, handleGetProg),
     takeEvery(ActionTypeProg.GETONE_PROG_REQUEST, handleGetOneProg),
+    takeEvery(ActionTypeInco.GET_INCO_REQUEST, handleGetInco),
+    takeEvery(ActionTypeInco.GETONE_INCO_REQUEST, handleGetOneInco),
+    takeEvery(ActionTypeCosm.GET_COSM_REQUEST, handleGetCosm),
+    takeEvery(ActionTypeCosm.GETONE_COSM_REQUEST, handleGetOneCosm),
   ]);
 }
 

@@ -10,12 +10,11 @@ export default function MainPage() {
   return (
     <div>
       <LandingPageBootcamp>
-        <Sbar></Sbar>
-        <Titlesss></Titlesss>
-        <Conte></Conte>
-        <Description></Description>
-        <Instructor></Instructor>
-        <Review></Review>
+        <Titlesss />
+        <Conte />
+        <Description />
+        <Instructor />
+        <Review />
       </LandingPageBootcamp>
     </div>
   );
