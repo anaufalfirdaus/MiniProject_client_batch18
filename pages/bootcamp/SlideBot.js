@@ -10,12 +10,12 @@ function SlideBot() {
         <div className="flex  h-full  items-center justify-center  ">
           <Kartus />
         </div>
-        <div className="flex h-full items-center justify-center  ">
+        {/* <div className="flex h-full items-center justify-center  ">
           <Kartus />
         </div>
         <div className="flex h-full items-center justify-center  ">
           <Kartus />
-        </div>
+        </div> */}
       </Carousel>
     </div>
   );
