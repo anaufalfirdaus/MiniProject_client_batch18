@@ -484,19 +484,11 @@ const updatePhone = (state, action) => {
 // and add the new id address to user address table
 const updateAddress = (state, action) => {
   const { payload } = action;
-  const { addresses } = state;
-  const updAddresses = addresses.map((address) => {
-    if (address.etadAddrId === payload.etadAddrId) {
-      Object.assign(address, payload);
-      return address;
-    }
-    return address;
-  });
   showToast('Update Address Success !');
   return {
     ...state,
     isLoading: { name: 'address', value: false },
-    addresses: [...updAddresses],
+    addresses: payload,
   };
 };
 

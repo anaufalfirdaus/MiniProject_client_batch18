@@ -10,7 +10,7 @@ import AppLayout from '../../component/layout/AppLayout';
 import ButtonMenu from '../../component/curriculum/ButtonMenu';
 import ListBox from '../../component/curriculum/ListBox';
 import Pagination from '../../component/curriculum/pagination';
-import { useEffect, useState, useMemo } from 'react';
+import { useEffect, useState, useMemo, useRef } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { getCurriculumsReq } from '../../redux-saga/Action/curriculumAction';
 import { ToastContainer } from 'react-toastify';
@@ -24,6 +24,8 @@ const paginate = (items, pageNumber, pageSize) => {
 export default function Curriculum() {
   const [currentPage, setCurrentPage] = useState(1);
   const pageSize = 10;
+  const [keyword, setKeyword] = useState('');
+  const [status, setStatus] = useState({ id: 0, status: 'all' });
   const [searchKeyword, setSearchKeyword] = useState('');
   const [statusFilter, setStatusFilter] = useState({ id: 0, status: 'all' });
 
@@ -34,15 +36,19 @@ export default function Curriculum() {
     dispatch(getCurriculumsReq());
   }, [dispatch]);
 
-  const handleChange = (e) => {
-    setSearchKeyword(e.target.value);
-  };
-  const handleChangeStatus = (status) => {
+  const handleSearch = () => {
+    setSearchKeyword(keyword);
     setStatusFilter(status);
   };
 
   const handlePageChange = (page) => {
     setCurrentPage(page);
+  };
+
+  const handleEnter = (e) => {
+    if (Number(e.keyCode) === 13) {
+      handleSearch();
+    }
   };
 
   const filteredCuriculum = useMemo(
@@ -115,18 +121,21 @@ export default function Curriculum() {
                     <SearchIcon className='w-5 h-5 text-gray-500' />
                   </div>
                   <input
-                    value={searchKeyword}
-                    onChange={(e) => handleChange(e)}
+                    value={keyword}
+                    onChange={(e) => setKeyword(e.target.value)}
+                    onKeyDown={(e) => handleEnter(e)}
                     type='search'
                     id='default-search'
                     autoComplete='off'
                     className='block w-full p-2 pl-10 text-sm text-gray-500 border border-gray-300 rounded-full bg-gray-50 focus:ring-blue-500 focus:border-blue-500 placeholder-gray-300'
-                    placeholder='Search...'
-                    required
+                    placeholder='Search Title, Headline'
                   />
                 </div>
-                <ListBox changeStatus={handleChangeStatus} />
-                <button className='font-bold tracking-tight text-gray-500 text-xs px-4 border border-gray-300 rounded-full bg-gray-50 focus:ring-blue-500 focus:border-blue-500'>
+                <ListBox changeStatus={setStatus} />
+                <button
+                  onClick={handleSearch}
+                  className='font-bold tracking-tight text-gray-500 text-xs px-4 border border-gray-300 rounded-full bg-gray-50 focus:ring-blue-500 focus:border-blue-500'
+                >
                   Search
                 </button>
               </div>

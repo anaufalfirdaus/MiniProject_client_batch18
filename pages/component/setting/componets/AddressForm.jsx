@@ -19,7 +19,7 @@ import { toast } from 'react-toastify';
 export default function AddressForm({ edit }) {
   const dispatch = useDispatch();
   const id = useSelector((state) => state.profile.profile.userId);
-  const addresses = useSelector((state) => state.profile.listAddresses);
+  const { addresses } = useSelector((state) => state.profile);
   const addressTypes = useSelector((state) => state.profile.addressType);
   const { city } = useSelector((state) => state.profile);
 
@@ -49,7 +49,7 @@ export default function AddressForm({ edit }) {
       addressLine1: edit ? edit.etadAddr.addrLine1 : '',
       addressLine2: edit ? edit.etadAddr.addrLine2 : '',
       addressPostalCode: edit ? edit.etadAddr.addrPostalCode : '',
-      cityId: '',
+      cityId: edit ? edit.etadAddr.addrCity.cityId : '',
       addressType: edit ? edit.etadAdty.adtyId : '',
     },
     validationSchema: Yup.object().shape({
@@ -94,19 +94,19 @@ export default function AddressForm({ edit }) {
 
       if (edit) {
         const payload = {
-          addressLine1: values.addressLine1,
-          addressLine2: values.addressLine2,
-          addressPostalCode: values.addressPostalCode,
-          CityId: values.cityId,
-          addressId: edit.etadAddrId,
-          addressType: values.addressType,
+          userId: Number(id),
+          addrLine1: values.addressLine1,
+          addrLine2: values.addressLine2,
+          addrPostalCode: values.addressPostalCode,
+          cityId: Number(values.cityId),
+          addressId: Number(edit.etadAddrId),
+          addressType: Number(values.addressType),
         };
         dispatch(updateAddressRequest(payload));
       } else {
         dispatch(addAddressRequest(values));
         formik.resetForm();
       }
-      console.log(values);
       closeModal();
     },
   });

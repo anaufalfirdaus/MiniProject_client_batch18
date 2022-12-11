@@ -38,8 +38,13 @@ export default function AddressSection() {
               className='flex items-center justify-between py-2'
             >
               <span className='text-sm text-gray-600 font-semibold line-clamp-1'>
-                {address?.etadAddr?.addrLine1} {address?.etadAddr?.addrLine2}{' '}
+                Address : {address?.etadAddr?.addrLine1}{' '}
+                {address?.etadAddr?.addrLine2}{' '}
+                <span className='text-sm text-gray-500 line-clamp-1'>
+                  City : {address?.etadAddr?.addrCity?.cityName}
+                </span>
               </span>
+
               <div className='flex space-x-3'>
                 <AddressForm edit={address} />
                 <RemoveModal modalTitle={'address'} id={address?.etadAddrId}>
@@ -48,7 +53,6 @@ export default function AddressSection() {
                     {address?.etadAddr?.addrLine1}{' '}
                     {address?.etadAddr?.addrLine2}
                   </span>{' '}
-                  ?
                 </RemoveModal>
               </div>
             </li>
