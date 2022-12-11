@@ -1,45 +1,71 @@
-import React from 'react'
+/* eslint-disable react-hooks/exhaustive-deps */
+import React, { useState, useEffect, useMemo, Fragment } from 'react'
+import { useSelector, useDispatch } from 'react-redux';
 import { SearchIcon } from '@heroicons/react/solid';
 import Dropdown from '../../component/job/Dropdown';
 import AppLayout from '../../component/layout/AppLayout';
 import JobPost from '../../component/job/JobPost';
-import CreateModal from '../../component/job/CreateModal'
+import Page from '../../component/commons/Page';
+import { GetJopoRequest } from '../../redux-saga/Action/JopoAction'
 
 
 export default function Hiring() {
   
+  const [display, setDisplay] = useState(false)
+  const [keyword, setKeyword] = useState("");
+  const [status, setStatus] = useState("")
+  const [searchStatus, setSearchStatus] = useState("")
+  const [searchTerm, setSearchTerm] = useState("");
+  const [viewKeyword, setViewKeyword] = useState("");
+
+
+  const handleSearch = () => {
+    setSearchTerm(keyword);
+    setSearchStatus(status)
+  };
+
+
+
+  
   return (
     <AppLayout>
-      <div className='p-3 flex border-4 border-zinc-600 rounded-md'>
-        <h3 className='font-bold tracking-wide pb-3 text-2xl text-black-700'>
-          Jobs Posting
-        </h3>
-        <div className='px-5 pb-3 absolute top-2.5 right-10'>
-        <CreateModal/>
-        </div>
-      </div>
-      <div className='flex'>
-              <form className='absolute inset-20' action='#' method='GET'>
-                <label htmlFor='search_field' className='sr-only'>
-                  Search
-                </label>
-                <div className='text-gray-400 focus-within:text-gray-600 items-center'>
-                  <div className='flex mx-7 my-5 items-center'>
-                    <SearchIcon className='h-10 w-10' aria-hidden='true' />
-                    <input
-                    id='search_field'
-                    name='search_field'
-                    className='pl-15 pr-100 py-2 w-full border-solid rounded-md text-gray-900 placeholder-gray-500 focus:ring-0 focus:border-solid focus:placeholder-gray-400'
-                    placeholder='title, experience, industry, category'
-                    type='search'
-                    />
-       <Dropdown/>
-        <button type="button" class="ml-2 text-white bg-green-700 hover:bg-blue-800 focus:ring-4 focus:ring-green-300 font-medium rounded-lg text-sm px-4 py-2.5 text-center inline-flex items-center">Search</button>
-                  </div>
-                  <JobPost/>
-                </div>
-              </form>
+      <Page
+        name={"Job"}
+        setDisplay={setDisplay}
+        title="Job Post"
+        titleButton="Posting Job"
+        onClick={() => navigate("/app/job/")}
+      >
+      <div className=" flex justify-center">
+          <div className="w-full">
+            <div className="input-group relative flex justify-center items-stretch w-full mb-10">
+              <p className="text-xs mx-2 py-1">Search by category</p>
+              <input
+                type="text"
+                onChange={(e) => setKeyword(e.target.value)}
+                className="form-control relative w-60 block px-2 py-0.5 text-xs font-normal text-gray-700 bg-white bg-clip-padding border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:border-transparent focus:text-gray-700 focus:ring-1 focus:ring-offset-1 focus:ring-purple-500 focus:outline-none"
+                placeholder="title, experience, industry, category"
+                aria-label="Search"
+                aria-describedby="button-addon2"
+              />
+              <select onChange={(e) => setStatus(e.target.value)} className="flex rounded max-w-xs px-4 py-0.5 text-xs mx-1">
+                {/* <option>Status</option> */}
+                <option value={"published"}>published</option>
+                <option value={"unpublished"}>unpublished</option>
+              </select>
+              <button
+                type="submit"
+                onClick={handleSearch}
+                className="btn px-3 py-2 bg-orange-600 text-white text-xs leading-tight uppercase rounded shadow-md hover:bg-red-700 focus:outline-none focus:ring-1 focus:ring-offset-1 focus:ring-purple-500 transition duration-150 ease-in-out flex items-center"
+              >
+                {" "}
+                Search
+              </button>
             </div>
+          </div>
+        </div>
+        <JobPost keyword={keyword} searchTerm={searchTerm} setViewKeyword={setViewKeyword} status={searchStatus}/>
+      </Page>
     </AppLayout>
   )
 }

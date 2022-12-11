@@ -1,10 +1,15 @@
-import React, {useState, useEffect} from "react";
+/* eslint-disable react-hooks/exhaustive-deps */
+import React, {useState, useEffect, useMemo} from "react";
+import { useDispatch, useSelector } from "react-redux";
 import MinimalMenu from "./MinimalMenu";
-import {Switch} from "antd";
+import { Switch } from "antd";
 import JopoApi from "../../api/JopoApi";
+import { GetJopoRequest } from "../../redux-saga/Action/JopoAction";
 
-export default function JobPost() {
+export default function JobPost({keyword, searchTerm, setViewKeyword, status}) {
 
+    const dispatch = useDispatch();
+    const jopos = useSelector((state) => state.jopoStated.jopos);
     const [jopo, setJopo] = useState()
     const getJopo = async () => {
     const result = await JopoApi.getAll();
@@ -12,23 +17,24 @@ export default function JobPost() {
     setJopo(result.data);
     return result.data;
   }
+
+  const filteredJopos = useMemo(() => {
+    if (searchTerm.length > 0) {
+      setViewKeyword(searchTerm);
+      return jopos.filter((jp) => {
+        return jp.jopoTitle.toLowerCase().includes(searchTerm.toLowerCase())
+      });
+    }
+    return jopos;
+  }, [searchTerm, jopos]);
+  console.log({keyword, searchTerm, status});
+  useEffect(() => {
+    dispatch(GetJopoRequest());
+    console.log(jopos);
+  }, []);
   
 
-//   const toggler = async(status) => {
-//     console.log('xxxx')
-//     setToggle(status=="published")
-//     // const result = await JopoApi.publish(jopo.jopoId);
-//     // if(result) {
-//     //     setToggle(true)
-//     //     return result.data
-//     // }
-//     //     setToggle(false)
-//     //     return result.data
-//   }
 
-  useEffect(() => {
-    getJopo()
-  }, [])
 
     return (
         <div className="flex flex-col">
@@ -64,13 +70,13 @@ export default function JobPost() {
                                     </th>
                                     <th
                                         scope="col"
-                                        className="px-6 py-3 text-xs font-bold text-right text-gray-500 uppercase "
+                                        className="px-6 py-3 text-xs font-bold text-center text-gray-500 uppercase "
                                     >
                                         INDUSTRY
                                     </th>
                                     <th
                                         scope="col"
-                                        className="px-6 py-3 text-xs font-bold text-right text-gray-500 uppercase "
+                                        className="px-6 py-3 text-xs font-bold text-center text-gray-500 uppercase "
                                     >
                                         PUBLISH
                                     </th>
@@ -82,9 +88,9 @@ export default function JobPost() {
                                     </th>
                                 </tr>
                             </thead>
-                            <tbody className="divide-y divide-gray-200">
+                            <tbody className="divide-y divide-gray-200 -z-10">
                                 {
-                                    jopo?.map(job => (
+                                   Array.isArray(filteredJopos) && (filteredJopos).map(job => (
                                 <tr key={job.jopoId}>
                                     <td className="px-6 py-4 text-sm font-medium text-gray-800 whitespace-nowrap">
                                         {job.jopoTitle}
@@ -94,17 +100,17 @@ export default function JobPost() {
                                         <span>{new Date(job.jopoEndDate).toDateString()}</span>
                                     </td>
                                     <td className="px-6 py-4 text-sm text-gray-800 whitespace-nowrap">
-                                        <span>IDR {job.jopoMinSalary} - </span> <br/> 
-                                        IDR {job.jopoMaxSalary}
+                                        <span>Rp. {new Intl.NumberFormat('id-ID', { maximumSignificantDigits: 3 }).format(job.jopoMinSalary)} - </span> <br/> 
+                                        Rp. {new Intl.NumberFormat('id-ID', { maximumSignificantDigits: 3 }).format(job.jopoMaxSalary)}
                                     </td>
                                     <td className="px-6 py-4 text-right font-sm text-gray-800 whitespace-nowrap">
                                         {job.jopoMinExperience} tahun
                                     </td>
                                     <td className="px-6 py-4 text-sm text-gray-800 whitespace-nowrap">
                                         <span>Retail</span> <br/>
-                                        <span>Software Engineer</span>
+                                        {job.jopoJoca.jocaName}
                                     </td>
-                                    <td className="px-6 py-4 text-sm text-gray-800 whitespace-nowrap">
+                                    <td className="px-6 py-4 text-sm text-center text-gray-800 whitespace-nowrap">
                                         <Switch defaultChecked={job.jopoStatus=='published'} onClick = { async(tes) => {
                                             let result;
                                             if (tes) {
@@ -130,6 +136,7 @@ export default function JobPost() {
                         </table>
                     </div>
                 </div>
+
             </div>
         </div>
     );

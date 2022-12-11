@@ -9,7 +9,7 @@ import {
 function* handleGetJopo() {
     try {
         const result = yield call(JopoApi.getAll)
-        yield put(GetJopoSuccess(result))
+        yield put(GetJopoSuccess(result.data))
     } catch (error) {
         yield put(GetJopoFailed(error))
     }

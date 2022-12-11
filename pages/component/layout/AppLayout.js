@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { Fragment, useEffect, useState } from 'react';
 import Image from 'next/image';
 import { Dialog, Menu, Transition } from '@headlessui/react';
