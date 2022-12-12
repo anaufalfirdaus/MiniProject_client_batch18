@@ -23,17 +23,10 @@ export default function AddressForm({ edit }) {
   const addressTypes = useSelector((state) => state.profile.addressType);
   const { city } = useSelector((state) => state.profile);
 
-  const [query, setQuery] = useState('');
   let [isOpen, setIsOpen] = useState(false);
 
   const oneOfCity = city?.map((ci) => ci.cityId);
   const oneOfaddress = addressTypes.map((addrs) => addrs.adtyId);
-
-  const filteredAddress = query
-    ? addresses.filter((address) =>
-        address.addrLine1.toLowerCase().includes(query.toLowerCase())
-      )
-    : [];
 
   function closeModal() {
     setIsOpen(false);
@@ -103,6 +96,7 @@ export default function AddressForm({ edit }) {
           addressType: Number(values.addressType),
         };
         dispatch(updateAddressRequest(payload));
+        console.log({ payload });
       } else {
         dispatch(addAddressRequest(values));
         formik.resetForm();

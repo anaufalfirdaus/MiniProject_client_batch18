@@ -52,7 +52,11 @@ const profileReducer = (state = initial_state, action) => {
       return updateProfile(state, action);
     }
     case actionTypesProfile.UPD_PROFILE_FAILED: {
-      return { ...state, isLoading: false, errors: action.payload };
+      return {
+        ...state,
+        isLoading: { name: 'profile', value: false },
+        errors: action.payload,
+      };
     }
     case actionTypesProfile.UPD_PASSWORD_REQUEST: {
       return { ...state, isLoading: { name: 'password', value: true } };
@@ -61,7 +65,11 @@ const profileReducer = (state = initial_state, action) => {
       return updatePassword(state, action);
     }
     case actionTypesProfile.UPD_PASSWORD_FAILED: {
-      return { ...state, isLoading: false, errors: action.payload };
+      return {
+        ...state,
+        isLoading: { name: 'password', value: false },
+        errors: action.payload,
+      };
     }
     //* ADD CASE
     case actionTypesProfile.ADD_EMAIL_REQUEST: {
@@ -72,7 +80,11 @@ const profileReducer = (state = initial_state, action) => {
       return addEmail(state, action);
     }
     case actionTypesProfile.ADD_EMAIL_FAILED: {
-      return { ...state, isLoading: false, errors: action.payload };
+      return {
+        ...state,
+        isLoading: { name: 'email', value: false },
+        errors: action.payload,
+      };
     }
     case actionTypesProfile.ADD_PHONE_REQUEST: {
       //* PHONE
@@ -82,7 +94,11 @@ const profileReducer = (state = initial_state, action) => {
       return addPhone(state, action);
     }
     case actionTypesProfile.ADD_PHONE_FAILED: {
-      return { ...state, isLoading: false, errors: action.payload };
+      return {
+        ...state,
+        isLoading: { name: 'phone', value: false },
+        errors: action.payload,
+      };
     }
     case actionTypesProfile.ADD_ADDRESS_REQUEST: {
       //* ADDRESS
@@ -92,7 +108,11 @@ const profileReducer = (state = initial_state, action) => {
       return addAddress(state, action);
     }
     case actionTypesProfile.ADD_ADDRESS_FAILED: {
-      return { ...state, isLoading: false, errors: action.payload };
+      return {
+        ...state,
+        isLoading: { name: 'address', value: false },
+        errors: action.payload,
+      };
     }
     case actionTypesProfile.ADD_EDUCATION_REQUEST: {
       //* EDUCATION
@@ -102,7 +122,11 @@ const profileReducer = (state = initial_state, action) => {
       return addEducation(state, action);
     }
     case actionTypesProfile.ADD_EDUCATION_FAILED: {
-      return { ...state, isLoading: false, errors: action.payload };
+      return {
+        ...state,
+        isLoading: { name: 'education', value: false },
+        errors: action.payload,
+      };
     }
     case actionTypesProfile.ADD_EXPERIENCE_REQUEST: {
       //* EXPERIENCE
@@ -112,7 +136,11 @@ const profileReducer = (state = initial_state, action) => {
       return addExperience(state, action);
     }
     case actionTypesProfile.ADD_EXPERIENCE_FAILED: {
-      return { ...state, isLoading: false, errors: action.payload };
+      return {
+        ...state,
+        isLoading: { name: 'experience', value: false },
+        errors: action.payload,
+      };
     }
     case actionTypesProfile.ADD_SKILL_REQUEST: {
       //* SKILL
@@ -122,7 +150,11 @@ const profileReducer = (state = initial_state, action) => {
       return addSkill(state, action);
     }
     case actionTypesProfile.ADD_SKILL_FAILED: {
-      return { ...state, isLoading: false, errors: action.payload };
+      return {
+        ...state,
+        isLoading: { name: 'skill', value: false },
+        errors: action.payload,
+      };
     }
     //* REMOVE CASE
     case actionTypesProfile.REM_EMAIL_REQUEST: {
@@ -133,7 +165,11 @@ const profileReducer = (state = initial_state, action) => {
       return removeEmail(state, action);
     }
     case actionTypesProfile.REM_EMAIL_FAILED: {
-      return { ...state, isLoading: false, errors: action.payload };
+      return {
+        ...state,
+        isLoading: { name: 'email', value: false },
+        errors: action.payload,
+      };
     }
     case actionTypesProfile.REM_PHONE_REQUEST: {
       //* PHONE
@@ -143,7 +179,11 @@ const profileReducer = (state = initial_state, action) => {
       return removePhone(state, action);
     }
     case actionTypesProfile.REM_PHONE_FAILED: {
-      return { ...state, isLoading: false, errors: action.payload };
+      return {
+        ...state,
+        isLoading: { name: 'phone', value: false },
+        errors: action.payload,
+      };
     }
     case actionTypesProfile.REM_ADDRESS_REQUEST: {
       //* ADDRESS
@@ -153,7 +193,11 @@ const profileReducer = (state = initial_state, action) => {
       return removeAddress(state, action);
     }
     case actionTypesProfile.REM_ADDRESS_FAILED: {
-      return { ...state, isLoading: false, errors: action.payload };
+      return {
+        ...state,
+        isLoading: { name: 'address', value: false },
+        errors: action.payload,
+      };
     }
     case actionTypesProfile.REM_EDUCATION_REQUEST: {
       //* EDUCATION
@@ -163,7 +207,11 @@ const profileReducer = (state = initial_state, action) => {
       return removeEducation(state, action);
     }
     case actionTypesProfile.REM_EDUCATION_FAILED: {
-      return { ...state, isLoading: false, errors: action.payload };
+      return {
+        ...state,
+        isLoading: { name: 'education', value: false },
+        errors: action.payload,
+      };
     }
     case actionTypesProfile.REM_EXPERIENCE_REQUEST: {
       //* EXPERIENCE
@@ -173,7 +221,11 @@ const profileReducer = (state = initial_state, action) => {
       return removeExperience(state, action);
     }
     case actionTypesProfile.REM_EXPERIENCE_FAILED: {
-      return { ...state, isLoading: false, errors: action.payload };
+      return {
+        ...state,
+        isLoading: { name: 'experience', value: false },
+        errors: action.payload,
+      };
     }
     case actionTypesProfile.REM_SKILL_REQUEST: {
       //* SKILL
@@ -183,7 +235,11 @@ const profileReducer = (state = initial_state, action) => {
       return removeSkill(state, action);
     }
     case actionTypesProfile.REM_SKILL_FAILED: {
-      return { ...state, isLoading: false, errors: action.payload };
+      return {
+        ...state,
+        isLoading: { name: 'skill', value: false },
+        errors: action.payload,
+      };
     }
     //* UPDATE CASE
     case actionTypesProfile.UPD_EMAIL_REQUEST: {
@@ -194,7 +250,11 @@ const profileReducer = (state = initial_state, action) => {
       return updateEmail(state, action);
     }
     case actionTypesProfile.UPD_EMAIL_FAILED: {
-      return { ...state, isLoading: false, errors: action.payload };
+      return {
+        ...state,
+        isLoading: { name: 'email', value: false },
+        errors: action.payload,
+      };
     }
     case actionTypesProfile.UPD_PHONE_REQUEST: {
       //* PHONE
@@ -204,7 +264,11 @@ const profileReducer = (state = initial_state, action) => {
       return updatePhone(state, action);
     }
     case actionTypesProfile.UPD_PHONE_FAILED: {
-      return { ...state, isLoading: false, errors: action.payload };
+      return {
+        ...state,
+        isLoading: { name: 'phone', value: false },
+        errors: action.payload,
+      };
     }
     case actionTypesProfile.UPD_ADDRESS_REQUEST: {
       //* ADDRESS
@@ -214,7 +278,11 @@ const profileReducer = (state = initial_state, action) => {
       return updateAddress(state, action);
     }
     case actionTypesProfile.UPD_ADDRESS_FAILED: {
-      return { ...state, isLoading: false, errors: action.payload };
+      return {
+        ...state,
+        isLoading: { name: 'address', value: false },
+        errors: action.payload,
+      };
     }
     case actionTypesProfile.UPD_EDUCATION_REQUEST: {
       //* EDUCATION
@@ -224,7 +292,11 @@ const profileReducer = (state = initial_state, action) => {
       return updateEducation(state, action);
     }
     case actionTypesProfile.UPD_EDUCATION_FAILED: {
-      return { ...state, isLoading: false, errors: action.payload };
+      return {
+        ...state,
+        isLoading: { name: 'education', value: false },
+        errors: action.payload,
+      };
     }
     case actionTypesProfile.UPD_EXPERIENCE_REQUEST: {
       //* EXPERIENCE
@@ -234,7 +306,11 @@ const profileReducer = (state = initial_state, action) => {
       return updateExperience(state, action);
     }
     case actionTypesProfile.UPD_EXPERIENCE_FAILED: {
-      return { ...state, isLoading: false, errors: action.payload };
+      return {
+        ...state,
+        isLoading: { name: 'experience', value: false },
+        errors: action.payload,
+      };
     }
     case actionTypesProfile.UPD_PHOTO_PROFILE_REQ: {
       return { ...state, isLoading: { name: 'profile', value: true } };
@@ -243,7 +319,11 @@ const profileReducer = (state = initial_state, action) => {
       return updatePhoto(state, action);
     }
     case actionTypesProfile.UPD_PHOTO_PROFILE_FAL: {
-      return { ...state, isLoading: false, errors: action.payload };
+      return {
+        ...state,
+        isLoading: { name: 'profile', value: false },
+        errors: action.payload,
+      };
     }
     default: {
       return { ...state };
@@ -488,7 +568,7 @@ const updateAddress = (state, action) => {
   return {
     ...state,
     isLoading: { name: 'address', value: false },
-    addresses: payload,
+    addresses: [...payload],
   };
 };
 

@@ -145,7 +145,7 @@ export default function Curriculum() {
         </div>
 
         <div className='border border-gray-300 relative shadow-md sm:rounded-lg'>
-          <table className='table-auto w-full duration-200'>
+          <table className='table-auto w-full'>
             <thead>
               <tr className='text-gray-600 bg-gray-100 text-sm font-semibold tracking-wide uppercase'>
                 <th className='p-2'>No.</th>

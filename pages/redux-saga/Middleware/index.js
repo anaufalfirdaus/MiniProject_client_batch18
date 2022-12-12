@@ -47,7 +47,7 @@ function* watchAll() {
     takeLatest(actionTypesProfile.UPD_PHONE_REQUEST, handlerUpdatePhone),
     takeLatest(actionTypesProfile.ADD_ADDRESS_REQUEST, handlerAddAddress),
     takeLatest(actionTypesProfile.REM_ADDRESS_REQUEST, handlerRemoveAddress),
-    takeLatest(actionTypesProfile.ADD_ADDRESS_REQUEST, handlerUpdateAddress),
+    takeLatest(actionTypesProfile.UPD_ADDRESS_REQUEST, handlerUpdateAddress),
     takeLatest(actionTypesProfile.ADD_EDUCATION_REQUEST, handlerAddEducation),
     takeLatest(
       actionTypesProfile.REM_EDUCATION_REQUEST,
