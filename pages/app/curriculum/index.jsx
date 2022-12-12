@@ -37,6 +37,7 @@ export default function Curriculum() {
   }, [dispatch]);
 
   const handleSearch = () => {
+    setCurrentPage(1);
     setSearchKeyword(keyword);
     setStatusFilter(status);
   };
