@@ -19,14 +19,11 @@ import {
   ChevronRightIcon,
   ChevronLeftIcon,
 } from "@heroicons/react/solid";
-//import Modal from "../../component/ModalReview";
-//import ModalReview from "../../component/ModalReview";
 import ModalFilter from "../../component/ModalFilter";
 import ModalApply from "../../component/ModalApply";
 import ModalContract from "../../component/ModalContract";
 import ModalDisqualified from "../../component/ModalDisqualified";
 import ModalNotRespond from "../../component/ModalNotRespond";
-
 
 const columns = [
   { name: "" },
@@ -58,18 +55,14 @@ export default function Candidate() {
   const [currentPage, setCurrentPage] = useState(1);
   const [pageRange, setPageRange] = useState(0);
 
-  const handleGetApply = useSelector(
-    (state) => state.candidateStated.applies
-  );
+  const handleGetApply = useSelector((state) => state.candidateStated.applies);
 
   useEffect(() => {
     dispatch(GetApplyRequest());
     console.log(handleGetApply);
   }, []);
 
-  const handleGetFilter = useSelector(
-    (state) => state.candidateStated.filters
-  );
+  const handleGetFilter = useSelector((state) => state.candidateStated.filters);
 
   useEffect(() => {
     dispatch(GetFilterRequest());
@@ -102,7 +95,6 @@ export default function Candidate() {
     dispatch(GetNotrespondRequest());
     console.log(handleGetNotrespond);
   }, []);
-
 
   useEffect(() => {
     setPageNumbers(
@@ -217,19 +209,27 @@ export default function Candidate() {
                             <td className="px-4 py-2 text-left whitespace-nowrap text-sm text-gray-900">
                               <div>
                                 {/*{apply.boapEntity.usersEducations[0].usduSchool}*/}
-                                {apply.boapEntity.usersEducations[0] ? apply.boapEntity.usersEducations[0].usduSchool : 'No school inserted'} 
+                                {apply.boapEntity.usersEducations[0]
+                                  ? apply.boapEntity.usersEducations[0]
+                                      .usduSchool
+                                  : "No school inserted"}
                               </div>
                               <div className="font-style: italic">
-                              {apply.boapEntity.usersEducations[0] ? apply.boapEntity.usersEducations[0].usduFieldStudy : 'No major inserted'}
+                                {apply.boapEntity.usersEducations[0]
+                                  ? apply.boapEntity.usersEducations[0]
+                                      .usduFieldStudy
+                                  : "No major inserted"}
                               </div>
                             </td>
                             <td className="px-2 py-2 text-center whitespace-nowrap text-sm text-gray-900">
                               Graduated :{" "}
                               {/* {
                             apply.boapEntity.usersEducations[0].usduEndDate} */}
-                              {apply.boapEntity.usersEducations[0] ? new Date(
-                                 apply.boapEntity.usersEducations[0].usduEndDate 
-                              ).getFullYear() : '-'}
+                              {apply.boapEntity.usersEducations[0]
+                                ? new Date(
+                                    apply.boapEntity.usersEducations[0].usduEndDate
+                                  ).getFullYear()
+                                : "-"}
                             </td>
                             <td className="px-4 py-2 text-center whitespace-nowrap text-sm text-gray-900">
                               HP : 0{apply.boapEntity.usersPhones.uspoNumber}
@@ -250,7 +250,7 @@ export default function Candidate() {
 
                             {/*Option*/}
                             <td className="pr-6">
-                              <ModalApply dataApply={apply}/> 
+                              <ModalApply dataApply={apply} />
                             </td>
                           </tr>
                         </>
@@ -295,12 +295,18 @@ export default function Candidate() {
                                 {filter.boapEntity.usersEmail[0].pmailAddress}
                               </div>
                             </td>
-                            <td className="px-4 py-2 text-left whitespace-nowrap text-sm text-gray-900">
+                            <td className=" py-2 text-left whitespace-nowrap text-sm text-gray-900">
                               <div>
-                              {filter.boapEntity.usersEducations[0] ? filter.boapEntity.usersEducations[0].usduSchool : 'No school inserted'}
+                                {filter.boapEntity.usersEducations[0]
+                                  ? filter.boapEntity.usersEducations[0]
+                                      .usduSchool
+                                  : "No school inserted"}
                               </div>
                               <div className="font-style: italic">
-                              {filter.boapEntity.usersEducations[0] ? filter.boapEntity.usersEducations[0].usduFieldStudy : 'No major inserted'}
+                                {filter.boapEntity.usersEducations[0]
+                                  ? filter.boapEntity.usersEducations[0]
+                                      .usduFieldStudy
+                                  : "No major inserted"}
                               </div>
                             </td>
                             <td className="px-4 py-2 text-center whitespace-nowrap text-sm text-gray-900">
@@ -310,9 +316,11 @@ export default function Candidate() {
                               {/* {new Date(
                                  filter.boapEntity.usersEducations[0].usduEndDate 
                               ).getFullYear()} */}
-                              {filter.boapEntity.usersEducations[0] ? new Date(
-                                 filter.boapEntity.usersEducations[0].usduEndDate 
-                              ).getFullYear() : '-'}
+                              {filter.boapEntity.usersEducations[0]
+                                ? new Date(
+                                    filter.boapEntity.usersEducations[0].usduEndDate
+                                  ).getFullYear()
+                                : "-"}
                             </td>
                             <td className="px-4 py-2 text-center whitespace-nowrap text-sm text-gray-900">
                               HP : 0{filter.boapEntity.usersPhones.uspoNumber}
@@ -333,7 +341,7 @@ export default function Candidate() {
 
                             {/*Option*/}
                             <td className="pr-6">
-                               <ModalFilter dataFilter={filter}/>
+                              <ModalFilter dataFilter={filter} />
                             </td>
                           </tr>
                         </>
@@ -379,18 +387,26 @@ export default function Candidate() {
                               </div>
                             </td>
                             <td className="px-4 py-2 text-left whitespace-nowrap text-sm text-gray-900">
-                              <div>                               
-                                {contract.boapEntity.usersEducations[0] ? contract.boapEntity.usersEducations[0].usduSchool : 'No school inserted'} 
+                              <div>
+                                {contract.boapEntity.usersEducations[0]
+                                  ? contract.boapEntity.usersEducations[0]
+                                      .usduSchool
+                                  : "No school inserted"}
                               </div>
                               <div className="font-style: italic">
-                              {contract.boapEntity.usersEducations[0] ? contract.boapEntity.usersEducations[0].usduFieldStudy : 'No major inserted'}
+                                {contract.boapEntity.usersEducations[0]
+                                  ? contract.boapEntity.usersEducations[0]
+                                      .usduFieldStudy
+                                  : "No major inserted"}
                               </div>
                             </td>
-                            <td className="px-4 py-2 text-center whitespace-nowrap text-sm text-gray-900">
-                              Graduated :{" "}                            
-                              {contract.boapEntity.usersEducations[0] ? new Date(
-                                 contract.boapEntity.usersEducations[0].usduEndDate 
-                              ).getFullYear() : '-'}
+                            <td className="px-2 py-2 text-center whitespace-nowrap text-sm text-gray-900">
+                              Graduated :{" "}
+                              {contract.boapEntity.usersEducations[0]
+                                ? new Date(
+                                    contract.boapEntity.usersEducations[0].usduEndDate
+                                  ).getFullYear()
+                                : "-"}
                             </td>
                             <td className="px-4 py-2 text-center whitespace-nowrap text-sm text-gray-900">
                               HP : 0{contract.boapEntity.usersPhones.uspoNumber}
@@ -405,13 +421,14 @@ export default function Candidate() {
                                 <br></br>
                               </div> */}
                               <div className="font-style: italic">
-                                Score : {contract.boapTotalSkor}, {contract.boapStatus}
+                                Score : {contract.boapTotalSkor},{" "}
+                                {contract.boapStatus}
                               </div>
                             </td>
 
                             {/*Option*/}
                             <td className="pr-6">
-                            <ModalContract dataContract={contract}/> 
+                              <ModalContract dataContract={contract} />
                             </td>
                           </tr>
                         </>
@@ -457,18 +474,26 @@ export default function Candidate() {
                               </div>
                             </td>
                             <td className="px-4 py-2 text-left whitespace-nowrap text-sm text-gray-900">
-                              <div>                               
-                                {disq.boapEntity.usersEducations[0] ? disq.boapEntity.usersEducations[0].usduSchool : 'No school inserted'} 
+                              <div>
+                                {disq.boapEntity.usersEducations[0]
+                                  ? disq.boapEntity.usersEducations[0]
+                                      .usduSchool
+                                  : "No school inserted"}
                               </div>
                               <div className="font-style: italic">
-                              {disq.boapEntity.usersEducations[0] ? disq.boapEntity.usersEducations[0].usduFieldStudy : 'No major inserted'}
+                                {disq.boapEntity.usersEducations[0]
+                                  ? disq.boapEntity.usersEducations[0]
+                                      .usduFieldStudy
+                                  : "No major inserted"}
                               </div>
                             </td>
                             <td className="px-4 py-2 text-center whitespace-nowrap text-sm text-gray-900">
-                              Graduated :{" "}                             
-                              {disq.boapEntity.usersEducations[0] ? new Date(
-                                disq.boapEntity.usersEducations[0].usduEndDate 
-                              ).getFullYear() : '-'}
+                              Graduated :{" "}
+                              {disq.boapEntity.usersEducations[0]
+                                ? new Date(
+                                    disq.boapEntity.usersEducations[0].usduEndDate
+                                  ).getFullYear()
+                                : "-"}
                             </td>
                             <td className="px-4 py-2 text-center whitespace-nowrap text-sm text-gray-900">
                               HP : 0{disq.boapEntity.usersPhones.uspoNumber}
@@ -483,13 +508,13 @@ export default function Candidate() {
                                 <br></br>
                               </div> */}
                               <div className="font-style: italic">
-                              Score : {disq.boapTotalSkor}, {disq.boapStatus}
+                                Score : {disq.boapTotalSkor}, {disq.boapStatus}
                               </div>
                             </td>
 
                             {/*Option*/}
                             <td className="pr-6">
-                            <ModalDisqualified dataDisq={disq}/> 
+                              <ModalDisqualified dataDisq={disq} />
                             </td>
                           </tr>
                         </>
@@ -536,19 +561,24 @@ export default function Candidate() {
                             </td>
                             <td className="px-4 py-2 text-left whitespace-nowrap text-sm text-gray-900">
                               <div>
-                             
-                                {not.boapEntity.usersEducations[0] ? not.boapEntity.usersEducations[0].usduSchool : 'No school inserted'} 
+                                {not.boapEntity.usersEducations[0]
+                                  ? not.boapEntity.usersEducations[0].usduSchool
+                                  : "No school inserted"}
                               </div>
                               <div className="font-style: italic">
-                              {not.boapEntity.usersEducations[0] ? not.boapEntity.usersEducations[0].usduFieldStudy : 'No major inserted'}
+                                {not.boapEntity.usersEducations[0]
+                                  ? not.boapEntity.usersEducations[0]
+                                      .usduFieldStudy
+                                  : "No major inserted"}
                               </div>
                             </td>
                             <td className="px-4 py-2 text-center whitespace-nowrap text-sm text-gray-900">
                               Graduated :{" "}
-     
-                              {not.boapEntity.usersEducations[0] ? new Date(
-                                 not.boapEntity.usersEducations[0].usduEndDate 
-                              ).getFullYear() : '-'}
+                              {not.boapEntity.usersEducations[0]
+                                ? new Date(
+                                    not.boapEntity.usersEducations[0].usduEndDate
+                                  ).getFullYear()
+                                : "-"}
                             </td>
                             <td className="px-4 py-2 text-center whitespace-nowrap text-sm text-gray-900">
                               HP : 0{not.boapEntity.usersPhones.uspoNumber}
@@ -569,7 +599,7 @@ export default function Candidate() {
 
                             {/*Option*/}
                             <td className="pr-6">
-                            <ModalNotRespond dataNot={not}/> 
+                              <ModalNotRespond dataNot={not} />
                             </td>
                           </tr>
                         </>
@@ -592,6 +622,23 @@ export default function Candidate() {
 
           <div className="bg-white px-4 py-3 flex items-center justify-between border-t border-gray-200 sm:px-6">
             <div className="hidden sm:flex-1 sm:flex sm:items-center sm:justify-center">
+              {/* <div>
+                <p className="text-sm text-gray-700">
+                  Showing{" "}
+                  <span className="font-medium">
+                    {(currentPage - 1) * 5 + 1}
+                  </span>{" "}
+                  to{" "}
+                  <span className="font-medium">
+                    {currentPage * 5 < handleGetApply.length
+                      ? currentPage * 5
+                      : handleGetApply.length}
+                  </span>{" "}
+                  of{" "}
+                  <span className="font-medium">{handleGetApply.length}</span>{" "}
+                  results
+                </p>
+              </div> */}
               <br></br>
               <br></br>
               <div>

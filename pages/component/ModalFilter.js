@@ -22,7 +22,7 @@ export default function ModalFilter({ dataFilter }) {
     validationSchema: Yup.object().shape({
       boapEntityId: Yup.number().required(),
       boapReview: Yup.string().required(),
-      boapTotalSkor: Yup.string().required(),
+      boapTotalSkor: Yup.number().required(),
       boapStatus: Yup.string()
         .oneOf(filterStatus, "Please select status ")
         .required("Please"),

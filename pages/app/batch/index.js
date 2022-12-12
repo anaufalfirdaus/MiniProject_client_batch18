@@ -55,6 +55,7 @@ export default function Batch() {
   const [categoryTerm, setCategoryTerm] = useState("");
   const [viewKeyword, setViewKeyword] = useState("");
   const [category, setCategory] = useState("1");
+  const [closed, setClosed] = useState("Closed");
 
   const handleSearch = () => {
     setSearchTerm(keyword);
@@ -105,11 +106,15 @@ export default function Batch() {
 
   const onDelete = async (id) => {
     dispatch(DeleteBatchRequest(id));
-    //toast.success('Data has been deleted.')
+    alert.success('Data has been deleted.')
   };
 
-  const onClick = (id) => {
-    setDisplayEdit(true);
+  const onUpdate = async (id) => {
+    dispatch(EditBatchRequest(id));
+  };
+
+  const onChange= (id) => {
+    setClosed(true);
     setId(id);
   };
 
@@ -210,8 +215,13 @@ export default function Batch() {
                           <td className="px-4 py-2 text-center whitespace-nowrap text-sm text-gray-900">
                             {data?.batchProg.progTitle}
                           </td>
-                          <td className="px-6 py-2 text-end whitespace-nowrap text-sm text-gray-900">
-                            <div className="flex items-center gap-2">
+                          <td className="px-4 py-2 text-end whitespace-nowrap text-sm text-gray-900">
+                            <div className="flex items-center">
+                              <img
+                                className="w-8 h-8 border-2 border-white rounded-full dark:border-gray-800"
+                                src="../assets/images/yuri.jpg"
+                                alt=""
+                              />
                               <img
                                 className="w-8 h-8 border-2 border-white rounded-full dark:border-gray-800"
                                 src="../assets/images/yuri.jpg"
@@ -220,16 +230,16 @@ export default function Batch() {
                               <span> +{data?.batchStudents.length} </span>
                             </div>
                           </td>
-                          <td className="px-6 py-2 text-center whitespace-nowrap text-sm text-gray-900">
+                          <td className="px-4 py-4 text-center whitespace-nowrap text-sm text-gray-900">
                             {new Date(data?.batchStartDate).toLocaleDateString('au-AU', options)} 
                              - <br></br> 
                             {new Date(data?.batchEndDate).toLocaleDateString('au-AU', options)}
                           </td>
-                          <td className="px-6 py-2 text-center whitespace-nowrap text-sm text-gray-900">
+                          <td className="px-4 py-2 text-center whitespace-nowrap text-sm text-gray-900">
                             {data?.batchInstructor.empEntity.userFirstName}{" "}
                             {data?.batchInstructor.empEntity.userLastName}
                           </td>
-                          <td className="px-6 py-2 text-center whitespace-nowrap text-sm text-gray-900">
+                          <td className="px-4 py-2 text-center whitespace-nowrap text-sm text-gray-900">
                             {data?.batchStatus}
                           </td>
 
@@ -279,10 +289,6 @@ export default function Batch() {
                                                 "group flex items-center px-4 py-2 text-sm"
                                               )}
                                             >
-                                              {/* <PencilAltIcon
-                                                className="mr-3 h-5 w-5 text-gray-700 group-hover:text-gray-500"
-                                                aria-hidden="true"
-                                              /> */}
                                               Edit
                                             </Link>
                                           )}
@@ -299,7 +305,7 @@ export default function Batch() {
                                                     "Close this Batch?"
                                                   )
                                                 )
-                                                  onChange(data.batchStatus);
+                                                  onChange(data.batchId);
                                               }}
                                               className={classNames(
                                                 active
@@ -342,7 +348,7 @@ export default function Batch() {
                                         <Menu.Item>
                                           {({ active }) => (
                                             <Link
-                                              href={`/app/batch/set/${data.batchId}`}
+                                              href='#'
                                               onClick={() =>
                                                 onClick(data.batchId)
                                               }
@@ -353,10 +359,6 @@ export default function Batch() {
                                                 "group flex items-center px-4 py-2 text-sm"
                                               )}
                                             >
-                                              {/* <PencilAltIcon
-                                                className="mr-3 h-5 w-5 text-gray-700 group-hover:text-gray-500"
-                                                aria-hidden="true"
-                                              /> */}
                                               Set to Running
                                             </Link>
                                           )}
@@ -377,10 +379,6 @@ export default function Batch() {
                                                 "group flex items-center px-4 py-2 text-sm"
                                               )}
                                             >
-                                              {/* <PencilAltIcon
-                                                className="mr-3 h-5 w-5 text-gray-700 group-hover:text-gray-500"
-                                                aria-hidden="true"
-                                              /> */}
                                               Evaluation
                                             </Link>
                                           )}
@@ -405,24 +403,26 @@ export default function Batch() {
             )}
 
             <div className="bg-white px-4 py-3 flex items-center justify-between border-t border-gray-200 sm:px-6">
-              <div className="hidden sm:flex-1 sm:flex sm:items-center sm:justify-center">
-                {/* <div>
+              <div className="space-x-12 hidden sm:flex-1 sm:flex sm:items-center sm:justify-center">
+                <div>
                   <p className="text-sm text-gray-700">
                     Showing{" "}
                     <span className="font-medium">
-                      {(currentPage - 1) * 10 + 1}
+                      {(currentPage - 1) * 5 + 1}
                     </span>{" "}
                     to{" "}
                     <span className="font-medium">
-                      {currentPage * 10 < handleGetBatch.length
-                        ? currentPage * 10
+                      {currentPage * 5 < handleGetBatch.length
+                        ? currentPage * 5
                         : handleGetBatch.length}
                     </span>{" "}
                     of{" "}
                     <span className="font-medium">{handleGetBatch.length}</span>{" "}
                     results
                   </p>
-                </div> */}
+                </div>
+                <br></br>
+                <br></br>
                 <br></br>
                 <br></br>
                 <div>
