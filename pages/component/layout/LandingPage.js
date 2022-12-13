@@ -1262,7 +1262,7 @@ export default function LandingPage(props) {
         <div className="mb-6 pt-20 lg:pt-16">
           {children}
           
-          <div className="fixed right-4 bottom-8">
+          <div className="fixed right-4 bottom-2">
             <div className="text-center">
               <a href="https://api.whatsapp.com/send?phone=6287825111461" target="_blank" rel="noopener noreferrer">
                 <div className="flex items-center justify-center w-10 h-10 mx-auto rounded-full transition duration-300 shadow-md bg-green-500 hover:scale-110 group hover:shadow-xl sm:w-12 sm:h-12">

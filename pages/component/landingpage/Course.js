@@ -26,7 +26,7 @@ export default function Course() {
               <div className="mb-6 mr-6 lg:mb-0">
                 <div className="flex items-center justify-center w-20 h-20 bg-indigo-50 lg:w-32 lg:h-32">
                   <img
-                    src="../assets/images/codeid.png"
+                    src={cr.progImage}
                     // className="h-full w-full object-cover object-center group-hover:opacity-75"
                   />
                 </div>

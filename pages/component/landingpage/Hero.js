@@ -11,6 +11,11 @@ export default function Hero() {
     dispatch(GetStoryRequest())
   }, [])
 
+  const srcLogo = (clitLogo) => {
+    let logo = `../assets/images/${clitLogo}`
+    return logo
+  }
+
   return (
     <div className="px-8 py-8 mx-auto lg:px-12 lg:py-20">
       <div className="flex flex-col items-center justify-between w-full mb-10 lg:flex-row">
@@ -35,12 +40,15 @@ export default function Hero() {
           {stories && stories.slice(0,3).map((story) => (
             <div key={story.eccoId} className="w-1/3 lg:w-2/5">
               <div className="bg-white rounded shadow-2xl p-2 sm:p-4 text-center">
-                <img src="../assets/images/yuri.jpg"
+                <img src={story.eccoEntity.empEntity.userPhoto}
                   className="w-full lg:h-40 h-20 object-cover object-center" />
                 <h4 className="text-md text-gray-900 font-semibold lg:text-lg">{story.eccoEntity.empEntity.userFirstName}</h4>
-                <h4 className="text-sm text-gray-700 lg:text-md">{story.eccoClit.clitName}</h4>
-                <p className="text-xs text-gray-700 lg:text-base">{story.eccoEntity.empJoro.joroName} at</p>
-                <img src="../assets/images/codeid.png" />
+                {/* <h4 className="text-sm text-gray-700 lg:text-md">{story.eccoClit.clitName}</h4> */}
+                <p className="text-sm text-gray-700 lg:text-sm">{story.eccoEntity.empJoro.joroName} at</p>
+                <div className='flex items-center justify-center'>
+                  <img src={srcLogo(story.eccoClit.clitLogo)}
+                    className="h-20 w-auto" />
+                </div>
               </div>
             </div>
           ))}

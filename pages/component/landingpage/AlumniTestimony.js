@@ -22,7 +22,9 @@ export default function AlumniTestimony() {
             <div className="flex lg:flex-row flex-col h-full">
               <div className="lg:w-1/3 grid grid-cols-2 lg:grid-cols-1">
                 <div className="pr-4 mb-3">
-                  <img src="../assets/images/yuri.jpg" className="w-full lg:h-25 h-20 object-cover object-top" />
+                  <img src={testi.poreEntity.userPhoto}
+                    className="w-full lg:h-25 h-20 object-cover object-top"
+                  />
                 </div>
                 <div className="lg:pr-4 lg:text-center">
                   <h4 className="text-md font-semibold">{testi.poreEntity.userFirstName}</h4>
