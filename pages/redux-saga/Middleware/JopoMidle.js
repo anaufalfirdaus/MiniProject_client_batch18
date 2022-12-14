@@ -29,7 +29,7 @@ function* handleDelJopo(action) {
     const { payload } = action
     try {
         const result = yield call(JopoApi.Delete, payload)
-        yield put(DelJopoSuccess(result))
+        yield put(DelJopoSuccess(result.data))
     } catch (error) {
         yield put(DelJopoFailed(error))
     }

@@ -254,7 +254,7 @@ export default function AppLayout(props) {
                             className='w-10 h-10 bg-gray-300 object-cover rounded-full flex-shrink-0'
                             height={128}
                             width={128}
-                            src='/assets/images/yuri.jpg'
+                            src='/assets/images/adam.jpg'
                             alt='profile'
                           />
                           <span className='flex-1 flex flex-col min-w-0'>

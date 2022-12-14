@@ -48,7 +48,7 @@ const GetOneJopoSuccessed = (state,action) =>{
 
 const DelJopoSuccessed = (state,action) => {
     const {payload} = action
-    const filterJopo = state.jopos.filter(el=>el.jopoId !== payload)
+    const filterJopo = state.jopos.filter(el=>el.jopoId !== Number(payload.jopoId))
     return {
         ...state,
         jopos:[...filterJopo]

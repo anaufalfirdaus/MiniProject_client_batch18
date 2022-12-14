@@ -1,13 +1,24 @@
 import React, {Fragment} from 'react'
+import { useDispatch } from 'react-redux'
 import { Menu, Transition } from '@headlessui/react'
 import { HiDotsVertical } from 'react-icons/hi'
 import UpdateModal from './UpdateModal'
+import { DelJopoRequest } from '../../redux-saga/Action/JopoAction'
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(' ')
 }
 
 function MinimalMenu() {
+
+  const dispatch = useDispatch();
+  
+
+  const removeAction = (id) => {
+      dispatch(DelJopoRequest(id));
+      return;
+    }
+
   return (
     <Menu as="div" className="ml-2 relative inline-block text-left">
       <div>
@@ -38,7 +49,7 @@ function MinimalMenu() {
             <Menu.Item>
               {({ active }) => (
                 <a
-                  href="#"
+                  onClick={() => removeAction(id)}
                   className={classNames(
                     active ? 'bg-gray-100 text-gray-900' : 'text-gray-700',
                     'rounded-md bg-blue-700 bg-opacity-75 px-4 py-2 text-sm font-medium text-blue hover:bg-opacity-30 focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75'

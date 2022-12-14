@@ -5,7 +5,16 @@ import { getCookie } from 'cookies-next'
 
 const getAll = async () => {
     try {
-        const result = await axios.get(`${domain}/jopo`);
+        const result = await axios.get(`${domain}/taap`);
+        return result;
+    } catch (error) {
+        return error;
+    }
+}
+
+const getAllUser = async () => {
+    try {
+        const result = await axios.get(`${domain}/taap/user`);
         return result;
     } catch (error) {
         return error;
@@ -14,7 +23,7 @@ const getAll = async () => {
 
 const getOne = async (id) => {
     try {
-        const result = await axios.get(`${domain}/jopo/${id}`)
+        const result = await axios.get(`${domain}/taap/${id}`)
     } catch (error) {
         return error;
     }
@@ -22,7 +31,7 @@ const getOne = async (id) => {
 
 const create = async (data) => {
     try {
-        const result = await axios.post(`${domain}/jopo`, data);
+        const result = await axios.post(`${domain}/taap`, data);
         return result;
     } catch (error) {
         return error;
@@ -31,7 +40,7 @@ const create = async (data) => {
 
 const update = async(data)=>{
     try {
-        const result = await axios.put(`${domain}/jopo/${data.jopoId}`,data)
+        const result = await axios.put(`${domain}/taap/${data.taapId}`,data)
         return result
     } catch (error) {
         return await error.message
@@ -40,38 +49,29 @@ const update = async(data)=>{
 
 const Delete = async(id)=>{
     try {
-        const result = await axios.delete(`${domain}/jopo/${id}`)
+        const result = await axios.delete(`${domain}/taap/${id}`)
         return result
     } catch (error) {
         return await error.message
     }
 }
 
-const publish = async (id) => {
+const apply = async(data) => {
     try {
-        const result = await axios.put(`${domain}/jopo/publish/${id}`);
+        const result = await axios.post(`${domain}/taap/apply`, data);
         return result;
     } catch (error) {
         return error;
-    }
-}
-
-const unPublish = async (id) => {
-    try {
-        const result = await axios.put(`${domain}/jopo/unpublish/${id}`);
-        return result;
-    } catch (error) {
-        return error;
-    }
+    }   
 }
 
 
 export default {
     getAll,
-    publish,
-    unPublish,
+    getAllUser,
     getOne,
     create,
     update,
+    apply,
     Delete
 }
