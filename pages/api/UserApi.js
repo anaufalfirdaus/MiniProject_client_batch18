@@ -33,8 +33,11 @@ const profile = async () => {
 };
 
 const getProfile = async (id) => {
+  axios.defaults.headers.common = {
+    Authorization: `Bearer ${getCookie('access_token')}`,
+  };
   try {
-    const result = await axios.get(`${domain}/profileuser/${id}`);
+    const result = await axios.get(`${domain}/profile/fetch`);
     return result;
   } catch (err) {
     return err;
@@ -43,9 +46,12 @@ const getProfile = async (id) => {
 
 //TODO: Update
 const updateProfile = async (data) => {
-  console.log(data, 'API');
+  axios.defaults.headers.common = {
+    Authorization: `Bearer ${getCookie('access_token')}`,
+  };
+
   try {
-    const result = await axios.patch(`${domain}/profileupdate`, data);
+    const result = await axios.patch(`${domain}/profile/user`, data);
     return result;
   } catch (err) {
     return err.message;
