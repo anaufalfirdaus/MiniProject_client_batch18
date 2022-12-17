@@ -470,7 +470,7 @@ const removeAddress = (state, action) => {
   const { payload } = action;
   const { addresses } = state;
   const filterAddresses = addresses.filter(
-    (address) => address.etadAddrId !== payload.etadAddrId
+    (address) => address.etadAddrId !== payload.id
   );
   showToast('Remove Address Success !');
   return {
@@ -484,7 +484,7 @@ const removeEducation = (state, action) => {
   const { payload } = action;
   const { educations } = state;
   const filterEducations = educations.filter(
-    (education) => education.usduId !== payload.usduId
+    (education) => education.usduId !== payload.id
   );
   showToast('Remove Education Success !');
   return {
@@ -498,7 +498,7 @@ const removeExperience = (state, action) => {
   const { payload } = action;
   const { experiences } = state;
   const filterExperiences = experiences.filter(
-    (experience) => experience.usexId !== payload.usexId
+    (experience) => experience.usexId !== payload.id
   );
   showToast('Remove Experience Success !');
   return {
@@ -511,9 +511,7 @@ const removeExperience = (state, action) => {
 const removeSkill = (state, action) => {
   const { payload } = action;
   const { skills } = state;
-  const filterSkills = skills.filter(
-    (skill) => skill.uskiId !== payload.uskiId
-  );
+  const filterSkills = skills.filter((skill) => skill.uskiId !== payload.id);
   showToast('Remove Skill Success !');
   return {
     ...state,
@@ -564,11 +562,15 @@ const updatePhone = (state, action) => {
 // and add the new id address to user address table
 const updateAddress = (state, action) => {
   const { payload } = action;
+  const filteredAddress = state.addresses.filter(
+    (address) => address.etadAddrId !== payload.id
+  );
+
   showToast('Update Address Success !');
   return {
     ...state,
     isLoading: { name: 'address', value: false },
-    addresses: [...payload],
+    addresses: [...filteredAddress, payload],
   };
 };
 

@@ -3,24 +3,7 @@ import {
   getProfile,
   updateProfile,
   updatePassword,
-  addEmail,
-  removeEmail,
-  addPhone,
-  updateEmail,
-  removePhone,
-  updatePhone,
   uploadPhoto,
-  addAddress,
-  removeAddress,
-  updateAddress,
-  addEducation,
-  removeEducation,
-  updateEducation,
-  addExperience,
-  removeExperience,
-  updateExperience,
-  addSkill,
-  removeSkill,
 } from '../../api/UserApi';
 import {
   getProfileSuccess,
@@ -67,7 +50,27 @@ import {
   uploadPhotoFal,
 } from '../Action/profileAction';
 
-function* handleGetProfile(action) {
+import {
+  requestAddAddress,
+  requestAddEducation,
+  requestAddEmail,
+  requestAddExperience,
+  requestAddPhone,
+  requestAddSkill,
+  requestRemoveAddress,
+  requestRemoveEducation,
+  requestRemoveEmail,
+  requestRemoveExperience,
+  requestRemovePhone,
+  requestRemoveSkill,
+  requestUpdateAddress,
+  requestUpdateEducation,
+  requestUpdateEmail,
+  requestUpdateExperience,
+  requestUpdatePhone,
+} from './request/profile';
+
+export function* handleGetProfile(action) {
   try {
     const { payload } = action;
     const profile = yield call(getProfile, payload);
@@ -77,7 +80,7 @@ function* handleGetProfile(action) {
   }
 }
 
-function* handleUpdateProfile(action) {
+export function* handleUpdateProfile(action) {
   try {
     const { payload } = action;
     const updProfile = yield call(updateProfile, payload);
@@ -87,7 +90,7 @@ function* handleUpdateProfile(action) {
   }
 }
 
-function* handlerUpdatePassword(action) {
+export function* handlerUpdatePassword(action) {
   try {
     const { payload } = action;
     const updPassword = yield call(updatePassword, payload);
@@ -98,29 +101,29 @@ function* handlerUpdatePassword(action) {
 }
 
 //* EMAIL
-function* handlerAddEmail(action) {
+export function* handlerAddEmail(action) {
   try {
     const { payload } = action;
-    const newEmail = yield call(addEmail, payload);
+    const newEmail = yield call(requestAddEmail, payload);
     yield put(addEmailSuccess(newEmail.data));
   } catch (error) {
     yield put(addEmailFailed(error.message));
   }
 }
 
-function* handlerRemoveEmail(action) {
+export function* handlerRemoveEmail(action) {
   try {
     const { payload } = action;
-    const remEmail = yield call(removeEmail, payload);
+    const remEmail = yield call(requestRemoveEmail, payload);
     yield put(removeEmailSuccess(remEmail.data));
   } catch (error) {
     yield put(removeEmailFailed(error.message));
   }
 }
-function* handlerUpdateEmail(action) {
+export function* handlerUpdateEmail(action) {
   try {
     const { payload } = action;
-    const updEmail = yield call(updateEmail, payload);
+    const updEmail = yield call(requestUpdateEmail, payload);
     yield put(updateEmailSuccess(updEmail.data));
   } catch (error) {
     yield put(updateEmailFailed(error.message));
@@ -128,30 +131,30 @@ function* handlerUpdateEmail(action) {
 }
 
 //* PHONE
-function* handlerAddPhone(action) {
+export function* handlerAddPhone(action) {
   try {
     const { payload } = action;
-    const newPhone = yield call(addPhone, payload);
+    const newPhone = yield call(requestAddPhone, payload);
     yield put(addPhoneSuccess(newPhone.data));
   } catch (error) {
     yield put(addPhoneFailed(error.message));
   }
 }
 
-function* handlerRemovePhone(action) {
+export function* handlerRemovePhone(action) {
   try {
     const { payload } = action;
-    const remPhone = yield call(removePhone, payload);
+    const remPhone = yield call(requestRemovePhone, payload);
     yield put(removePhoneSuccess(remPhone.data));
   } catch (error) {
     yield put(removePhoneFailed(error.message));
   }
 }
 
-function* handlerUpdatePhone(action) {
+export function* handlerUpdatePhone(action) {
   try {
     const { payload } = action;
-    const updPhone = yield call(updatePhone, payload);
+    const updPhone = yield call(requestUpdatePhone, payload);
     yield put(updatePhoneSuccess(updPhone.data));
   } catch (error) {
     yield put(updatePhoneFailed(error));
@@ -159,61 +162,63 @@ function* handlerUpdatePhone(action) {
 }
 
 //* ADDRESS
-function* handlerAddAddress(action) {
+export function* handlerAddAddress(action) {
   try {
     const { payload } = action;
-    const newAddress = yield call(addAddress, payload);
+    const newAddress = yield call(requestAddAddress, payload);
     yield put(addAddressSuccess(newAddress.data));
   } catch (error) {
     yield put(addAddressFailed(error.message));
   }
 }
 
-function* handlerRemoveAddress(action) {
+export function* handlerRemoveAddress(action) {
   try {
     const { payload } = action;
-    const remAddress = yield call(removeAddress, payload);
-    yield put(removeAddressSuccess(remAddress.data));
+    const remAddress = yield call(requestRemoveAddress, payload);
+    yield put(removeAddressSuccess({ id: payload, ...remAddress.data }));
   } catch (error) {
     yield put(removeAddressFailed(error.message));
   }
 }
 
-function* handlerUpdateAddress(action) {
+export function* handlerUpdateAddress(action) {
   try {
     const { payload } = action;
-    const updAddress = yield call(updateAddress, payload);
-    yield put(updateAddressSuccess(updAddress.data));
+    const updAddress = yield call(requestUpdateAddress, payload);
+    yield put(
+      updateAddressSuccess({ id: payload.addressId, ...updAddress.data })
+    );
   } catch (error) {
     yield put(updateAddressFailed(error.message));
   }
 }
 
 //* EDUCATION
-function* handlerAddEducation(action) {
+export function* handlerAddEducation(action) {
   try {
     const { payload } = action;
-    const addEdu = yield call(addEducation, payload);
+    const addEdu = yield call(requestAddEducation, payload);
     yield put(addEducationSuccess(addEdu.data));
   } catch (error) {
     yield put(addEducationFailed(error.message));
   }
 }
 
-function* handlerRemoveEducation(action) {
+export function* handlerRemoveEducation(action) {
   try {
     const { payload } = action;
-    const remEdu = yield call(removeEducation, payload);
-    yield put(removeEducationSuccess(remEdu.data));
+    const remEdu = yield call(requestRemoveEducation, payload);
+    yield put(removeEducationSuccess({ id: payload, ...remEdu.data }));
   } catch (error) {
     yield put(removeEducationFailed(error.message));
   }
 }
 
-function* handlerUpdateEducation(action) {
+export function* handlerUpdateEducation(action) {
   try {
     const { payload } = action;
-    const updEdu = yield call(updateEducation, payload);
+    const updEdu = yield call(requestUpdateEducation, payload);
     yield put(updateEducationSuccess(updEdu.data));
   } catch (error) {
     yield put(updateEducationFailed(error.message));
@@ -221,30 +226,30 @@ function* handlerUpdateEducation(action) {
 }
 
 //* EXPERIENCE
-function* handlerAddExperience(action) {
+export function* handlerAddExperience(action) {
   try {
     const { payload } = action;
-    const addExp = yield call(addExperience, payload);
+    const addExp = yield call(requestAddExperience, payload);
     yield put(addExperienceSuccess(addExp.data));
   } catch (error) {
     yield put(addExperienceFailed(error.message));
   }
 }
 
-function* handlerRemoveExperience(action) {
+export function* handlerRemoveExperience(action) {
   try {
     const { payload } = action;
-    const remExp = yield call(removeExperience, payload);
-    yield put(removeExperienceSuccess(remExp.data));
+    const remExp = yield call(requestRemoveExperience, payload);
+    yield put(removeExperienceSuccess({ id: payload, ...remExp.data }));
   } catch (error) {
     yield put(removeExperienceFailed(error.message));
   }
 }
 
-function* handlerUpdateExperience(action) {
+export function* handlerUpdateExperience(action) {
   try {
     const { payload } = action;
-    const updExp = yield call(updateExperience, payload);
+    const updExp = yield call(requestUpdateExperience, payload);
     yield put(updateExperienceSuccess(updExp.data));
   } catch (error) {
     yield put(updateExperienceFailed(error.message));
@@ -252,27 +257,27 @@ function* handlerUpdateExperience(action) {
 }
 
 //* SKILL
-function* handlerAddSkill(action) {
+export function* handlerAddSkill(action) {
   try {
     const { payload } = action;
-    const newSkl = yield call(addSkill, payload);
+    const newSkl = yield call(requestAddSkill, payload);
     yield put(addSkillSuccess(newSkl.data));
   } catch (error) {
     yield put(addSkillFailed(error.message));
   }
 }
 
-function* handlerRemoveSkill(action) {
+export function* handlerRemoveSkill(action) {
   try {
     const { payload } = action;
-    const remSkill = yield call(removeSkill, payload);
-    yield put(removeSkillSuccess(remSkill.data));
+    const remSkill = yield call(requestRemoveSkill, payload);
+    yield put(removeSkillSuccess({ id: payload, ...remSkill.data }));
   } catch (error) {
     yield put(removeSkillFailed(error.message));
   }
 }
 
-function* handlerUploadPhoto(action) {
+export function* handlerUploadPhoto(action) {
   try {
     const { payload } = action;
     const uploadPic = yield call(uploadPhoto, payload);
@@ -281,27 +286,3 @@ function* handlerUploadPhoto(action) {
     yield put(uploadPhotoFal(error.message));
   }
 }
-
-export {
-  handleGetProfile,
-  handlerAddEmail,
-  handlerAddPhone,
-  handlerAddAddress,
-  handlerAddEducation,
-  handlerAddExperience,
-  handlerAddSkill,
-  handlerRemoveEmail,
-  handlerRemovePhone,
-  handlerRemoveAddress,
-  handlerRemoveEducation,
-  handlerRemoveExperience,
-  handlerRemoveSkill,
-  handleUpdateProfile,
-  handlerUpdatePassword,
-  handlerUpdateEmail,
-  handlerUpdatePhone,
-  handlerUpdateAddress,
-  handlerUpdateEducation,
-  handlerUpdateExperience,
-  handlerUploadPhoto,
-};

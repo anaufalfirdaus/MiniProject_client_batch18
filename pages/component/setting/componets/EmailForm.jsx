@@ -18,8 +18,6 @@ import { toast } from 'react-toastify';
 
 export default function EmailForm({ edit }) {
   let [isOpen, setIsOpen] = useState(false);
-
-  const id = useSelector((state) => state.profile.profile.userId);
   const { emails } = useSelector((state) => state.profile);
   const dispatch = useDispatch();
 
@@ -33,12 +31,10 @@ export default function EmailForm({ edit }) {
 
   const formik = useFormik({
     initialValues: {
-      userId: Number(id),
       emailId: edit ? Number(edit.pmailId) : '',
       email: edit ? edit.pmailAddress : '',
     },
     validationSchema: Yup.object().shape({
-      userId: Yup.number().required(),
       email: Yup.string('email shoult be a string')
         .max(50, 'max character email is 50')
         .email('please provite correct email')
@@ -46,17 +42,6 @@ export default function EmailForm({ edit }) {
     }),
 
     onSubmit: async (values) => {
-      if (edit) {
-        const payload = {
-          emailId: values.emailId,
-          userId: values.userId,
-          pmailAddress: values.email,
-        };
-        dispatch(updateEmailRequest(payload));
-        console.log(payload);
-        closeModal();
-        return;
-      }
       const emailExist = emails.filter(
         (email) => values.email === email.pmailAddress
       );
@@ -74,6 +59,13 @@ export default function EmailForm({ edit }) {
           theme: 'colored',
         });
       }
+
+      if (edit) {
+        dispatch(updateEmailRequest(values));
+        closeModal();
+        return;
+      }
+
       dispatch(addEmailRequest(values));
       closeModal();
       formik.resetForm();

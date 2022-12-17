@@ -20,8 +20,6 @@ if (typeof window === 'undefined');
 export default function SettingPage() {
   const [position, setPosition] = useState('');
   const dispatch = useDispatch();
-  const { UserProfile } = useSelector((state) => state.usrStated);
-  const [user, setUser] = useState({});
 
   useEffect(() => {
     window.navigator.geolocation.getCurrentPosition(
@@ -31,9 +29,8 @@ export default function SettingPage() {
   }, []);
 
   useEffect(() => {
-    setUser(UserProfile);
-    dispatch(getProfileRequest(user?.userId || UserProfile?.userId));
-  }, [dispatch, user, UserProfile]);
+    dispatch(getProfileRequest());
+  }, [dispatch]);
 
   return (
     <AppLayout>

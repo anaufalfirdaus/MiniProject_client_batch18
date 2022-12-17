@@ -22,7 +22,6 @@ export default function PhoneForm({ edit }) {
   const dispatch = useDispatch();
   const phoneCode = ['Cell', 'Home'];
   const { phones } = useSelector((state) => state.profile);
-  const id = useSelector((state) => state.profile.profile.userId);
 
   function closeModal() {
     setIsOpen(false);
@@ -34,27 +33,20 @@ export default function PhoneForm({ edit }) {
 
   const formik = useFormik({
     initialValues: {
-      userId: id,
+      phoneId: edit ? edit.phoneId : '',
       phone: edit ? edit.uspoPhone : '',
-      code: edit ? edit.pontyCode : '',
+      phoneCode: edit ? edit.pontyCode : '',
     },
     validationSchema: Yup.object().shape({
-      userId: Yup.number().required(),
       phone: Yup.string().required('Please provite your number'),
-      code: Yup.string()
+      phoneCode: Yup.string()
         .oneOf(phoneCode, 'Please Choose Phone Type')
         .required('Please Choose Phone Type'),
     }),
 
     onSubmit: async (values) => {
       if (edit) {
-        const payload = {
-          uspoPhoneId: edit.uspoPhoneId,
-          uspoEntity: values.userId,
-          uspoPhone: values.phone,
-          pontyCode: values.code,
-        };
-        dispatch(updatePhoneRequest(payload));
+        dispatch(updatePhoneRequest(values));
       } else {
         const phoneExist = phones.filter(
           (phone) => phone.uspoPhone === values.phone
@@ -157,17 +149,17 @@ export default function PhoneForm({ edit }) {
                         </span>
                       ) : null}
                       <div className='grid grid-cols-2 items-center mt-2 gap-3'>
-                        <label htmlFor='code'>Phone Type</label>
+                        <label htmlFor='phoneCode'>Phone Type</label>
                         <select
-                          value={formik.values.code}
+                          value={formik.values.phoneCode}
                           onSelect={formik.handleChange}
                           onBlur={formik.handleBlur}
                           onChange={(e) =>
-                            formik.setFieldValue('code', e.target.value)
+                            formik.setFieldValue('phoneCode', e.target.value)
                           }
                           className='rounded-lg px-2 py-1 col-span-1'
-                          name='code'
-                          id='code'
+                          name='phoneCode'
+                          id='phoneCode'
                         >
                           <option value='Bachelor'>-- Phone Type --</option>
                           {phoneCode.map((code, i) => (

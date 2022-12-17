@@ -18,7 +18,6 @@ import { toast } from 'react-toastify';
 
 export default function AddressForm({ edit }) {
   const dispatch = useDispatch();
-  const id = useSelector((state) => state.profile.profile.userId);
   const { addresses } = useSelector((state) => state.profile);
   const addressTypes = useSelector((state) => state.profile.addressType);
   const { city } = useSelector((state) => state.profile);
@@ -38,15 +37,14 @@ export default function AddressForm({ edit }) {
 
   const formik = useFormik({
     initialValues: {
-      userId: id,
+      addressId: edit ? edit.etadAddrId : '',
       addressLine1: edit ? edit.etadAddr.addrLine1 : '',
       addressLine2: edit ? edit.etadAddr.addrLine2 : '',
-      addressPostalCode: edit ? edit.etadAddr.addrPostalCode : '',
+      postalCode: edit ? edit.etadAddr.addrPostalCode : '',
       cityId: edit ? edit.etadAddr.addrCity.cityId : '',
       addressType: edit ? edit.etadAdty.adtyId : '',
     },
     validationSchema: Yup.object().shape({
-      userId: Yup.number().required(),
       addressLine1: Yup.string()
         .min(5)
         .max(255)
@@ -55,7 +53,7 @@ export default function AddressForm({ edit }) {
         .min(5)
         .max(255)
         .required('please provite your new Address'),
-      addressPostalCode: Yup.number().required('please provite a postal code'),
+      postalCode: Yup.number().required('please provite a postal code'),
       cityId: Yup.number()
         .oneOf(oneOfCity, 'Pleace Choose City that we Provided')
         .required('please insert city'),
@@ -68,7 +66,7 @@ export default function AddressForm({ edit }) {
         (address) =>
           values.addressLine1 === address.addrLine1 ||
           values.addressLine2 === address.addrLine2 ||
-          values.addressPostalCode === address.addrPostalCode
+          values.postalCode === address.addrPostalCode
       );
 
       if (addressExsist.length > 0) {
@@ -86,17 +84,7 @@ export default function AddressForm({ edit }) {
       }
 
       if (edit) {
-        const payload = {
-          userId: Number(id),
-          addrLine1: values.addressLine1,
-          addrLine2: values.addressLine2,
-          addrPostalCode: values.addressPostalCode,
-          cityId: Number(values.cityId),
-          addressId: Number(edit.etadAddrId),
-          addressType: Number(values.addressType),
-        };
-        dispatch(updateAddressRequest(payload));
-        console.log({ payload });
+        dispatch(updateAddressRequest(values));
       } else {
         dispatch(addAddressRequest(values));
         formik.resetForm();
@@ -186,14 +174,14 @@ export default function AddressForm({ edit }) {
                         />
                       </div>
                       <div className='flex items-center gap-3'>
-                        <label htmlFor='addressPostalCode'>Postal Code</label>
+                        <label htmlFor='postalCode'>Postal Code</label>
                         <input
-                          value={formik.values.addressPostalCode}
+                          value={formik.values.postalCode}
                           onChange={formik.handleChange}
                           className='rounded-lg px-2 py-1'
                           type='text'
-                          name='addressPostalCode'
-                          id='addressPostalCode'
+                          name='postalCode'
+                          id='postalCode'
                           placeholder='ex. 34045'
                         />
                         <label htmlFor='cityId'>City</label>

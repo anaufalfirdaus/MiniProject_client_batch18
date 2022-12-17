@@ -9,50 +9,47 @@ import { Dialog, Transition } from '@headlessui/react';
 import { Fragment, useState } from 'react';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
-import { useSelector, useDispatch } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import {
   addEducationRequest,
   updateEducationRequest,
 } from '../../../redux-saga/Action/profileAction';
 
+const oneOfMonth = [
+  '0',
+  '1',
+  '2',
+  '3',
+  '4',
+  '5',
+  '6',
+  '7',
+  '8',
+  '9',
+  '10',
+  '11',
+];
+const months = [
+  'January',
+  'February',
+  'March',
+  'April',
+  'May',
+  'June',
+  'July',
+  'August',
+  'September',
+  'October',
+  'November',
+  'December',
+];
+
+const degreesType = ['Bachelor', 'Diploma', 'PHD', 'High School'];
+
 export default function EducationForm({ edit }) {
   let [isOpen, setIsOpen] = useState(false);
 
   const dispatch = useDispatch();
-  const id = useSelector((state) => state.profile.profile.userId);
-  const oneOfMonth = [
-    '0',
-    '1',
-    '2',
-    '3',
-    '4',
-    '5',
-    '6',
-    '7',
-    '8',
-    '9',
-    '10',
-    '11',
-  ];
-  const months = [
-    'January',
-    'February',
-    'March',
-    'April',
-    'May',
-    'June',
-    'July',
-    'August',
-    'September',
-    'October',
-    'November',
-    'December',
-  ];
-
-  const degreesType = ['Bachelor', 'Diploma', 'PHD', 'High School'];
-  function closeModal() {
-    setIsOpen(false);
-  }
 
   function closeModal() {
     setIsOpen(false);
@@ -64,20 +61,21 @@ export default function EducationForm({ edit }) {
 
   const formik = useFormik({
     initialValues: {
-      userId: id,
+      educationId: edit ? edit.usduId : '',
       school: edit ? edit.usduSchool : '',
       degree: edit ? edit.usduDegree : '',
       fieldStudy: edit ? edit.usduFieldStudy : '',
+      startDate: '',
+      endDate: '',
       startYear: edit ? new Date(edit.usduStartDate).getFullYear() : '',
       startMonth: edit ? new Date(edit.usduStartDate).getMonth() : '',
       endYear: edit ? new Date(edit.usduEndDate).getFullYear() : '',
       endMonth: edit ? new Date(edit.usduEndDate).getMonth() : '',
       grade: edit ? edit.usduGrade : '',
       activities: edit ? edit.usduActivities : '',
-      description: edit ? edit.usduDescription : '',
+      desc: edit ? edit.usduDescription : '',
     },
     validationSchema: Yup.object().shape({
-      userId: Yup.number().required(),
       school: Yup.string()
         .min(5, 'Minimal Character is 5')
         .max(255, 'Maximum Character is 255')
@@ -106,26 +104,16 @@ export default function EducationForm({ edit }) {
       ),
       grade: Yup.number().required('please proivete your education Grade'),
       activities: Yup.string().notRequired(),
-      description: Yup.string().notRequired(),
+      desc: Yup.string().notRequired(),
     }),
     onSubmit: (values) => {
       if (edit) {
-        const payload = {
-          usduId: edit.usduId,
-          usduEntityId: values.userId,
-          usduSchool: values.school,
-          usduDegree: values.degree,
-          usduFieldStudy: values.fieldStudy,
-          startMonth: values.startMonth,
-          startYear: values.startYear,
-          endMonth: values.endMonth,
-          endYear: values.endYear,
-          usduGrade: values.grade,
-          usduActivities: values.activities,
-          usduDescription: values.description,
-        };
-        dispatch(updateEducationRequest(payload));
+        values.startDate = new Date(values.startYear, values.startMonth, 1);
+        values.endDate = new Date(values.endYear, values.endMonth, 1);
+        dispatch(updateEducationRequest(values));
       } else {
+        values.startDate = new Date(values.startYear, values.startMonth, 1);
+        values.endDate = new Date(values.endYear, values.endMonth, 1);
         dispatch(addEducationRequest(values));
         formik.resetForm();
       }
@@ -340,16 +328,16 @@ export default function EducationForm({ edit }) {
                         ></textarea>
                       </div>
                       <div className='grid grid-cols-6'>
-                        <label className='col-span-1' htmlFor='description'>
+                        <label className='col-span-1' htmlFor='desc'>
                           Description
                         </label>
                         <textarea
-                          value={formik.values.description}
+                          value={formik.values.desc}
                           onChange={formik.handleChange}
                           onBlur={formik.handleBlur}
                           className='col-span-5 rounded-lg px-2 py-1'
-                          name='description'
-                          id='description'
+                          name='desc'
+                          id='desc'
                           cols='5'
                           rows='5'
                         ></textarea>

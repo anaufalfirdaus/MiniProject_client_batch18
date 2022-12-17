@@ -15,44 +15,44 @@ import {
   updateExperienceRequest,
 } from '../../../redux-saga/Action/profileAction';
 
+const oneOfMonth = [
+  '0',
+  '1',
+  '2',
+  '3',
+  '4',
+  '5',
+  '6',
+  '7',
+  '8',
+  '9',
+  '10',
+  '11',
+];
+const months = [
+  'January',
+  'February',
+  'March',
+  'April',
+  'May',
+  'June',
+  'July',
+  'August',
+  'September',
+  'October',
+  'November',
+  'December',
+];
+
 export default function ExperienceForm({ edit }) {
   let [isOpen, setIsOpen] = useState(false);
   const dispatch = useDispatch();
-  const id = useSelector((state) => state.profile.profile.userId);
   const statusType = useSelector((state) => state.profile.statusType);
   const empType = useSelector((state) => state.profile.employeementType);
   const cities = useSelector((state) => state.profile.city);
   const oneOfCity = cities?.map((ci) => ci.cityId);
   const oneOfEmp = empType.map((emp) => emp.jotyName);
   const oneOfStatus = statusType.map((status) => status.status);
-  const oneOfMonth = [
-    '0',
-    '1',
-    '2',
-    '3',
-    '4',
-    '5',
-    '6',
-    '7',
-    '8',
-    '9',
-    '10',
-    '11',
-  ];
-  const months = [
-    'January',
-    'February',
-    'March',
-    'April',
-    'May',
-    'June',
-    'July',
-    'August',
-    'September',
-    'October',
-    'November',
-    'December',
-  ];
 
   function closeModal() {
     setIsOpen(false);
@@ -64,23 +64,24 @@ export default function ExperienceForm({ edit }) {
 
   const formik = useFormik({
     initialValues: {
-      userId: id,
+      educationId: edit ? edit.usexId : '',
       title: edit ? edit.usexTitle : '',
       profileHeadline: edit ? edit.usexProfileHeadline : '',
-      employeementType: edit ? edit.usexEmploymentType : '',
+      employmentType: edit ? edit.usexEmploymentType : '',
       companyName: edit ? edit.usexCompanyName : '',
       isCurrent: edit ? edit.usexIsCurrent : '0',
+      startDate: '',
+      endDate: '',
       startYear: edit ? new Date(edit.usexStartDate).getFullYear() : '',
       startMonth: edit ? new Date(edit.usexStartDate).getMonth() : '',
       endYear: edit ? new Date(edit.usexEndDate).getFullYear() : '',
       endMonth: edit ? new Date(edit.usexEndDate).getMonth() : '',
       industry: edit ? edit.usexIndustry : '',
-      description: edit ? edit.usexDescription : '',
-      city: '',
+      desc: edit ? edit.usexDescription : '',
+      cityId: '',
       experienceType: edit ? edit.usexExperienceType : '',
     },
     validationSchema: Yup.object().shape({
-      userId: Yup.number().required(),
       title: Yup.string()
         .min(5, 'title at least 5 characters')
         .max(255, 'title max is 255 characters')
@@ -89,7 +90,7 @@ export default function ExperienceForm({ edit }) {
         .min(5, 'title at least 5 characters')
         .max(512, 'title max is 512 characters')
         .required('Please provite the Profile Headline'),
-      employeementType: Yup.string()
+      employmentType: Yup.string()
         .oneOf(oneOfEmp)
         .required('Please Choose Employeement Type that provided'),
       companyName: Yup.string()
@@ -115,8 +116,8 @@ export default function ExperienceForm({ edit }) {
         .min(5, 'Industry at least 5 characters short')
         .max(15, 'industri at max 15 characters long')
         .required('please provite industry'),
-      description: Yup.string().max(512, 'max character is 512').notRequired(),
-      city: Yup.number()
+      desc: Yup.string().max(512, 'max character is 512').notRequired(),
+      cityId: Yup.number()
         .oneOf(oneOfCity, 'Pleace Choose City that we Provided')
         .required('please choose city'),
       experienceType: Yup.string()
@@ -126,23 +127,12 @@ export default function ExperienceForm({ edit }) {
 
     onSubmit: async (values) => {
       if (edit) {
-        const payload = {
-          usexId: edit.usexId,
-          usexTitle: values.title,
-          usexProfileHeadline: values.profileHeadline,
-          usexEmploymentType: values.employeementType,
-          usexCompanyName: values.companyName,
-          usexIsCurrent: values.isCurrent,
-          startMonth: values.startMonth,
-          startYear: values.startYear,
-          endMonth: values.endMonth,
-          endYear: values.endYear,
-          usexIndustry: values.industry,
-          usexDescription: values.description,
-          usexExperienceType: values.experienceType,
-        };
-        dispatch(updateExperienceRequest(payload));
+        values.startDate = new Date(values.startYear, values.startMonth, 1);
+        values.endDate = new Date(values.endYear, values.endMonth, 1);
+        dispatch(updateExperienceRequest(values));
       } else {
+        values.startDate = new Date(values.startYear, values.startMonth, 1);
+        values.endDate = new Date(values.endYear, values.endMonth, 1);
         dispatch(addExperienceRequest(values));
         formik.resetForm();
       }
@@ -254,18 +244,18 @@ export default function ExperienceForm({ edit }) {
                         />
                       </div>
                       <div className='grid grid-cols-6 items-center'>
-                        <label className='col-span-1' htmlFor='city'>
+                        <label className='col-span-1' htmlFor='cityId'>
                           City
                         </label>
                         <select
-                          value={formik.values.city}
+                          value={formik.values.cityId}
                           onBlur={formik.handleBlur}
                           onChange={(e) =>
-                            formik.setFieldValue('city', e.target.value)
+                            formik.setFieldValue('cityId', e.target.value)
                           }
                           className='rounded-lg px-2 py-1 col-span-1'
-                          name='city'
-                          id='city'
+                          name='cityId'
+                          id='cityId'
                         >
                           <option>-- City --</option>
                           {cities?.map((city) => (
@@ -355,21 +345,21 @@ export default function ExperienceForm({ edit }) {
                         />
                       </div>
                       <div className='grid grid-cols-6 items-center'>
-                        <label className='col-span-1' htmlFor='employementType'>
+                        <label className='col-span-1' htmlFor='employmentType'>
                           Employment Type
                         </label>
                         <select
-                          value={formik.values.employeementType}
+                          value={formik.values.employmentType}
                           onChange={(e) =>
                             formik.setFieldValue(
-                              'employeementType',
+                              'employmentType',
                               e.target.value
                             )
                           }
                           onBlur={formik.handleBlur}
                           className='rounded-lg px-2 py-1 col-span-2'
-                          name='employeementType'
-                          id='employeementType'
+                          name='employmentType'
+                          id='employmentType'
                         >
                           <option>-- Employment Type ---</option>
                           {empType.map((emp) => (
@@ -380,15 +370,15 @@ export default function ExperienceForm({ edit }) {
                         </select>
                       </div>
                       <div className='grid grid-cols-6'>
-                        <label className='col-span-1' htmlFor='description'>
+                        <label className='col-span-1' htmlFor='desc'>
                           Description
                         </label>
                         <textarea
-                          value={formik.values.description}
+                          value={formik.values.desc}
                           onChange={formik.handleChange}
                           className='col-span-5 rounded-lg px-2 py-1'
-                          name='description'
-                          id='description'
+                          name='desc'
+                          id='desc'
                           cols='5'
                           rows='5'
                         ></textarea>
@@ -424,10 +414,10 @@ export default function ExperienceForm({ edit }) {
                             {formik.errors.title}
                           </span>
                         ) : null}
-                        {formik.touched.employeementType &&
-                        formik.errors.employeementType ? (
+                        {formik.touched.employmentType &&
+                        formik.errors.employmentType ? (
                           <span className='mt-2 text-sm text-red-600'>
-                            {formik.errors.employeementType}
+                            {formik.errors.employmentType}
                           </span>
                         ) : null}
                         {formik.touched.profileHeadline &&
